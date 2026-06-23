@@ -1,8 +1,10 @@
 import { Link } from "react-router";
 import { Instagram, Twitter, Youtube, Facebook, Mail, MapPin, Phone } from "lucide-react";
 import BrandLogo from "./BrandLogo";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
   return (
     <footer id="contact" className="bg-foreground text-background">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-8">
@@ -11,7 +13,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
 <BrandLogo variant="light" className="mb-5" />
             <p className="text-sm text-background/60 leading-relaxed mb-6">
-              A community of students growing in faith, serving with love, and impacting our campus and beyond.
+              {t("heroText")}
             </p>
             <div className="flex gap-4">
               {[
@@ -34,9 +36,9 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold text-background/90 uppercase tracking-wider mb-5">Quick Links</h4>
+            <h4 className="text-sm font-semibold text-background/90 uppercase tracking-wider mb-5">{t("home")}</h4>
             <ul className="space-y-3">
-              {["Home", "About Us", "Teams", "Events", "Contact"].map((item) => (
+              {[t("home"), t("about"), t("teams"), t("events"), t("contact")].map((item) => (
                 <li key={item}>
                   <a href="#" className="text-sm text-background/60 hover:text-background transition-colors duration-200">
                     {item}
@@ -48,7 +50,7 @@ export default function Footer() {
 
           {/* Ministry Teams */}
           <div>
-            <h4 className="text-sm font-semibold text-background/90 uppercase tracking-wider mb-5">Our Teams</h4>
+            <h4 className="text-sm font-semibold text-background/90 uppercase tracking-wider mb-5">{t("teamMembers")}</h4>
             <ul className="space-y-3">
               {["Love Sharing Team", "Art Team", "Worship Team", "Media Team", "Prayer Team", "Evangelism Team"].map((team) => (
                 <li key={team}>
@@ -62,7 +64,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-sm font-semibold text-background/90 uppercase tracking-wider mb-5">Contact Us</h4>
+            <h4 className="text-sm font-semibold text-background/90 uppercase tracking-wider mb-5">{t("contact")}</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="text-primary mt-0.5 shrink-0" />
@@ -88,7 +90,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-background/40">
-            © {new Date().getFullYear()} AUWC ECSF. All rights reserved.
+            © {new Date().getFullYear()} AUWC ECSF. {t("goHome") === "Go Home" ? "All rights reserved." : "መብቱ ሁሉ የተጠበቀ ነው።"}
           </p>
           <div className="flex gap-6">
             <a href="#" className="text-xs text-background/40 hover:text-background/70 transition-colors">Privacy Policy</a>

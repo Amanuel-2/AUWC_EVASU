@@ -76,3 +76,7 @@ npm run build
 ## Notes
 
 This application currently uses mock data and browser state to simulate backend behavior. The architecture is ready for replacing mock services with API calls while keeping route guards, feature modules, and reusable components intact.
+
+## MongoDB Configuration
+
+MongoDB credentials must stay on the server side. Put the connection string in an environment variable such as `MONGODB_URI` in your backend or deployment environment. Do not import it into React components or commit the real password to the repository. See `.env.example` for the expected shape.

@@ -3,13 +3,8 @@ import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff, ArrowLeft, Check } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import BrandLogo from "../components/BrandLogo";
-
-const perks = [
-  "Join multiple ministry teams",
-  "Get updates on all fellowship events",
-  "Connect with 500+ students",
-  "Access members-only resources",
-];
+import LanguageToggle from "../components/LanguageToggle";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -20,6 +15,8 @@ export default function Register() {
   const [error, setError] = useState("");
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  const perks = [t("perkTeams"), t("perkEvents"), t("perkStudents"), t("perkResources")];
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -34,7 +31,8 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="relative min-h-screen grid lg:grid-cols-2">
+      <div className="absolute right-4 top-4 z-20"><LanguageToggle /></div>
       {/* Left panel */}
       <div className="hidden lg:flex flex-col justify-between p-12 bg-primary relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
@@ -46,10 +44,10 @@ export default function Register() {
 
         <div className="relative">
           <h2 className="font-['DM_Serif_Display'] text-4xl text-white mb-4 leading-tight">
-            Start your journey<br />with us today
+            {t("createTitle")}
           </h2>
           <p className="text-white/70 text-sm leading-relaxed mb-8">
-            Becoming a member opens doors to community, growth, and purpose that will shape the rest of your life.
+            {t("heroText")}
           </p>
           <ul className="space-y-3">
             {perks.map((perk) => (
@@ -76,12 +74,12 @@ export default function Register() {
       <div className="flex flex-col justify-center items-center px-6 py-12 lg:px-16 bg-background">
         <div className="w-full max-w-md">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10">
-            <ArrowLeft size={16} /> Back to Home
+            <ArrowLeft size={16} /> {t("backHome")}
           </Link>
 
           <div className="mb-10">
-            <h1 className="font-['DM_Serif_Display'] text-4xl text-foreground mb-2">Create your account</h1>
-            <p className="text-muted-foreground text-sm">{"Join AUWC ECSF — it's completely free"}</p>
+            <h1 className="font-['DM_Serif_Display'] text-4xl text-foreground mb-2">{t("createTitle")}</h1>
+            <p className="text-muted-foreground text-sm">{t("joinFree")}</p>
           </div>
 
           {error && (
@@ -92,7 +90,7 @@ export default function Register() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Full name</label>
+              <label className="block text-sm font-medium text-foreground mb-2">{t("fullName")}</label>
               <input
                 type="text"
                 value={name}
@@ -102,7 +100,7 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">University email</label>
+              <label className="block text-sm font-medium text-foreground mb-2">{t("universityEmail")}</label>
               <input
                 type="email"
                 value={email}
@@ -112,13 +110,13 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Password</label>
+              <label className="block text-sm font-medium text-foreground mb-2">{t("password")}</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Min. 6 characters"
+                  placeholder={t("password")}
                   className="w-full px-4 py-3 pr-12 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                 />
                 <button
@@ -132,9 +130,7 @@ export default function Register() {
             </div>
 
             <p className="text-xs text-muted-foreground leading-relaxed">
-              By registering, you agree to our{" "}
-              <a href="#" className="text-primary hover:underline">Terms of Service</a> and{" "}
-              <a href="#" className="text-primary hover:underline">Privacy Policy</a>.
+              {t("terms")}
             </p>
 
             <button
@@ -142,14 +138,14 @@ export default function Register() {
               disabled={loading}
               className="w-full bg-primary text-white py-3.5 rounded-xl font-semibold text-sm hover:bg-primary/90 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
             >
-              {loading ? "Creating account…" : "Create Account"}
+              {loading ? t("creating") : t("createButton")}
             </button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-8">
-            Already have an account?{" "}
+            {t("already")}{" "}
             <Link to="/login" className="text-primary font-semibold hover:underline">
-              Sign in
+              {t("signIn")}
             </Link>
           </p>
         </div>

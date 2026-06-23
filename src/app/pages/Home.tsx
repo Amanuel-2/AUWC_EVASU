@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ArrowRight, ChevronRight, Quote, Calendar, MapPin, Users } from "lucide-react";
 import { teams } from "../data/teams";
+import { useLanguage } from "../context/LanguageContext";
 
 /* ── Intersection Observer hook for fade-in animations ── */
 function useInView(threshold = 0.15) {
@@ -76,6 +77,7 @@ const testimonials = [
 
 /* ── HERO ── */
 function Hero() {
+  const { t } = useLanguage();
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background image */}
@@ -93,17 +95,17 @@ function Hero() {
         <div>
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-sm text-white/80 font-medium">AUWC Evangelical Christian Students Fellowship</span>
+            <span className="text-sm text-white/80 font-medium">{t("heroBadge")}</span>
           </div>
 
           <h1 className="font-['DM_Serif_Display'] text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.1] mb-6">
-            Grow Together,<br />
-            <span className="text-primary italic">Serve Together,</span><br />
-            <span className="text-white/90">Shine Together</span>
+            {t("grow")}<br />
+            <span className="text-primary italic">{t("serve")}</span><br />
+            <span className="text-white/90">{t("shine")}</span>
           </h1>
 
           <p className="text-lg text-white/70 leading-relaxed mb-10 max-w-md">
-            AUWC ECSF is a vibrant community of university students united by faith, growing in purpose, and dedicated to making a lasting difference on campus and beyond.
+            {t("heroText")}
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -111,20 +113,20 @@ function Hero() {
               to="/register"
               className="inline-flex items-center gap-2 bg-primary text-white px-7 py-3.5 rounded-full font-semibold hover:bg-primary/90 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
-              Join Our Community
+              {t("joinCommunity")}
               <ArrowRight size={18} />
             </Link>
             <button
               onClick={() => document.getElementById("teams")?.scrollIntoView({ behavior: "smooth" })}
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-7 py-3.5 rounded-full font-semibold hover:bg-white/20 transition-all duration-200"
             >
-              Explore Teams
+              {t("exploreTeams")}
               <ChevronRight size={18} />
             </button>
           </div>
 
           <div className="flex items-center gap-8 mt-12 pt-8 border-t border-white/10">
-            {[["500+", "Active Members"], ["12", "Ministry Teams"], ["6", "Years of Impact"]].map(([num, label]) => (
+            {[["500+", t("activeMembers")], ["12", t("ministryTeams")], ["6", t("yearsImpact")]].map(([num, label]) => (
               <div key={label}>
                 <div className="text-2xl font-bold text-white">{num}</div>
                 <div className="text-sm text-white/50">{label}</div>
@@ -166,6 +168,7 @@ function Hero() {
 /* ── ABOUT ── */
 function About() {
   const { ref, inView } = useInView();
+  const { t } = useLanguage();
 
   const cards = [
     {
@@ -193,13 +196,12 @@ function About() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div ref={ref} className={`transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <div className="max-w-2xl mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-widest">Who We Are</span>
+            <span className="text-sm font-semibold text-primary uppercase tracking-widest">{t("whoWeAre")}</span>
             <h2 className="font-['DM_Serif_Display'] text-4xl lg:text-5xl text-foreground mt-3 mb-6 leading-tight">
-              More than a student group —<br />
-              <span className="italic text-primary">a family</span>
+              {t("familyTitle")}
             </h2>
             <p className="text-muted-foreground leading-relaxed text-lg">
-              Founded in 2019 with a handful of students who refused to let university life be defined by academic pressure alone, AUWC ECSF has grown into one of the most vibrant student ministries on campus.
+              {t("heroText")}
             </p>
           </div>
 
@@ -251,6 +253,7 @@ function About() {
 function Teams() {
   const { ref, inView } = useInView();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <section id="teams" className="py-24 lg:py-32 bg-secondary/40">
@@ -258,13 +261,13 @@ function Teams() {
         <div ref={ref} className={`transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
             <div>
-              <span className="text-sm font-semibold text-primary uppercase tracking-widest">Ministry Teams</span>
+              <span className="text-sm font-semibold text-primary uppercase tracking-widest">{t("ministryTeams")}</span>
               <h2 className="font-['DM_Serif_Display'] text-4xl lg:text-5xl text-foreground mt-3 leading-tight">
-                Find your place<br />to <span className="italic text-primary">contribute</span>
+                {t("teamsTitle")}
               </h2>
             </div>
             <p className="text-muted-foreground max-w-sm text-base leading-relaxed">
-              Every team is a family within the family — a place where your unique gifts are celebrated and sharpened.
+              {t("heroText")}
             </p>
           </div>
 
@@ -297,7 +300,7 @@ function Teams() {
                     onClick={(e) => { e.stopPropagation(); navigate(`/teams/${team.id}`); }}
                     className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5 transition-all duration-200"
                   >
-                    Learn More <ArrowRight size={15} />
+                    {t("learnMore")} <ArrowRight size={15} />
                   </button>
                 </div>
               </div>
@@ -312,15 +315,16 @@ function Teams() {
 /* ── EVENTS ── */
 function Events() {
   const { ref, inView } = useInView();
+  const { t } = useLanguage();
 
   return (
     <section id="events" className="py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div ref={ref} className={`transition-all duration-700 ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <div className="max-w-xl mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-widest">{"What's Coming"}</span>
+            <span className="text-sm font-semibold text-primary uppercase tracking-widest">{t("events")}</span>
             <h2 className="font-['DM_Serif_Display'] text-4xl lg:text-5xl text-foreground mt-3 leading-tight">
-              Upcoming <span className="italic text-primary">Events</span>
+              {t("upcomingEvents")}
             </h2>
           </div>
 
@@ -355,7 +359,7 @@ function Events() {
                     </div>
                   </div>
                   <button className="w-full py-2.5 border border-primary text-primary rounded-xl text-sm font-semibold hover:bg-primary hover:text-white transition-colors duration-200">
-                    Register for Event
+                    {t("registerEvent")}
                   </button>
                 </div>
               </div>
@@ -426,6 +430,7 @@ function Testimonials() {
 /* ── CTA ── */
 function CTA() {
   const { ref, inView } = useInView();
+  const { t } = useLanguage();
 
   return (
     <section className="py-24 lg:py-32">
@@ -453,13 +458,13 @@ function CTA() {
                 to="/register"
                 className="inline-flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-full font-semibold hover:bg-white/90 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
-                Join Our Community <ArrowRight size={18} />
+                {t("joinCommunity")} <ArrowRight size={18} />
               </Link>
               <button
                 onClick={() => document.getElementById("teams")?.scrollIntoView({ behavior: "smooth" })}
                 className="inline-flex items-center gap-2 border-2 border-white/30 text-white px-8 py-4 rounded-full font-semibold hover:border-white/60 transition-all duration-200"
               >
-                Explore Teams
+                {t("exploreTeams")}
               </button>
             </div>
           </div>

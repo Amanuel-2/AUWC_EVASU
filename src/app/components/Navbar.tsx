@@ -3,14 +3,16 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { Menu, X, LogOut, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import BrandLogo from "./BrandLogo";
+import LanguageToggle from "./LanguageToggle";
+import { useLanguage } from "../context/LanguageContext";
 
 const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/#about" },
-  { label: "Teams", href: "/#teams" },
-  { label: "Events", href: "/#events" },
-  { label: "Contact", href: "/#contact" },
-];
+  { key: "home", href: "/" },
+  { key: "about", href: "/#about" },
+  { key: "teams", href: "/#teams" },
+  { key: "events", href: "/#events" },
+  { key: "contact", href: "/#contact" },
+] as const;
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -19,6 +21,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -58,19 +61,19 @@ export default function Navbar() {
             {navLinks.map((link) =>
               link.href.startsWith("/#") ? (
                 <button
-                  key={link.label}
+                  key={link.key}
                   onClick={() => handleAnchor(link.href)}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
                 >
-                  {link.label}
+                  {t(link.key)}
                 </button>
               ) : (
                 <Link
-                  key={link.label}
+                  key={link.key}
                   to={link.href}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
                 >
-                  {link.label}
+                  {t(link.key)}
                 </Link>
               )
             )}
@@ -78,6 +81,7 @@ export default function Navbar() {
 
           {/* Desktop Auth */}
           <div className="hidden lg:flex items-center gap-3">
+            <LanguageToggle />
             {user ? (
               <div className="relative">
                 <button
@@ -98,13 +102,13 @@ export default function Navbar() {
                       onClick={() => setUserMenuOpen(false)}
                       className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                     >
-                      <User size={14} /> Dashboard
+                      <User size={14} /> {t("dashboard")}
                     </Link>
                     <button
                       onClick={() => { logout(); setUserMenuOpen(false); }}
                       className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                     >
-                      <LogOut size={14} /> Sign out
+                      <LogOut size={14} /> {t("signOut")}
                     </button>
                   </div>
                 )}
@@ -115,13 +119,13 @@ export default function Navbar() {
                   to="/login"
                   className="text-sm font-medium text-foreground hover:text-primary transition-colors duration-200 px-4 py-2"
                 >
-                  Login
+                  {t("login")}
                 </Link>
                 <Link
                   to="/register"
                   className="text-sm font-medium bg-primary text-primary-foreground px-5 py-2.5 rounded-full hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
-                  Register
+                  {t("register")}
                 </Link>
               </>
             )}
@@ -148,23 +152,24 @@ export default function Navbar() {
           {navLinks.map((link) =>
             link.href.startsWith("/#") ? (
               <button
-                key={link.label}
+                key={link.key}
                 onClick={() => { handleAnchor(link.href); setMenuOpen(false); }}
                 className="text-left py-3 px-4 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-xl transition-colors"
               >
-                {link.label}
+                {t(link.key)}
               </button>
             ) : (
               <Link
-                key={link.label}
+                key={link.key}
                 to={link.href}
                 className="py-3 px-4 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-xl transition-colors"
               >
-                {link.label}
+                {t(link.key)}
               </Link>
             )
           )}
           <div className="flex flex-col gap-2 pt-3 border-t border-border mt-2">
+            <LanguageToggle />
             {user ? (
               <>
                 <Link
@@ -172,22 +177,22 @@ export default function Navbar() {
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-2 py-3 px-4 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-xl transition-colors"
                 >
-                  <User size={14} /> Dashboard
+                  <User size={14} /> {t("dashboard")}
                 </Link>
                 <button
                   onClick={() => { logout(); setMenuOpen(false); }}
                   className="flex items-center gap-2 py-3 px-4 text-sm font-medium text-muted-foreground"
                 >
-                  <LogOut size={14} /> Sign out ({user.name})
+                  <LogOut size={14} /> {t("signOut")} ({user.name})
                 </button>
               </>
             ) : (
               <>
                 <Link to="/login" className="py-3 px-4 text-sm font-medium text-center border border-border rounded-xl hover:bg-secondary transition-colors">
-                  Login
+                  {t("login")}
                 </Link>
                 <Link to="/register" className="py-3 px-4 text-sm font-medium text-center bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors">
-                  Register
+                  {t("register")}
                 </Link>
               </>
             )}

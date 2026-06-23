@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from "react-router";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import BrandLogo from "../components/BrandLogo";
+import LanguageToggle from "../components/LanguageToggle";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -14,6 +16,7 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as any)?.from || "/";
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -32,7 +35,8 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="relative min-h-screen grid lg:grid-cols-2">
+      <div className="absolute right-4 top-4 z-20"><LanguageToggle /></div>
       {/* Left panel */}
       <div className="hidden lg:flex flex-col justify-between p-12 bg-foreground relative overflow-hidden">
         <div className="absolute inset-0">
@@ -63,12 +67,12 @@ export default function Login() {
       <div className="flex flex-col justify-center items-center px-6 py-12 lg:px-16 bg-background">
         <div className="w-full max-w-md">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10">
-            <ArrowLeft size={16} /> Back to Home
+            <ArrowLeft size={16} /> {t("backHome")}
           </Link>
 
           <div className="mb-10">
-            <h1 className="font-['DM_Serif_Display'] text-4xl text-foreground mb-2">Welcome back</h1>
-            <p className="text-muted-foreground text-sm">Sign in to your AUWC ECSF account</p>
+            <h1 className="font-['DM_Serif_Display'] text-4xl text-foreground mb-2">{t("welcomeBack")}</h1>
+            <p className="text-muted-foreground text-sm">{t("signInSubtitle")}</p>
           </div>
 
           {error && (
@@ -78,14 +82,14 @@ export default function Login() {
           )}
 
           <div className="mb-6 rounded-lg border bg-secondary/50 p-4 text-sm text-muted-foreground">
-            <p className="font-medium text-foreground">Demo accounts</p>
-            <p className="mt-1">Admin: admin@auwcec.edu / any password</p>
-            <p>Team Leader: leader@auwcec.edu / any password</p>
+            <p className="font-medium text-foreground">{t("demoAccounts")}</p>
+            <p className="mt-1">{t("adminDemo")}</p>
+            <p>{t("leaderDemo")}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Email address</label>
+              <label className="block text-sm font-medium text-foreground mb-2">{t("email")}</label>
               <input
                 type="email"
                 value={email}
@@ -95,7 +99,7 @@ export default function Login() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Password</label>
+              <label className="block text-sm font-medium text-foreground mb-2">{t("password")}</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -113,7 +117,7 @@ export default function Login() {
                 </button>
               </div>
               <div className="text-right mt-2">
-                <a href="#" className="text-xs text-primary hover:underline">Forgot password?</a>
+                <a href="#" className="text-xs text-primary hover:underline">{t("forgot")}</a>
               </div>
             </div>
 
@@ -122,14 +126,14 @@ export default function Login() {
               disabled={loading}
               className="w-full bg-primary text-white py-3.5 rounded-xl font-semibold text-sm hover:bg-primary/90 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm hover:shadow-md mt-2"
             >
-              {loading ? "Signing in…" : "Sign In"}
+              {loading ? t("signingIn") : t("signIn")}
             </button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-8">
-            New to AUWC?{" "}
+            {t("newTo")}{" "}
             <Link to="/register" className="text-primary font-semibold hover:underline">
-              Create an account
+              {t("createAccount")}
             </Link>
           </p>
         </div>

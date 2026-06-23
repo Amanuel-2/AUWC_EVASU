@@ -3,19 +3,22 @@ import { ReactNode, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import { useAuth } from "../../../context/AuthContext";
 import { useLeaderDashboard } from "../context/LeaderDashboardContext";
+import LanguageToggle from "../../../components/LanguageToggle";
+import { useLanguage } from "../../../context/LanguageContext";
 
 const navigation = [
-  { to: "/leader", label: "Dashboard", icon: Home, end: true },
-  { to: "/leader/members", label: "Team Members", icon: Users },
-  { to: "/leader/attendance", label: "Attendance", icon: ClipboardCheck },
-  { to: "/leader/schedule", label: "Meeting Schedule", icon: CalendarDays },
-  { to: "/leader/profile", label: "Profile", icon: User },
-];
+  { to: "/leader", labelKey: "dashboard", icon: Home, end: true },
+  { to: "/leader/members", labelKey: "teamMembers", icon: Users },
+  { to: "/leader/attendance", labelKey: "attendance", icon: ClipboardCheck },
+  { to: "/leader/schedule", labelKey: "meetingSchedule", icon: CalendarDays },
+  { to: "/leader/profile", labelKey: "profile", icon: User },
+] as const;
 
 function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { logout } = useAuth();
   const { team } = useLeaderDashboard();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleLogout = () => {
     logout();
@@ -25,9 +28,9 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <aside className="flex h-full flex-col bg-[#0F2638] text-white">
       <div className="border-b border-white/10 p-5">
-        <p className="text-xs uppercase tracking-[0.18em] text-white/45">Team Leader</p>
-        <h2 className="mt-2 text-xl font-semibold">AUWC ECSF Hub</h2>
-        <p className="mt-1 text-sm text-white/60">{team?.name ?? "Assigned team"}</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-white/45">{t("teamLeader")}</p>
+        <h2 className="mt-2 text-xl font-semibold">{t("leaderWorkspace")}</h2>
+        <p className="mt-1 text-sm text-white/60">{team?.name ?? t("assignedTeam")}</p>
       </div>
       <nav className="flex-1 space-y-1 p-3" aria-label="Leader dashboard">
         {navigation.map((item) => (
@@ -41,14 +44,14 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             }
           >
             <item.icon size={18} aria-hidden="true" />
-            <span>{item.label}</span>
+            <span>{t(item.labelKey)}</span>
           </NavLink>
         ))}
       </nav>
       <div className="border-t border-white/10 p-3">
         <button type="button" onClick={handleLogout} className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white/72 transition-colors hover:bg-white/10 hover:text-white">
           <LogOut size={18} aria-hidden="true" />
-          Logout
+          {t("logout")}
         </button>
       </div>
     </aside>
@@ -58,6 +61,7 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 function TopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
   const { user } = useAuth();
   const { team } = useLeaderDashboard();
+  const { t } = useLanguage();
   return (
     <header className="sticky top-0 z-20 border-b bg-background/95 px-4 py-3 backdrop-blur md:px-6">
       <div className="flex items-center justify-between gap-4">
@@ -66,11 +70,12 @@ function TopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
             <Menu size={20} />
           </button>
           <div>
-            <p className="text-sm text-muted-foreground">{team?.name ?? "Team dashboard"}</p>
-            <h1 className="text-lg font-semibold text-foreground sm:text-xl">Leader Workspace</h1>
+            <p className="text-sm text-muted-foreground">{team?.name ?? t("dashboard")}</p>
+            <h1 className="text-lg font-semibold text-foreground sm:text-xl">{t("leaderWorkspace")}</h1>
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <LanguageToggle compact />
           <button className="relative inline-flex size-10 items-center justify-center rounded-md border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" aria-label="Notifications">
             <Bell size={18} />
             <span className="absolute right-2 top-2 size-2 rounded-full bg-[#F26F5B]" />
@@ -81,7 +86,7 @@ function TopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
             </div>
             <div className="leading-tight">
               <p className="text-sm font-medium">{user?.name}</p>
-              <p className="text-xs text-muted-foreground">Team Leader</p>
+              <p className="text-xs text-muted-foreground">{t("teamLeader")}</p>
             </div>
           </div>
         </div>
