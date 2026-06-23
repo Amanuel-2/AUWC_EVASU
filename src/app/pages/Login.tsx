@@ -21,8 +21,13 @@ export default function Login() {
     setError("");
     const ok = await login(email, password);
     setLoading(false);
-    if (ok) navigate(from, { replace: true });
-    else setError("Invalid credentials. Please try again.");
+    if (ok) {
+      const normalizedEmail = email.trim().toLowerCase();
+      const isAdmin = normalizedEmail === "admin@radiance.edu";
+      const fallback = isAdmin ? "/admin" : "/leader";
+      const requestedRouteMatchesRole = isAdmin ? !from.startsWith("/leader") : !from.startsWith("/admin");
+      navigate(from !== "/" && requestedRouteMatchesRole ? from : fallback, { replace: true });
+    } else setError("Invalid credentials. Please try again.");
   };
 
   return (
@@ -75,6 +80,12 @@ export default function Login() {
               {error}
             </div>
           )}
+
+          <div className="mb-6 rounded-lg border bg-secondary/50 p-4 text-sm text-muted-foreground">
+            <p className="font-medium text-foreground">Demo accounts</p>
+            <p className="mt-1">Admin: admin@radiance.edu / any password</p>
+            <p>Team Leader: leader@radiance.edu / any password</p>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>

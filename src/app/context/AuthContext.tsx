@@ -4,6 +4,10 @@ interface User {
   id: string;
   name: string;
   email: string;
+  role: "admin" | "team_leader" | "member";
+  assignedTeamId: string;
+  phone: string;
+  avatarUrl: string;
   joinedTeams: string[];
 }
 
@@ -14,6 +18,8 @@ interface AuthContextType {
   logout: () => void;
   joinTeam: (teamId: string) => void;
   hasJoinedTeam: (teamId: string) => boolean;
+  updateUser: (updates: Partial<User>) => void;
+  changePassword: (currentPassword: string, nextPassword: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -31,11 +37,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, _password: string): Promise<boolean> => {
     // Simulate login — in production this would hit an API
+    const normalizedEmail = email.trim().toLowerCase();
+    const isAdmin = normalizedEmail === "admin@radiance.edu";
+    const name = isAdmin ? "Admin User" : email.split("@")[0].replace(/[._]/g, " ");
     const mockUser: User = {
       id: crypto.randomUUID(),
-      name: email.split("@")[0].replace(/[._]/g, " "),
-      email,
-      joinedTeams: [],
+      name,
+      email: normalizedEmail,
+      role: isAdmin ? "admin" : "team_leader",
+      assignedTeamId: isAdmin ? "" : "media",
+      phone: isAdmin ? "+253 77 000 001" : "+253 77 213 890",
+      avatarUrl: "",
+      joinedTeams: isAdmin ? [] : ["media"],
     };
     setUser(mockUser);
     return true;
@@ -46,7 +59,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       id: crypto.randomUUID(),
       name,
       email,
-      joinedTeams: [],
+      role: "team_leader",
+      assignedTeamId: "media",
+      phone: "+253 77 213 890",
+      avatarUrl: "",
+      joinedTeams: ["media"],
     };
     setUser(mockUser);
     return true;
@@ -64,8 +81,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return user?.joinedTeams.includes(teamId) ?? false;
   };
 
+  const updateUser = (updates: Partial<User>) => {
+    if (!user) return;
+    setUser({ ...user, ...updates });
+  };
+
+  const changePassword = async (_currentPassword: string, nextPassword: string) => {
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    return nextPassword.length >= 8;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, joinTeam, hasJoinedTeam }}>
+    <AuthContext.Provider value={{ user, login, register, logout, joinTeam, hasJoinedTeam, updateUser, changePassword }}>
       {children}
     </AuthContext.Provider>
   );

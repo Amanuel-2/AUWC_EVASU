@@ -4,6 +4,15 @@ import Home from "./pages/Home";
 import TeamDetails from "./pages/TeamDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import RequireTeamLeader from "./features/leader/components/RequireTeamLeader";
+import LeaderLayout from "./features/leader/components/LeaderLayout";
+import LeaderHome from "./features/leader/pages/LeaderHome";
+import MembersPage from "./features/leader/pages/MembersPage";
+import AttendancePage from "./features/leader/pages/AttendancePage";
+import SchedulePage from "./features/leader/pages/SchedulePage";
+import ProfilePage from "./features/leader/pages/ProfilePage";
+import RequireAdmin from "./features/admin/components/RequireAdmin";
+import AdminDashboard from "./features/admin/pages/AdminDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +23,27 @@ export const router = createBrowserRouter([
       { path: "teams/:id", Component: TeamDetails },
       { path: "login", Component: Login },
       { path: "register", Component: Register },
+      {
+        path: "leader",
+        Component: RequireTeamLeader,
+        children: [
+          {
+            Component: LeaderLayout,
+            children: [
+              { index: true, Component: LeaderHome },
+              { path: "members", Component: MembersPage },
+              { path: "attendance", Component: AttendancePage },
+              { path: "schedule", Component: SchedulePage },
+              { path: "profile", Component: ProfilePage },
+            ],
+          },
+        ],
+      },
+      {
+        path: "admin",
+        Component: RequireAdmin,
+        children: [{ index: true, Component: AdminDashboard }],
+      },
       {
         path: "*",
         Component: () => (
