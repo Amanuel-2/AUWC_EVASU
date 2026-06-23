@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
-import { fetchLeaderTeam, fetchMeetingSchedule, fetchTeamMembers, saveAttendanceRecord, saveMeetingSchedule } from "../mockApi";
+import { fetchAttendanceRecords, fetchLeaderTeam, fetchMeetingSchedule, fetchTeamMembers, saveAttendanceRecord, saveMeetingSchedule } from "../mockApi";
 import { AttendanceRecord, AttendanceStatus, MeetingSchedule, Team, TeamMember } from "../types";
 
 interface LeaderDashboardContextValue {
@@ -17,6 +17,10 @@ interface LeaderDashboardContextValue {
 
 const LeaderDashboardContext = createContext<LeaderDashboardContextValue | null>(null);
 
+function createId() {
+  return typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `attendance-${Date.now()}`;
+}
+
 export function LeaderDashboardProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [team, setTeam] = useState<Team | null>(null);
@@ -29,19 +33,24 @@ export function LeaderDashboardProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
     async function loadDashboardData() {
-      if (!user?.assignedTeamId) return;
+      if (!user?.assignedTeamId) {
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       setError("");
       try {
-        const [teamData, memberData, scheduleData] = await Promise.all([
+        const [teamData, memberData, scheduleData, attendanceData] = await Promise.all([
           fetchLeaderTeam(user.assignedTeamId),
           fetchTeamMembers(user.assignedTeamId),
           fetchMeetingSchedule(user.assignedTeamId),
+          fetchAttendanceRecords(user.assignedTeamId),
         ]);
         if (!mounted) return;
         setTeam(teamData);
         setMembers(memberData);
         setSchedule(scheduleData);
+        setAttendanceHistory(attendanceData);
       } catch (err) {
         if (mounted) setError(err instanceof Error ? err.message : "Something went wrong while loading dashboard data.");
       } finally {
@@ -61,14 +70,14 @@ export function LeaderDashboardProvider({ children }: { children: ReactNode }) {
   const saveAttendance = async (meetingDate: string, statuses: Record<string, AttendanceStatus>) => {
     if (!user?.assignedTeamId) return;
     const record: AttendanceRecord = {
-      id: crypto.randomUUID(),
+      id: createId(),
       teamId: user.assignedTeamId,
       meetingDate,
       markedAt: new Date().toISOString(),
       statuses,
     };
     const saved = await saveAttendanceRecord(record);
-    setAttendanceHistory((items) => [saved, ...items]);
+    setAttendanceHistory((items) => [saved, ...items.filter((item) => !(item.teamId === saved.teamId && item.meetingDate === saved.meetingDate))]);
   };
 
   const value = useMemo<LeaderDashboardContextValue>(() => ({

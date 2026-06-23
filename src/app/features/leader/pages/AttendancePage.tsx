@@ -30,9 +30,14 @@ export default function AttendancePage() {
   const handleSave = async () => {
     setSaving(true);
     setNotice("");
-    await saveAttendance(meetingDate, records);
-    setSaving(false);
-    setNotice("Attendance saved for this meeting.");
+    try {
+      await saveAttendance(meetingDate, records);
+      setNotice("Attendance saved for this meeting.");
+    } catch (err) {
+      setNotice(err instanceof Error ? err.message : "Attendance could not be saved.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (

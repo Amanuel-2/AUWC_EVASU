@@ -298,7 +298,12 @@ function Teams() {
                 </div>
                 <div className="p-6">
                   <h3 className="font-['DM_Serif_Display'] text-xl text-foreground mb-2">{team.name}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">{team.description}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{team.description}</p>
+                  <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-xs font-semibold text-secondary-foreground">
+                    <Users size={14} /> {team.leaderCount} {team.leaderCount === 1 ? "leader" : "leaders"}
+                  </div>
+                  {team.leaderEmail && <p className="mb-5 text-xs font-medium text-muted-foreground">Leader: {team.leaderEmail}</p>}
+                  {!team.leaderEmail && <div className="mb-5" />}
                   <button
                     onClick={(e) => { e.stopPropagation(); navigate(`/teams/${team.id}`); }}
                     className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5 transition-all duration-200"

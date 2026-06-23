@@ -16,8 +16,12 @@ export default function SchedulePage() {
     setSaved(false);
     if (!schedule || !day || !time || location.trim().length < 3) { setError("Enter a meeting day, time, and valid location."); return; }
     setError("");
-    await updateSchedule({ ...schedule, day, time, location });
-    setSaved(true);
+    try {
+      await updateSchedule({ ...schedule, day, time, location });
+      setSaved(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Schedule could not be saved.");
+    }
   };
 
   return (

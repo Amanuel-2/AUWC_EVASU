@@ -19,6 +19,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const dashboardPath = user?.role === "admin" ? "/admin" : user?.role === "team_leader" ? "/leader" : "";
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -97,13 +98,15 @@ export default function Navbar() {
                       <p className="text-sm font-medium">{user.name}</p>
                       <p className="text-xs text-muted-foreground">{user.email}</p>
                     </div>
-                    <Link
-                      to={user.role === "admin" ? "/admin" : "/leader"}
-                      onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                    >
-                      <User size={14} /> {t("dashboard")}
-                    </Link>
+                    {dashboardPath && (
+                      <Link
+                        to={dashboardPath}
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                      >
+                        <User size={14} /> {t("dashboard")}
+                      </Link>
+                    )}
                     <button
                       onClick={() => { logout(); setUserMenuOpen(false); }}
                       className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
@@ -172,13 +175,15 @@ export default function Navbar() {
             <LanguageToggle />
             {user ? (
               <>
-                <Link
-                  to={user.role === "admin" ? "/admin" : "/leader"}
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 py-3 px-4 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-xl transition-colors"
-                >
-                  <User size={14} /> {t("dashboard")}
-                </Link>
+                {dashboardPath && (
+                  <Link
+                    to={dashboardPath}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2 py-3 px-4 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-xl transition-colors"
+                  >
+                    <User size={14} /> {t("dashboard")}
+                  </Link>
+                )}
                 <button
                   onClick={() => { logout(); setMenuOpen(false); }}
                   className="flex items-center gap-2 py-3 px-4 text-sm font-medium text-muted-foreground"

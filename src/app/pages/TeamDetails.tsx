@@ -65,6 +65,10 @@ export default function TeamDetails() {
               </div>
             </div>
             <p className="text-white/70 text-lg italic">{team.tagline}</p>
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white/85 backdrop-blur-sm">
+              <Users size={16} /> {team.leaderCount} {team.leaderCount === 1 ? "team leader" : "team leaders"}
+            </div>
+            {team.leaderEmail && <p className="mt-3 text-sm font-medium text-white/75">Assigned leader: {team.leaderEmail}</p>}
           </div>
         </div>
       </div>
