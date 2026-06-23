@@ -1,0 +1,27 @@
+/* src/styles/global.css */
+
+/* Responsive root font size – scales from 14px on small screens to 18px on large screens */
+html {
+  font-size: clamp(14px, 1.2vw, 18px);
+}
+
+/* Ensure images scale correctly and maintain aspect ratio */
+img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Optional utility overrides for headings – use clamp to keep them balanced */
+@layer utilities {
+  .text-4xl { font-size: clamp(1.8rem, 4vw, 2.5rem); }
+  .text-3xl { font-size: clamp(1.5rem, 3.5vw, 2rem); }
+  .text-2xl { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+  .text-xl  { font-size: clamp(1.125rem, 2.5vw, 1.5rem); }
+}
+
+/* Slight spacing adjustments for mobile containers */
+@layer components {
+  .mobile-px { padding-left: 1rem; padding-right: 1rem; }
+  .mobile-py { padding-top: 1rem; padding-bottom: 1rem; }
+}
