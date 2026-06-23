@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AttendanceStatus } from "../types";
 import { useLeaderDashboard } from "../context/LeaderDashboardContext";
 
@@ -11,7 +11,17 @@ export default function AttendancePage() {
   const [query, setQuery] = useState("");
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState("");
-  const [records, setRecords] = useState<Record<string, AttendanceStatus>>(() => Object.fromEntries(members.map((member) => [member.id, "Present"])));
+  const [records, setRecords] = useState<Record<string, AttendanceStatus>>({});
+
+  useEffect(() => {
+    setRecords((current) => {
+      const next = { ...current };
+      members.forEach((member) => {
+        if (!next[member.id]) next[member.id] = "Present";
+      });
+      return next;
+    });
+  }, [members]);
 
   const filtered = useMemo(() => members.filter((member) => member.fullName.toLowerCase().includes(query.toLowerCase())), [members, query]);
 
