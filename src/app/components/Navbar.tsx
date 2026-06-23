@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Menu, X, LogOut, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import BrandLogo from "./BrandLogo";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -42,20 +43,14 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-[#F8F4EE]/95 backdrop-blur-md shadow-sm border-b border-border" : "bg-transparent"
+        scrolled ? "bg-[#F5F8FB]/95 backdrop-blur-md shadow-sm border-b border-border" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-200">
-              <span className="text-white text-lg">✦</span>
-            </div>
-            <div className="flex flex-col leading-none">
-              <span className="font-['DM_Serif_Display'] text-lg text-foreground">Radiance</span>
-              <span className="text-[11px] text-muted-foreground tracking-widest uppercase font-medium">Fellowship</span>
-            </div>
+          <Link to="/" className="group transition-transform duration-200 hover:scale-[1.02]">
+            <BrandLogo />
           </Link>
 
           {/* Desktop Nav */}
@@ -147,7 +142,7 @@ export default function Navbar() {
       <div
         className={`lg:hidden overflow-hidden transition-all duration-300 ${
           menuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        } bg-[#F8F4EE]/98 backdrop-blur-md border-b border-border`}
+        } bg-[#F5F8FB]/98 backdrop-blur-md border-b border-border`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-1">
           {navLinks.map((link) =>

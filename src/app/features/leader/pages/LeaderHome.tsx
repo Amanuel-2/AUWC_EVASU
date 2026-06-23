@@ -9,7 +9,7 @@ export default function LeaderHome() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg bg-[#23342f] p-6 text-white shadow-sm md:p-8">
+      <section className="rounded-lg bg-[#0F2638] p-6 text-white shadow-sm md:p-8">
         <div className="max-w-3xl">
           <p className="text-sm uppercase tracking-[0.18em] text-white/55">Welcome back</p>
           <h2 className="mt-3 text-2xl font-semibold md:text-4xl">{user?.name}, your {team?.name} is ready.</h2>

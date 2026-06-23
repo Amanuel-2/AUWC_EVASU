@@ -55,7 +55,7 @@ const testimonials = [
     id: 1,
     name: "Amara Osei",
     year: "Final Year, Computer Science",
-    text: "Radiance Fellowship gave me a sense of belonging I never expected to find in university. The Prayer Team completely transformed how I start my mornings — I walk into each day with genuine peace.",
+    text: "AUWC ECSF gave me a sense of belonging I never expected to find in university. The Prayer Team completely transformed how I start my mornings — I walk into each day with genuine peace.",
     avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=120&h=120&fit=crop&auto=format&face",
   },
   {
@@ -79,21 +79,21 @@ function Hero() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background image */}
-      <div className="absolute inset-0 bg-[#1A1208]">
+      <div className="absolute inset-0 bg-[#07131F]">
         <img
           src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600&h=1000&fit=crop&auto=format"
           alt="Students gathered in fellowship"
           className="w-full h-full object-cover opacity-40"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1A1208]/90 via-[#1A1208]/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1A1208]/70 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#07131F]/90 via-[#07131F]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#07131F]/70 via-transparent to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-24 pb-16 grid lg:grid-cols-2 gap-12 items-center">
         <div>
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-sm text-white/80 font-medium">University of Greenfields Fellowship</span>
+            <span className="text-sm text-white/80 font-medium">AUWC Evangelical Christian Students Fellowship</span>
           </div>
 
           <h1 className="font-['DM_Serif_Display'] text-5xl lg:text-6xl xl:text-7xl text-white leading-[1.1] mb-6">
@@ -103,7 +103,7 @@ function Hero() {
           </h1>
 
           <p className="text-lg text-white/70 leading-relaxed mb-10 max-w-md">
-            Radiance Fellowship is a vibrant community of university students united by faith, growing in purpose, and dedicated to making a lasting difference on campus and beyond.
+            AUWC ECSF is a vibrant community of university students united by faith, growing in purpose, and dedicated to making a lasting difference on campus and beyond.
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -199,7 +199,7 @@ function About() {
               <span className="italic text-primary">a family</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed text-lg">
-              Founded in 2019 with a handful of students who refused to let university life be defined by academic pressure alone, Radiance Fellowship has grown into one of the most vibrant student ministries on campus.
+              Founded in 2019 with a handful of students who refused to let university life be defined by academic pressure alone, AUWC ECSF has grown into one of the most vibrant student ministries on campus.
             </p>
           </div>
 

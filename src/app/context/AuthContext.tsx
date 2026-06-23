@@ -38,15 +38,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, _password: string): Promise<boolean> => {
     // Simulate login — in production this would hit an API
     const normalizedEmail = email.trim().toLowerCase();
-    const isAdmin = normalizedEmail === "admin@radiance.edu";
-    const name = isAdmin ? "Admin User" : email.split("@")[0].replace(/[._]/g, " ");
+    const isAdmin = normalizedEmail === "admin@auwcec.edu";
+    const name = isAdmin ? "AUWC ECSF Admin" : email.split("@")[0].replace(/[._]/g, " ");
     const mockUser: User = {
       id: crypto.randomUUID(),
       name,
       email: normalizedEmail,
       role: isAdmin ? "admin" : "team_leader",
       assignedTeamId: isAdmin ? "" : "media",
-      phone: isAdmin ? "+253 77 000 001" : "+253 77 213 890",
+      phone: isAdmin ? "+251 900 000 001" : "+251 900 000 002",
       avatarUrl: "",
       joinedTeams: isAdmin ? [] : ["media"],
     };
@@ -61,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       role: "team_leader",
       assignedTeamId: "media",
-      phone: "+253 77 213 890",
+      phone: "+251 900 000 002",
       avatarUrl: "",
       joinedTeams: ["media"],
     };

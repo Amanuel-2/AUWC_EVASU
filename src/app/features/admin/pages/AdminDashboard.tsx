@@ -15,7 +15,7 @@ export default function AdminDashboard() {
   return (
     <main className="min-h-screen bg-[#f7f8f5] p-4 md:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <header className="flex flex-col gap-4 rounded-lg bg-[#17211f] p-6 text-white shadow-sm md:flex-row md:items-center md:justify-between">
+        <header className="flex flex-col gap-4 rounded-lg bg-[#0F2638] p-6 text-white shadow-sm md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.18em] text-white/50">Admin Dashboard</p>
             <h1 className="mt-2 text-2xl font-semibold md:text-4xl">Welcome, {user?.name}</h1>
@@ -23,7 +23,7 @@ export default function AdminDashboard() {
           </div>
           <div className="flex gap-3">
             <Link to="/" className="rounded-md bg-white/10 px-4 py-2 text-sm font-medium transition hover:bg-white/20">Public site</Link>
-            <button onClick={logout} className="rounded-md bg-white px-4 py-2 text-sm font-medium text-[#17211f] transition hover:bg-white/90">Logout</button>
+            <button onClick={logout} className="rounded-md bg-white px-4 py-2 text-sm font-medium text-[#0F2638] transition hover:bg-white/90">Logout</button>
           </div>
         </header>
 

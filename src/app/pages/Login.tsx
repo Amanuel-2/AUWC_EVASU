@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import BrandLogo from "../components/BrandLogo";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ export default function Login() {
     setLoading(false);
     if (ok) {
       const normalizedEmail = email.trim().toLowerCase();
-      const isAdmin = normalizedEmail === "admin@radiance.edu";
+      const isAdmin = normalizedEmail === "admin@auwcec.edu";
       const fallback = isAdmin ? "/admin" : "/leader";
       const requestedRouteMatchesRole = isAdmin ? !from.startsWith("/leader") : !from.startsWith("/admin");
       navigate(from !== "/" && requestedRouteMatchesRole ? from : fallback, { replace: true });
@@ -43,12 +44,7 @@ export default function Login() {
           <div className="absolute inset-0 bg-gradient-to-b from-foreground/60 to-foreground/90" />
         </div>
         <div className="relative">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-              <span className="text-white text-lg">✦</span>
-            </div>
-            <span className="font-['DM_Serif_Display'] text-xl text-white">Radiance Fellowship</span>
-          </Link>
+<Link to="/"><BrandLogo variant="light" /></Link>
         </div>
         <div className="relative">
           <blockquote className="font-['DM_Serif_Display'] text-3xl text-white leading-relaxed italic mb-6">
@@ -72,7 +68,7 @@ export default function Login() {
 
           <div className="mb-10">
             <h1 className="font-['DM_Serif_Display'] text-4xl text-foreground mb-2">Welcome back</h1>
-            <p className="text-muted-foreground text-sm">Sign in to your Radiance Fellowship account</p>
+            <p className="text-muted-foreground text-sm">Sign in to your AUWC ECSF account</p>
           </div>
 
           {error && (
@@ -83,8 +79,8 @@ export default function Login() {
 
           <div className="mb-6 rounded-lg border bg-secondary/50 p-4 text-sm text-muted-foreground">
             <p className="font-medium text-foreground">Demo accounts</p>
-            <p className="mt-1">Admin: admin@radiance.edu / any password</p>
-            <p>Team Leader: leader@radiance.edu / any password</p>
+            <p className="mt-1">Admin: admin@auwcec.edu / any password</p>
+            <p>Team Leader: leader@auwcec.edu / any password</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -94,7 +90,7 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@university.edu"
+                placeholder="you@auwcec.edu"
                 className="w-full px-4 py-3 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
               />
             </div>
@@ -131,7 +127,7 @@ export default function Login() {
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-8">
-            New to Radiance?{" "}
+            New to AUWC?{" "}
             <Link to="/register" className="text-primary font-semibold hover:underline">
               Create an account
             </Link>

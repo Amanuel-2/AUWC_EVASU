@@ -23,10 +23,10 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   };
 
   return (
-    <aside className="flex h-full flex-col bg-[#17211f] text-white">
+    <aside className="flex h-full flex-col bg-[#0F2638] text-white">
       <div className="border-b border-white/10 p-5">
         <p className="text-xs uppercase tracking-[0.18em] text-white/45">Team Leader</p>
-        <h2 className="mt-2 text-xl font-semibold">Fellowship Hub</h2>
+        <h2 className="mt-2 text-xl font-semibold">AUWC ECSF Hub</h2>
         <p className="mt-1 text-sm text-white/60">{team?.name ?? "Assigned team"}</p>
       </div>
       <nav className="flex-1 space-y-1 p-3" aria-label="Leader dashboard">
@@ -37,7 +37,7 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             end={item.end}
             onClick={onNavigate}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-all duration-200 ${isActive ? "bg-white text-[#17211f] shadow-sm" : "text-white/72 hover:bg-white/10 hover:text-white"}`
+              `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-all duration-200 ${isActive ? "bg-white text-[#0F2638] shadow-sm" : "text-white/72 hover:bg-white/10 hover:text-white"}`
             }
           >
             <item.icon size={18} aria-hidden="true" />
@@ -73,7 +73,7 @@ function TopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
         <div className="flex items-center gap-2">
           <button className="relative inline-flex size-10 items-center justify-center rounded-md border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" aria-label="Notifications">
             <Bell size={18} />
-            <span className="absolute right-2 top-2 size-2 rounded-full bg-[#d66a2c]" />
+            <span className="absolute right-2 top-2 size-2 rounded-full bg-[#F26F5B]" />
           </button>
           <div className="hidden items-center gap-3 rounded-md border px-3 py-2 sm:flex">
             <div className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">

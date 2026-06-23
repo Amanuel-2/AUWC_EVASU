@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff, ArrowLeft, Check } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import BrandLogo from "../components/BrandLogo";
 
 const perks = [
   "Join multiple ministry teams",
@@ -40,12 +41,7 @@ export default function Register() {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2" />
 
         <div className="relative">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
-              <span className="text-white text-lg">✦</span>
-            </div>
-            <span className="font-['DM_Serif_Display'] text-xl text-white">Radiance Fellowship</span>
-          </Link>
+<Link to="/"><BrandLogo variant="light" /></Link>
         </div>
 
         <div className="relative">
@@ -85,7 +81,7 @@ export default function Register() {
 
           <div className="mb-10">
             <h1 className="font-['DM_Serif_Display'] text-4xl text-foreground mb-2">Create your account</h1>
-            <p className="text-muted-foreground text-sm">{"Join Radiance Fellowship — it's completely free"}</p>
+            <p className="text-muted-foreground text-sm">{"Join AUWC ECSF — it's completely free"}</p>
           </div>
 
           {error && (
@@ -111,7 +107,7 @@ export default function Register() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@university.edu"
+                placeholder="you@auwcec.edu"
                 className="w-full px-4 py-3 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
               />
             </div>
