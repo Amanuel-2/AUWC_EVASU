@@ -4,6 +4,9 @@ import { ArrowRight, ChevronRight, Quote, Calendar, MapPin, Users } from "lucide
 import { teams } from "../data/teams";
 import { useLanguage } from "../context/LanguageContext";
 
+import heroBg from "../../assets/teams/worship/20260510_125332.jpg";
+import worshipEventImg from "../../assets/teams/worship/20260510_125349.jpg";
+
 /* ── Intersection Observer hook for fade-in animations ── */
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
