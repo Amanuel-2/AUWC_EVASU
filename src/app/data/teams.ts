@@ -178,6 +178,7 @@ export const teams: Team[] = [
     ],
     icon: "💰",
     leaderCount: 3,
+<<<<<<< HEAD
   },
 
   {
@@ -403,6 +404,8 @@ export const teams: Team[] = [
     icon: "👥",
     leaderCount: 1,
     leaderEmail: "leader8@gmail.com",
+=======
+>>>>>>> 9a89d313 (build the ui)
   },
   {
     id: "prayer",
