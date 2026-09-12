@@ -132,6 +132,7 @@ export default function Navbar() {
                 </Link>
               </>
             )}
+            {user?.joinedTeams.length ? <Link to="/my-group" className="text-sm font-semibold text-primary px-3 py-2">My group</Link> : null}
           </div>
 
           {/* Mobile Menu Button */}
@@ -171,6 +172,7 @@ export default function Navbar() {
               </Link>
             )
           )}
+          {user?.joinedTeams.length ? <Link to="/my-group" onClick={() => setMenuOpen(false)} className="py-3 px-4 text-sm font-semibold text-primary hover:bg-secondary rounded-xl">My small group</Link> : null}
           <div className="flex flex-col gap-2 pt-3 border-t border-border mt-2">
             <LanguageToggle />
             {user ? (

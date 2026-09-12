@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { ArrowRight, Users, Heart, Music, Palette, HandHeart, Video, BookOpen, Cross, CalendarDays, MapPin, Quote } from "lucide-react";
 import { teams } from "../data/teams";
 import { useLanguage } from "../context/LanguageContext";
+import { useAuth } from "../context/AuthContext";
 
 import worshipTeam1 from "../../assets/teams/worship/20260510_125332.jpg";
 import worshipTeam2 from "../../assets/teams/worship/20260510_125349.jpg";
@@ -29,6 +30,7 @@ function useInView(threshold = 0.15) {
 function Hero() {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const { user } = useAuth();
   return (
     <section className="relative flex items-center overflow-hidden bg-background pt-20">
       <div className="absolute inset-0 opacity-5">
@@ -52,10 +54,10 @@ function Hero() {
 
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
-              to="/register"
+              to={user?.joinedTeams.length ? "/my-group" : "/register"}
               className="inline-flex justify-center items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg"
             >
-              {t("joinCommunity")}
+              {user?.joinedTeams.length ? "View my small group" : t("joinCommunity")}
               <ArrowRight size={18} />
             </Link>
             <button
