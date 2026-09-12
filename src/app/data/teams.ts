@@ -10,24 +10,7 @@ export interface Team {
   image: string;
   galleryImages: string[];
   icon: string;
-  leaderCount: number;
-  leaderEmail?: string;
 }
-
-import artTeamImage from "../../assets/teams/art/photo_2026-06-23_14-54-08.jpg";
-import choirImage1 from "../../assets/teams/choir/IMG_3224.jpg";
-import choirImage2 from "../../assets/teams/choir/IMG_3231.jpg";
-import choirImage3 from "../../assets/teams/choir/IMG_3247.jpg";
-import loveSharingImage1 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-02.jpg";
-import loveSharingImage2 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-11.jpg";
-import loveSharingImage3 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-21.jpg";
-import loveSharingImage4 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-29.jpg";
-import loveSharingImage5 from "../../assets/teams/love-sharing/photo_2026-06-23_15-01-32.jpg";
-import loveSharingImage6 from "../../assets/teams/love-sharing/photo_2026-06-23_15-01-44.jpg";
-import mediaTeamImage from "../../assets/teams/media/photo_2026-06-23_20-48-02.jpg";
-import worshipImage1 from "../../assets/teams/worship/20260510_125332.jpg";
-import worshipImage2 from "../../assets/teams/worship/20260510_125349.jpg";
-import worshipImage3 from "../../assets/teams/worship/IMG_20260516_153310_133.jpg";
 
 export const teams: Team[] = [
   {
@@ -48,14 +31,12 @@ export const teams: Team[] = [
       { day: "Monthly Planning", time: "Fridays 6:00 PM", location: "Fellowship Building, Room 4" },
     ],
     color: "#E8856A",
-    image: loveSharingImage3,
+    image: "../assets/images/teams/love-sharing/photo_2026-06-23_14-57-21.jpg",
     galleryImages: [
-      loveSharingImage3,
-      loveSharingImage1,
-      loveSharingImage2,
-      loveSharingImage4,
-      loveSharingImage5,
-      loveSharingImage6,
+      "../assets/images/teams/love-sharing/photo_2026-06-23_14-57-21.jpg",
+      "../assets/images/teams/love-sharing/photo_2026-06-23_14-57-21.jpg",
+      "../assets/images/teams/love-sharing/photo_2026-06-23_14-57-21.jpg",
+      "../assets/images/teams/love-sharing/photo_2026-06-23_14-57-21.jpg",
     ],
     icon: "❤️",
     leaderCount: 4,
@@ -78,9 +59,12 @@ export const teams: Team[] = [
       { day: "Exhibition Planning", time: "Bi-weekly Mondays 5:00 PM", location: "Fellowship Building, Room 2" },
     ],
     color: "#A78BFA",
-    image: artTeamImage,
+    image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&h=500&fit=crop&auto=format",
     galleryImages: [
-      artTeamImage,
+      "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1504805572947-34fad45aed93?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&auto=format",
     ],
     icon: "🎨",
     leaderCount: 3,
@@ -103,11 +87,12 @@ export const teams: Team[] = [
       { day: "Sunday Service", time: "8:00 AM Call Time", location: "Main Auditorium" },
     ],
     color: "#FBBF24",
-    image: worshipImage2,
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=500&fit=crop&auto=format",
     galleryImages: [
-      worshipImage2,
-      worshipImage1,
-      worshipImage3,
+      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&h=400&fit=crop&auto=format",
     ],
     icon: "🎵",
     leaderCount: 5,
@@ -121,10 +106,9 @@ export const teams: Team[] = [
     responsibilities: ["Arrange choral pieces for services", "Practice weekly rehearsals", "Collaborate with worship band", "Lead special musical events", "Mentor new singers"],
     schedule: [{ day: "Every Friday", time: "6:00 PM – 8:30 PM", location: "Chapel Choir Room" }],
     color: "#D946EF",
-    image: choirImage1,
-    galleryImages: [choirImage1, choirImage2, choirImage3],
-    icon: "🎤",
-    leaderCount: 4,
+    image: "/images/choir.jpg",
+    galleryImages: [],
+    icon: "🎤"
   },
   {
     id: "media",
@@ -144,11 +128,15 @@ export const teams: Team[] = [
       { day: "Content Review", time: "Mondays 4:00 PM", location: "Online (Google Meet)" },
     ],
     color: "#34D399",
-    image: mediaTeamImage,
+    image: "https://images.unsplash.com/photo-1574717024453-354050e0ce84?w=800&h=500&fit=crop&auto=format",
     galleryImages: [
-      mediaTeamImage,
+      "https://images.unsplash.com/photo-1551817958-d9d86fb29431?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1520390138845-fd2d229dd553?w=600&h=400&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=600&h=400&fit=crop&auto=format",
     ],
     icon: "📷",
+<<<<<<< HEAD
     leaderCount: 3,
   },
 
@@ -406,6 +394,8 @@ export const teams: Team[] = [
     leaderEmail: "leader8@gmail.com",
 =======
 >>>>>>> 9a89d313 (build the ui)
+=======
+>>>>>>> e3a1ae07 (Revert "add image")
   },
   {
     id: "prayer",

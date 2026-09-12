@@ -33,7 +33,7 @@ export default function TeamDetails() {
   };
 
   return (
-    <main className="min-h-screen bg-background pt-20">
+    <main className="min-h-screen bg-background pt-20 pb-24 md:pb-0">
       {/* Hero Banner */}
       <div className="relative h-[55vh] min-h-[400px] overflow-hidden bg-foreground">
         <img
@@ -116,12 +116,12 @@ export default function TeamDetails() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Join Card */}
-            <div className="bg-card border border-border rounded-2xl p-6 sticky top-24">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-md border-t border-border p-4 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] md:static md:rounded-2xl md:border md:p-6 md:shadow-none md:sticky md:top-24">
+              <div className="flex items-center gap-3 mb-2 md:mb-4">
                 <Users size={18} className="text-primary" />
                 <span className="font-semibold text-foreground text-sm">Join this team</span>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+              <p className="hidden md:block text-sm text-muted-foreground leading-relaxed mb-6">
                 {alreadyJoined
                   ? "You are already a member of this team. Welcome aboard!"
                   : user
@@ -137,14 +137,14 @@ export default function TeamDetails() {
               ) : (
                 <button
                   onClick={handleJoin}
-                  className="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors duration-200 shadow-sm hover:shadow-md"
+                  className="w-full bg-primary text-white py-3.5 md:py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors duration-200 shadow-sm hover:shadow-md"
                 >
                   {user ? "Join This Team" : "Login to Join"}
                 </button>
               )}
 
               {!user && (
-                <div className="mt-4 text-center">
+                <div className="hidden md:block mt-4 text-center">
                   <span className="text-xs text-muted-foreground">No account? </span>
                   <Link to="/register" className="text-xs font-semibold text-primary hover:underline">
                     Register free

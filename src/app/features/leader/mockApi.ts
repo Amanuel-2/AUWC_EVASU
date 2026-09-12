@@ -28,10 +28,10 @@ const members: TeamMember[] = [
   { id: "m-101", teamId: "worship", fullName: "Grace Mensah", phone: "+253 77 555 000", department: "Music", yearOfStudy: "Year 3", gender: "Female", dateJoined: "2025-09-01", email: "grace.mensah@university.edu", role: "Vocalist", notes: "Other team data, hidden from Media leader." },
   { id: "f-001", teamId: "fund", fullName: "Ruth Alemu", phone: "+253 77 410 210", department: "Accounting", yearOfStudy: "Year 3", gender: "Female", dateJoined: "2026-01-10", email: "ruth.alemu@university.edu", role: "Fund Coordinator", notes: "Tracks giving records and support requests." },
   { id: "f-002", teamId: "fund", fullName: "Noah Bekele", phone: "+253 77 902 118", department: "Business", yearOfStudy: "Year 2", gender: "Male", dateJoined: "2026-02-19", email: "noah.bekele@university.edu", role: "Budget Assistant", notes: "Helps prepare monthly summaries." },
-  { id: "sg-1-1", teamId: "small-group-1", fullName: "Group 1 Member 1", phone: "+253 77 001 001", department: "Campus Ministry", yearOfStudy: "Year 1", gender: "", dateJoined: "2026-01-01", email: "group1.member1@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 1." },
-  { id: "sg-1-2", teamId: "small-group-1", fullName: "Group 1 Member 2", phone: "+253 77 001 002", department: "Campus Ministry", yearOfStudy: "Year 2", gender: "", dateJoined: "2026-02-02", email: "group1.member2@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 1." },
-  { id: "sg-1-3", teamId: "small-group-1", fullName: "Group 1 Member 3", phone: "+253 77 001 003", department: "Campus Ministry", yearOfStudy: "Year 3", gender: "", dateJoined: "2026-03-03", email: "group1.member3@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 1." },
-  { id: "sg-1-4", teamId: "small-group-1", fullName: "Group 1 Member 4", phone: "+253 77 001 004", department: "Campus Ministry", yearOfStudy: "Year 4", gender: "", dateJoined: "2026-04-04", email: "group1.member4@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 1." },
+  { id: "sg-1-1", teamId: "small-group-1", fullName: "Abdi Hassan", phone: "+253 77 001 001", department: "Campus Ministry", yearOfStudy: "Year 1", gender: "Male", dateJoined: "2026-01-01", email: "abdi.hassan@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 1." },
+  { id: "sg-1-2", teamId: "small-group-1", fullName: "Hana Yusuf", phone: "+253 77 001 002", department: "Campus Ministry", yearOfStudy: "Year 2", gender: "Female", dateJoined: "2026-02-02", email: "hana.yusuf@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 1." },
+  { id: "sg-1-3", teamId: "small-group-1", fullName: "Samuel Tesfaye", phone: "+253 77 001 003", department: "Campus Ministry", yearOfStudy: "Year 3", gender: "Male", dateJoined: "2026-03-03", email: "samuel.tesfaye@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 1." },
+  { id: "sg-1-4", teamId: "small-group-1", fullName: "Mariam Ali", phone: "+253 77 001 004", department: "Campus Ministry", yearOfStudy: "Year 4", gender: "Female", dateJoined: "2026-04-04", email: "mariam.ali@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 1." },
   { id: "sg-2-1", teamId: "small-group-2", fullName: "Group 2 Member 1", phone: "+253 77 002 001", department: "Campus Ministry", yearOfStudy: "Year 1", gender: "", dateJoined: "2026-01-01", email: "group2.member1@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 2." },
   { id: "sg-2-2", teamId: "small-group-2", fullName: "Group 2 Member 2", phone: "+253 77 002 002", department: "Campus Ministry", yearOfStudy: "Year 2", gender: "", dateJoined: "2026-02-02", email: "group2.member2@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 2." },
   { id: "sg-2-3", teamId: "small-group-2", fullName: "Group 2 Member 3", phone: "+253 77 002 003", department: "Campus Ministry", yearOfStudy: "Year 3", gender: "", dateJoined: "2026-03-03", email: "group2.member3@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 2." },
@@ -112,7 +112,23 @@ export async function fetchLeaderTeam(teamId: string) {
 export async function fetchTeamMembers(teamId: string) {
   await wait();
   if (!teams.some((team) => team.id === teamId)) throw new Error("Assigned team could not be found.");
-  return members.filter((member) => member.teamId === teamId);
+  const names = [
+    "Abdi Hassan", "Hana Yusuf", "Samuel Tesfaye", "Mariam Ali",
+    "Yonas Ibrahim", "Liya Ahmed", "Daniel Bekele", "Sofia Mohamed",
+    "Nathaniel Omar", "Ruth Abdi", "Joel Dawit", "Ayanle Warsame",
+    "Michael Kidane", "Selam Gebre", "Elias Noor", "Meron Tadesse",
+    "Khalid Ismail", "Bethel Solomon", "Yared Musa", "Hawa Abdullahi",
+    "Yohannes Alemu", "Sara Hassan", "Dawit Roble", "Nadia Osman",
+    "Bereket Ali", "Muna Ibrahim", "Henok Tesfaye", "Fatima Ahmed",
+    "Isaac Daniel", "Rahel Yusuf", "Omar Abdullahi", "Eden Mekonnen",
+  ];
+  return members.filter((member) => member.teamId === teamId).map((member) => {
+    if (!member.fullName.startsWith("Group ")) return member;
+    const groupNumber = Number(member.teamId.split("-").pop()) || 1;
+    const memberNumber = Number(member.id.split("-").pop()) || 1;
+    const name = names[(groupNumber - 1) * 4 + memberNumber - 1];
+    return name ? { ...member, fullName: name, email: `${name.toLowerCase().replace(/ /g, ".")}@university.edu` } : member;
+  });
 }
 
 export async function fetchMeetingSchedule(teamId: string) {

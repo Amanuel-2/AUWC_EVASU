@@ -9,7 +9,7 @@ import { useLanguage } from "../context/LanguageContext";
 const navLinks = [
   { key: "home", href: "/" },
   { key: "about", href: "/#about" },
-  { key: "teams", href: "/#teams" },
+  { key: "teams", href: "/small-groups" },
   { key: "events", href: "/#events" },
   { key: "contact", href: "/#contact" },
 ] as const;

@@ -1,0 +1,16 @@
+/home/aman/code/projects/AUWC_EVASU/ATTRIBUTIONS.md
+/home/aman/code/projects/AUWC_EVASU/README.md
+/home/aman/code/projects/AUWC_EVASU/guidelines/Guidelines.md
+/home/aman/code/projects/AUWC_EVASU/index.html
+/home/aman/code/projects/AUWC_EVASU/pnpm-workspace.yaml
+/home/aman/code/projects/AUWC_EVASU/src/assets/auwcec-ecsf-logo.png
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/art/photo_2026-06-23_14-54-08.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/love-sharing/photo_2026-06-23_14-57-02.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/love-sharing/photo_2026-06-23_14-57-11.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/love-sharing/photo_2026-06-23_14-57-21.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/love-sharing/photo_2026-06-23_14-57-29.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/love-sharing/photo_2026-06-23_15-01-32.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/love-sharing/photo_2026-06-23_15-01-44.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/worship/20260510_125332.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/worship/20260510_125349.jpg
+/home/aman/code/projects/AUWC_EVASU/src/assets/teams/worship/IMG_20260516_153310_133.jpg
