@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ArrowRight, Users, Heart, Music, Palette, HandHeart, Video, BookOpen, Cross, CalendarDays, MapPin, Quote } from "lucide-react";
-import { teams } from "../data/teams";
+import { motion, useReducedMotion } from "motion/react";
+import { namedTeams } from "../data/teams";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -31,18 +32,24 @@ function Hero() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const reduceMotion = useReducedMotion();
   return (
-    <section className="relative flex items-center overflow-hidden bg-background pt-20">
-      <div className="absolute inset-0 opacity-5">
+    <motion.section
+      className="relative flex items-center overflow-hidden bg-background pt-20"
+      initial={reduceMotion ? false : "hidden"}
+      animate="visible"
+      variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } } }}
+    >
+      <motion.div className="absolute inset-0 opacity-5" initial={{ opacity: 0 }} animate={{ opacity: 0.05 }} transition={{ duration: 1.2 }}>
         <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(#5C1D4D 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
-      </div>
+      </motion.div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div className="z-10">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-8">
+        <motion.div className="z-10" variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } } }}>
+          <motion.div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-8" whileHover={reduceMotion ? undefined : { scale: 1.04 }}>
             <Cross size={14} />
             <span>{t("heroBadge")}</span>
-          </div>
+          </motion.div>
 
           <h1 className="font-['DM_Serif_Display'] text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-6 max-w-2xl">
             {t("grow")} {t("serve")} {t("shine")}
@@ -52,7 +59,7 @@ function Hero() {
             {t("heroText")}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          <motion.div className="flex flex-col sm:flex-row gap-3" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.5 } } }}>
             <Link
               to={user?.joinedTeams.length ? "/my-group" : "/register"}
               className="inline-flex justify-center items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg"
@@ -66,30 +73,30 @@ function Hero() {
             >
               {t("exploreTeams")}
             </button>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-3 gap-4 mt-10 pt-8 border-t border-border max-w-lg">
+          <motion.div className="grid grid-cols-3 gap-4 mt-10 pt-8 border-t border-border max-w-lg" variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}>
             {[["500+", t("activeMembers")], ["8", t("ministryTeams")], ["6+", t("yearsImpact")]].map(([num, label]) => (
               <div key={label}>
                 <div className="text-3xl font-bold text-primary">{num}</div>
                 <div className="text-sm text-muted-foreground mt-1">{label}</div>
               </div>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="relative">
+        <motion.div className="relative" variants={{ hidden: { opacity: 0, x: 28 }, visible: { opacity: 1, x: 0, transition: { duration: 0.85, ease: "easeOut" } } }}>
           <div className="relative grid grid-cols-2 gap-4">
             <div className="space-y-4">
-              <img src={worshipTeam1} alt="Students worshipping together" className="rounded-2xl w-full h-56 lg:h-64 object-cover shadow-md" />
-              <img src={loveSharing1} alt="Students serving their community" className="rounded-2xl w-full h-40 lg:h-48 object-cover shadow-md" />
+              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={worshipTeam1} alt="Students worshipping together" className="rounded-2xl w-full h-56 lg:h-64 object-cover shadow-md" />
+              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={loveSharing1} alt="Students serving their community" className="rounded-2xl w-full h-40 lg:h-48 object-cover shadow-md" />
             </div>
             <div className="space-y-4 mt-8">
-              <img src={worshipTeam2} alt="Fellowship gathering" className="rounded-2xl w-full h-40 lg:h-48 object-cover shadow-md" />
-              <img src={artTeam} alt="Students expressing their creativity" className="rounded-2xl w-full h-56 lg:h-64 object-cover shadow-md" />
+              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={worshipTeam2} alt="Fellowship gathering" className="rounded-2xl w-full h-40 lg:h-48 object-cover shadow-md" />
+              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={artTeam} alt="Students expressing their creativity" className="rounded-2xl w-full h-56 lg:h-64 object-cover shadow-md" />
             </div>
           </div>
-          <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl border border-border">
+          <motion.div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl border border-border" animate={reduceMotion ? undefined : { y: [0, -7, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}>
             <div className="flex items-center gap-3 mb-2">
               {[1, 2, 3].map(i => (
                 <div key={i} className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">{i}</div>
@@ -97,10 +104,10 @@ function Hero() {
               <span className="text-sm font-semibold text-foreground ml-2">+497</span>
             </div>
             <p className="text-xs text-muted-foreground">Active members</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -183,6 +190,7 @@ function Teams() {
   const { ref, inView } = useInView();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const reduceMotion = useReducedMotion();
 
   const teamIcons = {
     worship: <Music className="w-5 h-5" />,
@@ -204,14 +212,19 @@ function Teams() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {teams.map((team, i) => (
-              <div
+            {namedTeams.map((team, i) => (
+              <motion.div
                 key={team.id}
                 onClick={() => navigate(`/teams/${team.id}`)}
                 role="link"
                 tabIndex={0}
                 onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") navigate(`/teams/${team.id}`); }}
                 className="bg-white p-6 rounded-2xl border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.45, delay: i * 0.06 }}
+                whileHover={reduceMotion ? undefined : { y: -6 }}
               >
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ backgroundColor: team.color + "20", color: team.color }}>
                   {teamIcons[team.id as keyof typeof teamIcons] || <Users className="w-5 h-5" />}
@@ -225,7 +238,7 @@ function Teams() {
                 <button onClick={() => navigate(`/teams/${team.id}`)} className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:gap-2 transition-all">
                   Join this group <ArrowRight size={15} />
                 </button>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

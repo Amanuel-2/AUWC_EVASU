@@ -455,3 +455,11 @@ export const teams: Team[] = [
     leaderCount: 5,
   },
 ];
+
+// Placeholder groups remain available for existing leader assignments, but
+// should not appear in the public group directory until they are named.
+export function isPlaceholderTeam(team: Team) {
+  return /^(?:small\s+)?group(?:\s+name)?\s+\d+$/i.test(team.name.trim());
+}
+
+export const namedTeams = teams.filter((team) => !isPlaceholderTeam(team));

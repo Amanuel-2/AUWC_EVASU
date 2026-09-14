@@ -1,6 +1,6 @@
 import { ArrowRight, CheckCircle2, Users } from "lucide-react";
 import { useNavigate } from "react-router";
-import { teams } from "../data/teams";
+import { namedTeams } from "../data/teams";
 
 export default function SmallGroups() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export default function SmallGroups() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {teams.map((team) => (
+          {namedTeams.map((team) => (
             <button
               key={team.id}
               type="button"
