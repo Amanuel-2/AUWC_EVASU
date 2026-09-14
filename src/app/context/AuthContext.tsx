@@ -25,6 +25,31 @@ interface AuthContextType {
 const CURRENT_USER_KEY = "fellowship_user";
 const AUTH_DELAY_MS = 250;
 
+export const teamLeaderEmails: Record<string, string> = {
+  "media@auwcec.edu": "media",
+  "media@gmail.com": "media",
+  "fund@auwcec.edu": "fund",
+  "fund@gmail.com": "fund",
+  "love@gmail.com": "love-sharing",
+  "art@gmail.com": "art",
+  "worship@gmail.com": "worship",
+  "choir@gmail.com": "choir",
+  "pray@gmail.com": "prayer",
+  "evangelism@gmail.com": "evangelism",
+  "leader1@gmail.com": "small-group-1",
+  "leader2@gmail.com": "small-group-2",
+  "leader3@gmail.com": "small-group-3",
+  "leader4@gmail.com": "small-group-4",
+  "leader5@gmail.com": "small-group-5",
+  "leader6@gmail.com": "small-group-6",
+  "leader7@gmail.com": "small-group-7",
+  "leader8@gmail.com": "small-group-8",
+};
+
+export function isTeamLeaderEmail(email: string) {
+  return Boolean(teamLeaderEmails[normalizeEmail(email)]);
+}
+
 const AuthContext = createContext<AuthContextType | null>(null);
 
 function createId() {
@@ -60,19 +85,7 @@ function parseStoredUser(): User | null {
 function createDemoUser(email: string): User {
   const normalizedEmail = normalizeEmail(email);
   const isAdmin = normalizedEmail === "admin@auwcec.edu";
-  const leaderTeams: Record<string, string> = {
-    "media@auwcec.edu": "media",
-    "fund@auwcec.edu": "fund",
-    "leader1@gmail.com": "small-group-1",
-    "leader2@gmail.com": "small-group-2",
-    "leader3@gmail.com": "small-group-3",
-    "leader4@gmail.com": "small-group-4",
-    "leader5@gmail.com": "small-group-5",
-    "leader6@gmail.com": "small-group-6",
-    "leader7@gmail.com": "small-group-7",
-    "leader8@gmail.com": "small-group-8",
-  };
-  const assignedTeamId = leaderTeams[normalizedEmail] ?? "";
+  const assignedTeamId = teamLeaderEmails[normalizedEmail] ?? "";
   const isTeamLeader = Boolean(assignedTeamId);
   const name = isAdmin ? "AUWC ECSF Admin" : normalizedEmail.split("@")[0].replace(/[._]/g, " ");
 

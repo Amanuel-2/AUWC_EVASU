@@ -1,22 +1,10 @@
 import { AttendanceRecord, MeetingSchedule, Team, TeamMember } from "./types";
+import { teams as appTeams } from "../../data/teams";
 
 const SCHEDULES_KEY = "fellowship_mock_schedules";
 const ATTENDANCE_KEY = "fellowship_mock_attendance";
 
-const teams: Team[] = [
-  { id: "media", name: "Media Team", description: "Photography, announcements, livestream, and digital storytelling." },
-  { id: "worship", name: "Worship Team", description: "Music, prayer, and chapel service coordination." },
-  { id: "outreach", name: "Outreach Team", description: "Community service and campus engagement." },
-  { id: "fund", name: "Fund Team", description: "Fundraising, giving records, and financial support for fellowship programs." },
-  { id: "small-group-1", name: "Small Group 1", description: "Small group shepherding, attendance, and student care for Group 1." },
-  { id: "small-group-2", name: "Small Group 2", description: "Small group shepherding, attendance, and student care for Group 2." },
-  { id: "small-group-3", name: "Small Group 3", description: "Small group shepherding, attendance, and student care for Group 3." },
-  { id: "small-group-4", name: "Small Group 4", description: "Small group shepherding, attendance, and student care for Group 4." },
-  { id: "small-group-5", name: "Small Group 5", description: "Small group shepherding, attendance, and student care for Group 5." },
-  { id: "small-group-6", name: "Small Group 6", description: "Small group shepherding, attendance, and student care for Group 6." },
-  { id: "small-group-7", name: "Small Group 7", description: "Small group shepherding, attendance, and student care for Group 7." },
-  { id: "small-group-8", name: "Small Group 8", description: "Small group shepherding, attendance, and student care for Group 8." },
-];
+const teams: Team[] = appTeams.map(({ id, name, description }) => ({ id, name, description }));
 
 const members: TeamMember[] = [
   { id: "m-001", teamId: "media", fullName: "Hodan Ali", phone: "+253 77 100 421", department: "Communication", yearOfStudy: "Year 3", gender: "Female", dateJoined: "2025-09-14", email: "hodan.ali@university.edu", role: "Photographer", notes: "Leads event photo coverage." },
@@ -62,20 +50,12 @@ const members: TeamMember[] = [
   { id: "sg-8-4", teamId: "small-group-8", fullName: "Group 8 Member 4", phone: "+253 77 008 004", department: "Campus Ministry", yearOfStudy: "Year 4", gender: "", dateJoined: "2026-04-04", email: "group8.member4@university.edu", role: "Small Group Member", notes: "Assigned to Small Group 8." },
 ];
 
-const defaultSchedules: MeetingSchedule[] = [
-  { teamId: "media", day: "Thursday", time: "17:30", location: "Student Center Studio" },
-  { teamId: "worship", day: "Tuesday", time: "18:00", location: "Chapel Hall" },
-  { teamId: "outreach", day: "Saturday", time: "10:00", location: "Fellowship Office" },
-  { teamId: "fund", day: "Monday", time: "17:00", location: "Fellowship Office" },
-  { teamId: "small-group-1", day: "Wednesday", time: "18:00", location: "Small Group Room 1" },
-  { teamId: "small-group-2", day: "Wednesday", time: "18:00", location: "Small Group Room 2" },
-  { teamId: "small-group-3", day: "Wednesday", time: "18:00", location: "Small Group Room 3" },
-  { teamId: "small-group-4", day: "Wednesday", time: "18:00", location: "Small Group Room 4" },
-  { teamId: "small-group-5", day: "Wednesday", time: "18:00", location: "Small Group Room 5" },
-  { teamId: "small-group-6", day: "Wednesday", time: "18:00", location: "Small Group Room 6" },
-  { teamId: "small-group-7", day: "Wednesday", time: "18:00", location: "Small Group Room 7" },
-  { teamId: "small-group-8", day: "Wednesday", time: "18:00", location: "Small Group Room 8" },
-];
+const defaultSchedules: MeetingSchedule[] = appTeams.map((team) => ({
+  teamId: team.id,
+  day: team.schedule[0]?.day ?? "To be confirmed",
+  time: team.schedule[0]?.time ?? "To be confirmed",
+  location: team.schedule[0]?.location ?? "To be confirmed",
+}));
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 350));
 

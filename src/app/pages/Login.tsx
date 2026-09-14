@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
+import { isTeamLeaderEmail, useAuth } from "../context/AuthContext";
 import BrandLogo from "../components/BrandLogo";
 import LanguageToggle from "../components/LanguageToggle";
 import { useLanguage } from "../context/LanguageContext";
@@ -28,19 +28,7 @@ export default function Login() {
     if (ok) {
       const normalizedEmail = email.trim().toLowerCase();
       const isAdmin = normalizedEmail === "admin@auwcec.edu";
-      const leaderEmails = [
-        "media@auwcec.edu",
-        "fund@auwcec.edu",
-        "leader1@gmail.com",
-        "leader2@gmail.com",
-        "leader3@gmail.com",
-        "leader4@gmail.com",
-        "leader5@gmail.com",
-        "leader6@gmail.com",
-        "leader7@gmail.com",
-        "leader8@gmail.com",
-      ];
-      const isLeader = leaderEmails.includes(normalizedEmail);
+      const isLeader = isTeamLeaderEmail(normalizedEmail);
       const fallback = isAdmin ? "/admin" : isLeader ? "/leader" : "/";
       const requestedRouteMatchesRole = isAdmin ? !from.startsWith("/leader") : isLeader ? !from.startsWith("/admin") : !from.startsWith("/admin") && !from.startsWith("/leader");
       navigate(from !== "/" && requestedRouteMatchesRole ? from : fallback, { replace: true });
