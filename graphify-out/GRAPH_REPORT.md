@@ -1,23 +1,24 @@
 # Graph Report - AUWC_EVASU  (2026-09-12)
 
 ## Corpus Check
-- Large corpus: 96 files · ~544,487 words. Semantic extraction will be expensive (many Claude tokens). Consider running on a subfolder.
+- 8 files · ~546,819 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 604 nodes · 1247 edges · 43 communities (36 shown, 6 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 35 edges (avg confidence: 0.83)
+- 608 nodes · 1249 edges · 42 communities (34 shown, 7 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
 - App Core & Layout
 - NPM Dependencies
 - UI Input & Sidebar
-- UI Breadcrumbs & Tabs
-- UI Dialog & Alert
+- UI Avatar & Tabs
 - Leader Dashboard
+- UI Dialog & Alert
 - Home Pages & Team Data
-- Attributions & Config
 - UI Command Palette
+- Attributions & Config
 - Package Metadata
 - UI Menubar
 - UI Context Menu
@@ -30,66 +31,65 @@
 - UI Drawer
 - UI Navigation Menu
 - UI Alert & Badge
-- UI Checkbox & Switch
-- UI Progress & Slider
+- UI Progress & Radio
+- UI Checkbox & Slider
 - UI Toggle & Toggle Group
 - UI Input OTP
 - UI Accordion
 - UI Popover
 - Dev Dependencies
 - React Peer Deps Meta
-- UI Avatar
 - UI Collapsible
 - UI Hover Card
 - UI Resizable Panels
 - UI Toast & Themes
-- UI Radio Group
 - UI Scroll Area
 - Vite Build Config
 - PNPM Overrides
 - React Peer Deps
 - NPM Scripts
 - UI Aspect Ratio
+- UI Switch
 - Guidelines Doc
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 223 edges
 2. `react` - 58 edges
-3. `lucide-react` - 32 edges
+3. `lucide-react` - 36 edges
 4. `useAuth()` - 24 edges
-5. `useLanguage()` - 23 edges
-6. `react-router` - 15 edges
+5. `useLanguage()` - 17 edges
+6. `react-router` - 17 edges
 7. `AUWC ECSF Fellowship Management System` - 15 edges
 8. `useLeaderDashboard()` - 13 edges
 9. `buttonVariants` - 9 edges
 10. `Love Sharing Team` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `lucide-react` --conceptually_related_to--> `React 18`  [INFERRED]
+  package.json → README.md
+- `Attributions` --references--> `lucide-react`  [EXTRACTED]
+  ATTRIBUTIONS.md → package.json
 - `AUWC ECSF Logo (asset)` --semantically_similar_to--> `AUWC ECSF Logo`  [INFERRED] [semantically similar]
   ATTRIBUTIONS.md → README.md
 - `index.html (Vite entry point)` --references--> `AUWC ECSF Fellowship Management System`  [INFERRED]
   index.html → README.md
-- `Lucide React` --conceptually_related_to--> `React 18`  [INFERRED]
-  ATTRIBUTIONS.md → README.md
 - `pnpm workspace config` --conceptually_related_to--> `Vite`  [INFERRED]
   pnpm-workspace.yaml → README.md
-- `AccordionItem()` --calls--> `cn()`  [EXTRACTED]
-  src/app/components/ui/accordion.tsx → src/app/components/ui/utils.ts
 
 ## Import Cycles
 - None detected.
 
 ## Hyperedges (group relationships)
 - **React-based Frontend Tech Stack** — readme_react_18, readme_typescript, readme_vite, readme_react_router_7, readme_tailwind_css_4, readme_context_api [EXTRACTED 1.00]
-- **UI Library Ecosystem** — attributions_shadcn_ui, attributions_radix_ui, attributions_lucide_react [EXTRACTED 1.00]
+- **UI Library Ecosystem** — attributions_shadcn_ui, attributions_radix_ui, ref_lucide_react [EXTRACTED 1.00]
 - **Role-Based Feature Modules** — readme_admin_dashboard, readme_team_leader_dashboard, readme_mock_authentication, readme_role_based_access [INFERRED 0.85]
 - **AUWCEC ECSF Team Photos** — src_assets_teams_art, src_assets_teams_love_sharing, src_assets_teams_worship, src_assets_auwcec_ecsf_logo [INFERRED 0.85]
 
-## Communities (43 total, 6 thin omitted)
+## Communities (42 total, 7 thin omitted)
 
 ### Community 0 - "App Core & Layout"
-Cohesion: 0.09
-Nodes (46): lucide-react, react-router, App(), BrandLogo(), BrandLogoProps, Footer(), LanguageToggle(), Navbar() (+38 more)
+Cohesion: 0.07
+Nodes (47): lucide-react, react-router, App(), BrandLogo(), BrandLogoProps, Footer(), LanguageToggle(), Navbar() (+39 more)
 
 ### Community 1 - "NPM Dependencies"
 Cohesion: 0.04
@@ -99,29 +99,29 @@ Nodes (56): dependencies, canvas-confetti, class-variance-authority, clsx, cmdk,
 Cohesion: 0.06
 Nodes (36): @radix-ui/react-tooltip, Input(), Separator(), Sidebar(), SidebarContent(), SidebarContext, SidebarContextProps, SidebarFooter() (+28 more)
 
-### Community 3 - "UI Breadcrumbs & Tabs"
-Cohesion: 0.11
-Nodes (27): @radix-ui/react-tabs, BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage(), BreadcrumbSeparator(), Card() (+19 more)
+### Community 3 - "UI Avatar & Tabs"
+Cohesion: 0.10
+Nodes (31): @radix-ui/react-avatar, @radix-ui/react-tabs, Avatar(), AvatarFallback(), AvatarImage(), BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink() (+23 more)
 
-### Community 4 - "UI Dialog & Alert"
-Cohesion: 0.09
-Nodes (21): @radix-ui/react-alert-dialog, @radix-ui/react-slot, react-day-picker, AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter() (+13 more)
-
-### Community 5 - "Leader Dashboard"
+### Community 4 - "Leader Dashboard"
 Cohesion: 0.18
 Nodes (25): createId(), LeaderDashboardContext, LeaderDashboardContextValue, LeaderDashboardProvider(), loadDashboardData(), defaultSchedules, fetchAttendanceRecords(), fetchLeaderTeam() (+17 more)
 
+### Community 5 - "UI Dialog & Alert"
+Cohesion: 0.10
+Nodes (20): @radix-ui/react-alert-dialog, react-day-picker, AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader() (+12 more)
+
 ### Community 6 - "Home Pages & Team Data"
-Cohesion: 0.12
-Nodes (22): Team, teams, About(), CTA(), Hero(), Home(), Teams(), useInView() (+14 more)
+Cohesion: 0.14
+Nodes (20): Team, About(), CTA(), Home(), Teams(), useInView(), AUWCEC ECSF Logo, Art Team (+12 more)
 
-### Community 7 - "Attributions & Config"
-Cohesion: 0.13
-Nodes (23): AUWC ECSF Logo (asset), Lucide React, Attributions, Radix UI, shadcn/ui, Unsplash, index.html (Vite entry point), pnpm workspace config (+15 more)
-
-### Community 8 - "UI Command Palette"
+### Community 7 - "UI Command Palette"
 Cohesion: 0.13
 Nodes (15): cmdk, Command(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator(), CommandShortcut() (+7 more)
+
+### Community 8 - "Attributions & Config"
+Cohesion: 0.14
+Nodes (22): AUWC ECSF Logo (asset), Attributions, Radix UI, shadcn/ui, Unsplash, index.html (Vite entry point), pnpm workspace config, Admin Dashboard (+14 more)
 
 ### Community 9 - "Package Metadata"
 Cohesion: 0.09
@@ -168,16 +168,16 @@ Cohesion: 0.20
 Nodes (10): @radix-ui/react-navigation-menu, NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuTrigger() (+2 more)
 
 ### Community 20 - "UI Alert & Badge"
-Cohesion: 0.28
-Nodes (7): class-variance-authority, Alert(), AlertDescription(), AlertTitle(), alertVariants, Badge(), badgeVariants
+Cohesion: 0.24
+Nodes (8): class-variance-authority, @radix-ui/react-slot, Alert(), AlertDescription(), AlertTitle(), alertVariants, Badge(), badgeVariants
 
-### Community 21 - "UI Checkbox & Switch"
-Cohesion: 0.22
-Nodes (6): clsx, @radix-ui/react-checkbox, @radix-ui/react-switch, tailwind-merge, Checkbox(), Switch()
+### Community 21 - "UI Progress & Radio"
+Cohesion: 0.20
+Nodes (7): @radix-ui/react-progress, @radix-ui/react-radio-group, react, Progress(), RadioGroup(), RadioGroupItem(), Textarea()
 
-### Community 22 - "UI Progress & Slider"
+### Community 22 - "UI Checkbox & Slider"
 Cohesion: 0.22
-Nodes (6): @radix-ui/react-progress, @radix-ui/react-slider, react, Progress(), Slider(), Textarea()
+Nodes (6): clsx, @radix-ui/react-checkbox, @radix-ui/react-slider, tailwind-merge, Checkbox(), Slider()
 
 ### Community 23 - "UI Toggle & Toggle Group"
 Cohesion: 0.31
@@ -199,56 +199,48 @@ Nodes (5): devDependencies, tailwindcss, @tailwindcss/vite, vite, @vitejs/plugin
 Cohesion: 0.40
 Nodes (5): peerDependenciesMeta, react, react-dom, optional, optional
 
-### Community 29 - "UI Avatar"
-Cohesion: 0.40
-Nodes (4): @radix-ui/react-avatar, Avatar(), AvatarFallback(), AvatarImage()
-
-### Community 32 - "UI Resizable Panels"
+### Community 31 - "UI Resizable Panels"
 Cohesion: 0.40
 Nodes (3): react-resizable-panels, ResizableHandle(), ResizablePanelGroup()
 
-### Community 34 - "UI Radio Group"
-Cohesion: 0.50
-Nodes (3): @radix-ui/react-radio-group, RadioGroup(), RadioGroupItem()
-
-### Community 35 - "UI Scroll Area"
+### Community 33 - "UI Scroll Area"
 Cohesion: 0.50
 Nodes (3): @radix-ui/react-scroll-area, ScrollArea(), ScrollBar()
 
-### Community 36 - "Vite Build Config"
+### Community 34 - "Vite Build Config"
 Cohesion: 0.50
 Nodes (3): @tailwindcss/vite, vite, @vitejs/plugin-react
 
-### Community 37 - "PNPM Overrides"
+### Community 35 - "PNPM Overrides"
 Cohesion: 0.67
 Nodes (3): vite, pnpm, overrides
 
-### Community 38 - "React Peer Deps"
+### Community 36 - "React Peer Deps"
 Cohesion: 0.67
 Nodes (3): peerDependencies, react, react-dom
 
-### Community 39 - "NPM Scripts"
+### Community 37 - "NPM Scripts"
 Cohesion: 0.67
 Nodes (3): scripts, build, dev
 
 ## Knowledge Gaps
-- **132 isolated node(s):** `name`, `private`, `version`, `type`, `build` (+127 more)
+- **128 isolated node(s):** `BrandLogoProps`, `AuthContextType`, `User`, `Language`, `TranslationKey` (+123 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 185 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `UI Progress & Slider` to `App Core & Layout`, `UI Input & Sidebar`, `UI Breadcrumbs & Tabs`, `UI Dialog & Alert`, `Leader Dashboard`, `Home Pages & Team Data`, `UI Command Palette`, `Package Metadata`, `UI Menubar`, `UI Context Menu`, `UI Dropdown Menu`, `UI Forms & Validation`, `UI Carousel`, `UI Sheet & Dialog`, `UI Select`, `UI Charts`, `UI Drawer`, `UI Navigation Menu`, `UI Alert & Badge`, `UI Checkbox & Switch`, `UI Toggle & Toggle Group`, `UI Input OTP`, `UI Accordion`, `UI Popover`, `UI Avatar`, `UI Hover Card`, `UI Resizable Panels`, `UI Radio Group`, `UI Scroll Area`?**
-  _High betweenness centrality (0.308) - this node is a cross-community bridge._
-- **Why does `cn()` connect `UI Breadcrumbs & Tabs` to `UI Input & Sidebar`, `UI Dialog & Alert`, `UI Command Palette`, `UI Menubar`, `UI Context Menu`, `UI Dropdown Menu`, `UI Forms & Validation`, `UI Carousel`, `UI Sheet & Dialog`, `UI Select`, `UI Charts`, `UI Drawer`, `UI Navigation Menu`, `UI Alert & Badge`, `UI Checkbox & Switch`, `UI Progress & Slider`, `UI Toggle & Toggle Group`, `UI Input OTP`, `UI Accordion`, `UI Popover`, `UI Avatar`, `UI Hover Card`, `UI Resizable Panels`, `UI Radio Group`, `UI Scroll Area`?**
-  _High betweenness centrality (0.262) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `NPM Dependencies` to `Package Metadata`?**
-  _High betweenness centrality (0.167) - this node is a cross-community bridge._
-- **What connects `name`, `private`, `version` to the rest of the system?**
-  _132 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `react` connect `UI Progress & Radio` to `App Core & Layout`, `UI Input & Sidebar`, `UI Avatar & Tabs`, `Leader Dashboard`, `UI Dialog & Alert`, `Home Pages & Team Data`, `UI Command Palette`, `Package Metadata`, `UI Menubar`, `UI Context Menu`, `UI Dropdown Menu`, `UI Forms & Validation`, `UI Carousel`, `UI Sheet & Dialog`, `UI Select`, `UI Charts`, `UI Drawer`, `UI Navigation Menu`, `UI Alert & Badge`, `UI Checkbox & Slider`, `UI Toggle & Toggle Group`, `UI Input OTP`, `UI Accordion`, `UI Popover`, `UI Hover Card`, `UI Resizable Panels`, `UI Scroll Area`, `UI Switch`?**
+  _High betweenness centrality (0.307) - this node is a cross-community bridge._
+- **Why does `cn()` connect `UI Avatar & Tabs` to `UI Input & Sidebar`, `UI Dialog & Alert`, `UI Command Palette`, `UI Menubar`, `UI Context Menu`, `UI Dropdown Menu`, `UI Forms & Validation`, `UI Carousel`, `UI Sheet & Dialog`, `UI Select`, `UI Charts`, `UI Drawer`, `UI Navigation Menu`, `UI Alert & Badge`, `UI Progress & Radio`, `UI Checkbox & Slider`, `UI Toggle & Toggle Group`, `UI Input OTP`, `UI Accordion`, `UI Popover`, `UI Hover Card`, `UI Resizable Panels`, `UI Scroll Area`, `UI Switch`?**
+  _High betweenness centrality (0.269) - this node is a cross-community bridge._
+- **Why does `lucide-react` connect `App Core & Layout` to `UI Input & Sidebar`, `UI Avatar & Tabs`, `Leader Dashboard`, `UI Dialog & Alert`, `Home Pages & Team Data`, `UI Command Palette`, `Attributions & Config`, `Package Metadata`, `UI Menubar`, `UI Context Menu`, `UI Dropdown Menu`, `UI Carousel`, `UI Sheet & Dialog`, `UI Select`, `UI Navigation Menu`, `UI Progress & Radio`, `UI Checkbox & Slider`, `UI Input OTP`, `UI Accordion`, `UI Resizable Panels`?**
+  _High betweenness centrality (0.188) - this node is a cross-community bridge._
+- **What connects `BrandLogoProps`, `AuthContextType`, `User` to the rest of the system?**
+  _128 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App Core & Layout` be split into smaller, more focused modules?**
-  _Cohesion score 0.08647936786654961 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07343987823439878 - nodes in this community are weakly interconnected._
 - **Should `NPM Dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.03571428571428571 - nodes in this community are weakly interconnected._
 - **Should `UI Input & Sidebar` be split into smaller, more focused modules?**

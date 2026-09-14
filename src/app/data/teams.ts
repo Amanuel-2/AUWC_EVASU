@@ -1,3 +1,10 @@
+import worshipImage1 from "../../assets/teams/worship/20260510_125332.jpg";
+import loveSharingImage2 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-11.jpg";
+import loveSharingImage4 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-29.jpg";
+import loveSharingImage5 from "../../assets/teams/love-sharing/photo_2026-06-23_15-01-32.jpg";
+import loveSharingImage6 from "../../assets/teams/love-sharing/photo_2026-06-23_15-01-44.jpg";
+import mediaTeamImage from "../../assets/teams/worship/IMG_20260516_153310_133.jpg";
+
 export interface Team {
   id: string;
   name: string;
@@ -136,7 +143,6 @@ export const teams: Team[] = [
       "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=600&h=400&fit=crop&auto=format",
     ],
     icon: "📷",
-<<<<<<< HEAD
     leaderCount: 3,
   },
 
@@ -166,7 +172,6 @@ export const teams: Team[] = [
     ],
     icon: "💰",
     leaderCount: 3,
-<<<<<<< HEAD
   },
 
   {
@@ -392,10 +397,6 @@ export const teams: Team[] = [
     icon: "👥",
     leaderCount: 1,
     leaderEmail: "leader8@gmail.com",
-=======
->>>>>>> 9a89d313 (build the ui)
-=======
->>>>>>> e3a1ae07 (Revert "add image")
   },
   {
     id: "prayer",

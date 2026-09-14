@@ -216,36 +216,11 @@ function Teams() {
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ backgroundColor: team.color + "20", color: team.color }}>
                   {teamIcons[team.id as keyof typeof teamIcons] || <Users className="w-5 h-5" />}
                 </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <div className="p-6">
-                  <h3 className="font-['DM_Serif_Display'] text-xl text-foreground mb-2">{team.name}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{team.description}</p>
-                  <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-xs font-semibold text-secondary-foreground">
-                    <Users size={14} /> {team.leaderCount} {team.leaderCount === 1 ? "leader" : "leaders"}
-                  </div>
-                  {team.leaderEmail && <p className="mb-5 text-xs font-medium text-muted-foreground">Leader: {team.leaderEmail}</p>}
-                  {!team.leaderEmail && <div className="mb-5" />}
-                  <button
-                    onClick={(e) => { e.stopPropagation(); navigate(`/teams/${team.id}`); }}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5 transition-all duration-200"
-                  >
-                    {t("learnMore")} <ArrowRight size={15} />
-                  </button>
-=======
-                <h3 className="font-['DM_Serif_Display'] text-xl text-foreground mb-2">{team.name}</h3>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{team.description}</p>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Users size={14} />
-                  <span>{team.leaderCount} {team.leaderCount === 1 ? "Leader" : "Leaders"}</span>
->>>>>>> 9a89d313 (build the ui)
-=======
                 <h3 className="font-['DM_Serif_Display'] text-xl text-foreground mb-2">{team.name.replace(" Team", "")}</h3>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{team.tagline}</p>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Users size={14} />
                   <span>Welcoming new students</span>
->>>>>>> e3a1ae07 (Revert "add image")
                 </div>
                 <button onClick={() => navigate(`/teams/${team.id}`)} className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:gap-2 transition-all">
                   Join this group <ArrowRight size={15} />
