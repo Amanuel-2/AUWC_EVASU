@@ -1,5 +1,6 @@
 import { AttendanceRecord, MeetingSchedule, Team, TeamMember } from "./types";
 import { teams as appTeams } from "../../data/teams";
+import { fetchAttendanceRequest, fetchLeaderTeamRequest, fetchScheduleRequest, fetchTeamMembersRequest, saveAttendanceRequest, saveScheduleRequest } from "../../api";
 
 const SCHEDULES_KEY = "fellowship_mock_schedules";
 const ATTENDANCE_KEY = "fellowship_mock_attendance";
@@ -83,69 +84,32 @@ function readAttendance() {
 }
 
 export async function fetchLeaderTeam(teamId: string) {
-  await wait();
-  const team = teams.find((item) => item.id === teamId);
-  if (!team) throw new Error("Assigned team could not be found.");
-  return team;
+  const team = await fetchLeaderTeamRequest(teamId);
+  return { id: team.slug, name: team.name, description: team.description };
 }
 
 export async function fetchTeamMembers(teamId: string) {
-  await wait();
-  if (!teams.some((team) => team.id === teamId)) throw new Error("Assigned team could not be found.");
-  const names = [
-    "Abdi Hassan", "Hana Yusuf", "Samuel Tesfaye", "Mariam Ali",
-    "Yonas Ibrahim", "Liya Ahmed", "Daniel Bekele", "Sofia Mohamed",
-    "Nathaniel Omar", "Ruth Abdi", "Joel Dawit", "Ayanle Warsame",
-    "Michael Kidane", "Selam Gebre", "Elias Noor", "Meron Tadesse",
-    "Khalid Ismail", "Bethel Solomon", "Yared Musa", "Hawa Abdullahi",
-    "Yohannes Alemu", "Sara Hassan", "Dawit Roble", "Nadia Osman",
-    "Bereket Ali", "Muna Ibrahim", "Henok Tesfaye", "Fatima Ahmed",
-    "Isaac Daniel", "Rahel Yusuf", "Omar Abdullahi", "Eden Mekonnen",
-  ];
-  return members.filter((member) => member.teamId === teamId).map((member) => {
-    if (!member.fullName.startsWith("Group ")) return member;
-    const groupNumber = Number(member.teamId.split("-").pop()) || 1;
-    const memberNumber = Number(member.id.split("-").pop()) || 1;
-    const name = names[(groupNumber - 1) * 4 + memberNumber - 1];
-    return name ? { ...member, fullName: name, email: `${name.toLowerCase().replace(/ /g, ".")}@university.edu` } : member;
-  });
+  const apiMembers = await fetchTeamMembersRequest(teamId);
+  return apiMembers.map((member) => ({ id: member.id, teamId, fullName: member.name, phone: member.phone || "—", department: "Fellowship", yearOfStudy: member.yearOfStudy || "—", gender: member.gender || "—", dateJoined: new Date().toISOString(), email: member.email, role: "Team member", notes: "Registered member of this team." }));
 }
 
 export async function fetchMeetingSchedule(teamId: string) {
-  await wait();
-  const schedule = readSchedules().find((item) => item.teamId === teamId);
-  if (!schedule) throw new Error("Meeting schedule could not be found.");
-  return schedule;
+  const schedule = await fetchScheduleRequest(teamId);
+  return { teamId, day: schedule?.day ?? "To be confirmed", time: schedule?.time ?? "To be confirmed", location: schedule?.location ?? "To be confirmed" };
 }
 
 export async function fetchAttendanceRecords(teamId: string) {
-  await wait();
-  return readAttendance()
-    .filter((record) => record.teamId === teamId)
-    .sort((a, b) => b.markedAt.localeCompare(a.markedAt));
+  const records = await fetchAttendanceRequest(teamId) as Array<{ _id?: string; meetingDate: string; markedAt: string; statuses: Record<string, AttendanceStatus> }>;
+  return records.map((record) => ({ id: record._id ?? `${teamId}-${record.meetingDate}`, teamId, meetingDate: record.meetingDate, markedAt: record.markedAt, statuses: record.statuses })).sort((a, b) => b.markedAt.localeCompare(a.markedAt));
 }
 
 export async function saveMeetingSchedule(schedule: MeetingSchedule) {
-  await wait();
-  if (!teams.some((team) => team.id === schedule.teamId)) throw new Error("Assigned team could not be found.");
-  const cleaned: MeetingSchedule = {
-    teamId: schedule.teamId,
-    day: schedule.day.trim(),
-    time: schedule.time,
-    location: schedule.location.trim(),
-  };
-  const existing = readSchedules().filter((item) => item.teamId !== cleaned.teamId);
-  writeJson(SCHEDULES_KEY, [...existing, cleaned]);
-  return cleaned;
+  const saved = await saveScheduleRequest(schedule.teamId, { day: schedule.day.trim(), time: schedule.time, location: schedule.location.trim() });
+  return { teamId: schedule.teamId, ...saved };
 }
 
 export async function saveAttendanceRecord(record: AttendanceRecord) {
-  await wait();
-  if (!teams.some((team) => team.id === record.teamId)) throw new Error("Assigned team could not be found.");
-  const teamMemberIds = new Set(members.filter((member) => member.teamId === record.teamId).map((member) => member.id));
-  const statuses = Object.fromEntries(Object.entries(record.statuses).filter(([memberId]) => teamMemberIds.has(memberId)));
-  const cleaned: AttendanceRecord = { ...record, statuses };
-  const records = readAttendance().filter((item) => !(item.teamId === cleaned.teamId && item.meetingDate === cleaned.meetingDate));
-  writeJson(ATTENDANCE_KEY, [cleaned, ...records]);
-  return cleaned;
+  const saved = await saveAttendanceRequest(record.teamId, record.meetingDate, record.statuses);
+  const result = saved as { _id?: string; meetingDate: string; markedAt: string; statuses: Record<string, AttendanceStatus> };
+  return { id: result._id ?? record.id, teamId: record.teamId, meetingDate: result.meetingDate, markedAt: result.markedAt, statuses: result.statuses };
 }

@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { isTeamLeaderEmail, useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import BrandLogo from "../components/BrandLogo";
 import LanguageToggle from "../components/LanguageToggle";
 import { useLanguage } from "../context/LanguageContext";
@@ -23,14 +23,11 @@ export default function Login() {
     if (!email || !password) { setError("Please fill in all fields."); return; }
     setLoading(true);
     setError("");
-    const ok = await login(email, password);
+    const loggedInUser = await login(email, password);
     setLoading(false);
-    if (ok) {
-      const normalizedEmail = email.trim().toLowerCase();
-      const isAdmin = normalizedEmail === "admin@auwcec.edu";
-      const isLeader = isTeamLeaderEmail(normalizedEmail);
-      const fallback = isAdmin ? "/admin" : isLeader ? "/leader" : "/";
-      const requestedRouteMatchesRole = isAdmin ? !from.startsWith("/leader") : isLeader ? !from.startsWith("/admin") : !from.startsWith("/admin") && !from.startsWith("/leader");
+    if (loggedInUser) {
+      const fallback = loggedInUser.role === "admin" ? "/admin" : loggedInUser.role === "team_leader" ? "/leader" : "/";
+      const requestedRouteMatchesRole = loggedInUser.role === "admin" ? !from.startsWith("/leader") : loggedInUser.role === "team_leader" ? !from.startsWith("/admin") : !from.startsWith("/admin") && !from.startsWith("/leader");
       navigate(from !== "/" && requestedRouteMatchesRole ? from : fallback, { replace: true });
     } else setError("Invalid credentials. Please try again.");
   };

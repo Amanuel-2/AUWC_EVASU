@@ -9,6 +9,9 @@ import { useLanguage } from "../context/LanguageContext";
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [yearOfStudy, setYearOfStudy] = useState("");
+  const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,13 +23,13 @@ export default function Register() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !password) { setError("Please fill in all fields."); return; }
+    if (!name || !email || !phone || !yearOfStudy || !gender || !password) { setError("Please fill in all fields."); return; }
     if (password.length < 6) { setError("Password must be at least 6 characters."); return; }
     setLoading(true);
     setError("");
-    const ok = await register(name, email, password);
+    const registeredUser = await register(name, email, password, phone, yearOfStudy, gender);
     setLoading(false);
-    if (ok) navigate("/");
+    if (registeredUser) navigate("/");
     else setError("Something went wrong. Please try again.");
   };
 
@@ -108,6 +111,26 @@ export default function Register() {
                 placeholder="you@auwcec.edu"
                 className="w-full px-4 py-3 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Phone number</label>
+              <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+253 77 123 456" className="w-full px-4 py-3 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
+            </div>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Year of study</label>
+                <select value={yearOfStudy} onChange={(e) => setYearOfStudy(e.target.value)} className="w-full px-4 py-3 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all">
+                  <option value="">Select year</option>
+                  <option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Graduate</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Gender</label>
+                <select value={gender} onChange={(e) => setGender(e.target.value)} className="w-full px-4 py-3 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all">
+                  <option value="">Select gender</option>
+                  <option>Female</option><option>Male</option>
+                </select>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">{t("password")}</label>

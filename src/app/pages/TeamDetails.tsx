@@ -9,6 +9,8 @@ export default function TeamDetails() {
   const navigate = useNavigate();
   const { user, joinTeam, hasJoinedTeam } = useAuth();
   const [justJoined, setJustJoined] = useState(false);
+  const [joining, setJoining] = useState(false);
+  const [joinError, setJoinError] = useState("");
 
   const team = teams.find((t) => t.id === id);
 
@@ -23,13 +25,17 @@ export default function TeamDetails() {
 
   const alreadyJoined = hasJoinedTeam(team.id) || justJoined;
 
-  const handleJoin = () => {
+  const handleJoin = async () => {
     if (!user) {
       navigate("/login");
       return;
     }
-    joinTeam(team.id);
-    setJustJoined(true);
+    setJoining(true);
+    setJoinError("");
+    const joined = await joinTeam(team.id);
+    setJoining(false);
+    if (joined) setJustJoined(true);
+    else setJoinError("We could not join this team. Please try again.");
   };
 
   return (
@@ -136,12 +142,14 @@ export default function TeamDetails() {
                 </div>
               ) : (
                 <button
+                  disabled={joining}
                   onClick={handleJoin}
                   className="w-full bg-primary text-white py-3.5 md:py-3 rounded-xl font-semibold hover:bg-primary/90 transition-colors duration-200 shadow-sm hover:shadow-md"
                 >
-                  {user ? "Join This Team" : "Login to Join"}
+                  {user ? (joining ? "Joining…" : "Join This Team") : "Login to Join"}
                 </button>
               )}
+              {joinError && <p className="mt-3 text-sm text-destructive">{joinError}</p>}
 
               {!user && (
                 <div className="hidden md:block mt-4 text-center">
