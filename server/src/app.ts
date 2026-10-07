@@ -130,14 +130,34 @@ app.patch("/api/admin/teams/:teamId", requireAuth, requireRole("admin"), async (
 
 app.post("/api/admin/teams/:teamId/leaders", requireAuth, requireRole("admin"), async (req, res, next) => {
   try {
-    const input = z.object({ userId: z.string().optional(), email: z.string().email().optional() }).refine((value) => value.userId || value.email, "userId or email is required").parse(req.body);
+    const input = z.object({ userIds: z.array(z.string()).min(1).max(3) }).parse(req.body);
     const db = await getDb();
     const team = await findTeamBySlug(String(req.params.teamId));
-    const user = input.userId ? await db.collection<UserDocument>("users").findOne({ _id: id(input.userId) ?? undefined }) : await db.collection<UserDocument>("users").findOne({ email: normalizeEmail(input.email!) });
-    if (!team?._id || !user?._id) return res.status(404).json({ message: "Team or user not found." });
-    await db.collection<UserDocument>("users").updateOne({ _id: user._id }, { $set: { role: "team_leader", updatedAt: new Date() } });
-    await db.collection<MembershipDocument>("memberships").updateOne({ userId: user._id, teamId: team._id }, { $set: { status: "active", joinedAt: new Date() } }, { upsert: true });
-    return res.json({ message: "Leader assigned successfully." });
+    if (!team?._id) return res.status(404).json({ message: "Team not found." });
+    const userIds = [...new Set(input.userIds)].map((value) => id(value)).filter((value): value is NonNullable<typeof value> => Boolean(value));
+    if (userIds.length !== input.userIds.length) return res.status(400).json({ message: "One or more selected users are invalid." });
+    const users = await db.collection<UserDocument>("users").find({ _id: { $in: userIds } }).toArray();
+    if (users.length !== userIds.length) return res.status(404).json({ message: "One or more selected users were not found." });
+    if (users.some((user) => user.role === "admin")) return res.status(400).json({ message: "An admin cannot be assigned as a team leader." });
+    for (const user of users) {
+      await db.collection<UserDocument>("users").updateOne({ _id: user._id }, { $set: { role: "team_leader", updatedAt: new Date() } });
+      await db.collection<MembershipDocument>("memberships").updateOne({ userId: user._id, teamId: team._id }, { $set: { status: "active", joinedAt: new Date() } }, { upsert: true });
+    }
+    return res.json({ message: `${users.length} team leader${users.length === 1 ? "" : "s"} assigned successfully.` });
+  } catch (error) { return next(error); }
+});
+
+app.post("/api/admin/leaders/password", requireAuth, requireRole("admin"), async (req, res, next) => {
+  try {
+    const input = z.object({ userIds: z.array(z.string()).min(1).max(3), password: z.string().min(8).max(128) }).parse(req.body);
+    const db = await getDb();
+    const userIds = [...new Set(input.userIds)].map((value) => id(value)).filter((value): value is NonNullable<typeof value> => Boolean(value));
+    if (userIds.length !== input.userIds.length) return res.status(400).json({ message: "One or more selected users are invalid." });
+    const leaders = await db.collection<UserDocument>("users").find({ _id: { $in: userIds }, role: "team_leader" }).toArray();
+    if (leaders.length !== userIds.length) return res.status(400).json({ message: "Only team leader accounts can be updated here." });
+    const passwordHash = await bcrypt.hash(input.password, 12);
+    await db.collection<UserDocument>("users").updateMany({ _id: { $in: userIds } }, { $set: { passwordHash, updatedAt: new Date() } });
+    return res.json({ message: `Password updated for ${leaders.length} team leader${leaders.length === 1 ? "" : "s"}.` });
   } catch (error) { return next(error); }
 });
 

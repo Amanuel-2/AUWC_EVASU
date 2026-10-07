@@ -62,6 +62,8 @@ export async function registerRequest(name: string, email: string, password: str
 
 export async function currentUserRequest() { return request<{ user: ApiUser; teamIds: string[] }>("/api/auth/me"); }
 export async function fetchAdminOverviewRequest() { return request<AdminOverview>("/api/admin/overview"); }
+export async function assignTeamLeaderRequest(teamSlug: string, userIds: string[]) { return request<{ message: string }>(`/api/admin/teams/${encodeURIComponent(teamSlug)}/leaders`, { method: "POST", body: JSON.stringify({ userIds }) }); }
+export async function changeLeaderPasswordRequest(userIds: string[], password: string) { return request<{ message: string }>("/api/admin/leaders/password", { method: "POST", body: JSON.stringify({ userIds, password }) }); }
 export async function joinTeamRequest(teamId: string) { return request<{ message: string }>(`/api/teams/${encodeURIComponent(teamId)}/join`, { method: "POST", body: JSON.stringify({}) }); }
 export async function fetchTeamRequest(teamId: string) { return request<ApiTeam>(`/api/teams/${encodeURIComponent(teamId)}`); }
 export async function fetchLeaderTeamRequest(teamId: string) { return fetchTeamRequest(teamId); }
