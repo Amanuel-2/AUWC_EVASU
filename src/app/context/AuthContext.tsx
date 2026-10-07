@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<User | null>;
-  register: (name: string, email: string, password: string, phone: string, yearOfStudy: string, gender: string) => Promise<User | null>;
+  register: (name: string, email: string, password: string, phone: string, department: string, yearOfStudy: string, gender: string) => Promise<User | null>;
   logout: () => void;
   joinTeam: (teamId: string) => Promise<boolean>;
   hasJoinedTeam: (teamId: string) => boolean;
@@ -46,9 +46,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch { return null; }
   };
 
-  const register = async (name: string, email: string, password: string, phone: string, yearOfStudy: string, gender: string) => {
+  const register = async (name: string, email: string, password: string, phone: string, department: string, yearOfStudy: string, gender: string) => {
     try {
-      const apiUser = await registerRequest(name, email, password, phone, yearOfStudy, gender);
+      const apiUser = await registerRequest(name, email, password, phone, department, yearOfStudy, gender);
       const nextUser = toUser(apiUser);
       setUser(nextUser);
       return nextUser;

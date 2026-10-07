@@ -12,6 +12,7 @@ export function publicUser(user: UserDocument) {
     email: user.email,
     role: user.role,
     phone: user.phone,
+    department: user.department ?? "",
     yearOfStudy: user.yearOfStudy ?? "",
     gender: user.gender ?? "",
     avatarUrl: user.avatarUrl,

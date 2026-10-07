@@ -6,6 +6,7 @@ export interface ApiUser {
   email: string;
   role: "admin" | "team_leader" | "member";
   phone: string;
+  department: string;
   yearOfStudy: string;
   gender: string;
   avatarUrl: string;
@@ -20,6 +21,15 @@ export interface ApiTeam {
   isPublic: boolean;
   color: string;
   schedule: { day: string; time: string; location: string }[];
+}
+
+export interface AdminTeam extends ApiTeam {
+  memberIds: string[];
+}
+
+export interface AdminOverview {
+  users: ApiUser[];
+  teams: AdminTeam[];
 }
 
 const tokenKey = "fellowship_access_token";
@@ -44,13 +54,14 @@ export async function loginRequest(email: string, password: string) {
   return result.user;
 }
 
-export async function registerRequest(name: string, email: string, password: string, phone: string, yearOfStudy: string, gender: string) {
-  const result = await request<{ user: ApiUser; accessToken: string }>("/api/auth/register", { method: "POST", body: JSON.stringify({ name, email, password, phone, yearOfStudy, gender }) });
+export async function registerRequest(name: string, email: string, password: string, phone: string, department: string, yearOfStudy: string, gender: string) {
+  const result = await request<{ user: ApiUser; accessToken: string }>("/api/auth/register", { method: "POST", body: JSON.stringify({ name, email, password, phone, department, yearOfStudy, gender }) });
   localStorage.setItem(tokenKey, result.accessToken);
   return result.user;
 }
 
 export async function currentUserRequest() { return request<{ user: ApiUser; teamIds: string[] }>("/api/auth/me"); }
+export async function fetchAdminOverviewRequest() { return request<AdminOverview>("/api/admin/overview"); }
 export async function joinTeamRequest(teamId: string) { return request<{ message: string }>(`/api/teams/${encodeURIComponent(teamId)}/join`, { method: "POST", body: JSON.stringify({}) }); }
 export async function fetchTeamRequest(teamId: string) { return request<ApiTeam>(`/api/teams/${encodeURIComponent(teamId)}`); }
 export async function fetchLeaderTeamRequest(teamId: string) { return fetchTeamRequest(teamId); }

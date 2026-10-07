@@ -10,6 +10,7 @@ export interface UserDocument {
   passwordHash: string;
   role: Role;
   phone: string;
+  department: string;
   yearOfStudy?: string;
   gender?: string;
   avatarUrl: string;

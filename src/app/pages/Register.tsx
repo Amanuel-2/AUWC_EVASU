@@ -10,6 +10,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [department, setDepartment] = useState("");
   const [yearOfStudy, setYearOfStudy] = useState("");
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
@@ -23,11 +24,11 @@ export default function Register() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !phone || !yearOfStudy || !gender || !password) { setError("Please fill in all fields."); return; }
+    if (!name || !email || !phone || !department || !yearOfStudy || !gender || !password) { setError("Please fill in all fields."); return; }
     if (password.length < 6) { setError("Password must be at least 6 characters."); return; }
     setLoading(true);
     setError("");
-    const registeredUser = await register(name, email, password, phone, yearOfStudy, gender);
+    const registeredUser = await register(name, email, password, phone, department, yearOfStudy, gender);
     setLoading(false);
     if (registeredUser) navigate("/");
     else setError("Something went wrong. Please try again.");
@@ -115,6 +116,10 @@ export default function Register() {
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">Phone number</label>
               <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+253 77 123 456" className="w-full px-4 py-3 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">{t("department")}</label>
+              <input type="text" value={department} onChange={(e) => setDepartment(e.target.value)} placeholder="Computer Science" className="w-full px-4 py-3 bg-input-background border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" />
             </div>
             <div className="grid gap-5 sm:grid-cols-2">
               <div>

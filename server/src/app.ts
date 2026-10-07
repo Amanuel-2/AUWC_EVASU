@@ -18,7 +18,7 @@ const frontendDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 
 app.use(express.static(frontendDist));
 
 const credentialsSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
-const registerSchema = z.object({ name: z.string().trim().min(2), email: z.string().email(), password: z.string().min(1), phone: z.string().trim().max(40).optional().default(""), yearOfStudy: z.string().trim().max(40).optional().default(""), gender: z.string().trim().max(40).optional().default("") });
+const registerSchema = z.object({ name: z.string().trim().min(2), email: z.string().email(), password: z.string().min(1), phone: z.string().trim().max(40).optional().default(""), department: z.string().trim().min(2).max(100), yearOfStudy: z.string().trim().max(40).optional().default(""), gender: z.string().trim().max(40).optional().default("") });
 const scheduleSchema = z.object({ day: z.string().trim().min(1), time: z.string().trim().min(1), location: z.string().trim().min(1) });
 const attendanceSchema = z.object({ meetingDate: z.string().date(), statuses: z.record(z.enum(["Present", "Absent", "Late", "Excused"])) });
 const teamSchema = z.object({ slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), name: z.string().trim().min(2), tagline: z.string().trim().min(2), description: z.string().trim().min(2), isPublic: z.boolean().default(true), color: z.string().trim().default("#8B5CF6"), schedule: z.array(scheduleSchema).default([]) });
@@ -33,7 +33,7 @@ app.post("/api/auth/register", async (req, res, next) => {
     const exists = await db.collection<UserDocument>("users").findOne({ email });
     if (exists) return res.status(409).json({ message: "An account with this email already exists." });
     const now = new Date();
-    const user: UserDocument = { name: input.name, email, passwordHash: await bcrypt.hash(input.password, 12), role: "member", phone: input.phone, yearOfStudy: input.yearOfStudy, gender: input.gender, avatarUrl: "", createdAt: now, updatedAt: now };
+    const user: UserDocument = { name: input.name, email, passwordHash: await bcrypt.hash(input.password, 12), role: "member", phone: input.phone, department: input.department, yearOfStudy: input.yearOfStudy, gender: input.gender, avatarUrl: "", createdAt: now, updatedAt: now };
     const result = await db.collection<UserDocument>("users").insertOne(user);
     user._id = result.insertedId;
     return res.status(201).json({ user: publicUser(user), accessToken: signAccessToken(user, []) });
@@ -83,6 +83,25 @@ app.get("/api/admin/teams", requireAuth, requireRole("admin"), async (_req, res,
   try {
     const db = await getDb();
     return res.json(serialize(await db.collection<TeamDocument>("teams").find({}).sort({ name: 1 }).toArray()));
+  } catch (error) { return next(error); }
+});
+
+app.get("/api/admin/overview", requireAuth, requireRole("admin"), async (_req, res, next) => {
+  try {
+    const db = await getDb();
+    const [users, teams, memberships] = await Promise.all([
+      db.collection<UserDocument>("users").find({}, { projection: { passwordHash: 0 } }).sort({ name: 1 }).toArray(),
+      db.collection<TeamDocument>("teams").find({}).sort({ name: 1 }).toArray(),
+      db.collection<MembershipDocument>("memberships").find({ status: "active" }).toArray(),
+    ]);
+    const memberIdsByTeam = new Map<string, string[]>();
+    for (const membership of memberships) {
+      const teamId = membership.teamId.toString();
+      const memberIds = memberIdsByTeam.get(teamId) ?? [];
+      memberIds.push(membership.userId.toString());
+      memberIdsByTeam.set(teamId, memberIds);
+    }
+    return res.json(serialize({ users: users.map(publicUser), teams: teams.map((team) => ({ ...team, memberIds: memberIdsByTeam.get(team._id?.toString() ?? "") ?? [] })) }));
   } catch (error) { return next(error); }
 });
 

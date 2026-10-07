@@ -90,7 +90,7 @@ export async function fetchLeaderTeam(teamId: string) {
 
 export async function fetchTeamMembers(teamId: string) {
   const apiMembers = await fetchTeamMembersRequest(teamId);
-  return apiMembers.map((member) => ({ id: member.id, teamId, fullName: member.name, phone: member.phone || "—", department: "Fellowship", yearOfStudy: member.yearOfStudy || "—", gender: member.gender || "—", dateJoined: new Date().toISOString(), email: member.email, role: "Team member", notes: "Registered member of this team." }));
+  return apiMembers.map((member) => ({ id: member.id, teamId, fullName: member.name, phone: member.phone || "—", department: member.department || "Fellowship", yearOfStudy: member.yearOfStudy || "—", gender: member.gender || "—", dateJoined: new Date().toISOString(), email: member.email, role: "Team member", notes: "Registered member of this team." }));
 }
 
 export async function fetchMeetingSchedule(teamId: string) {
