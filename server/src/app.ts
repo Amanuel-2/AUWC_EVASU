@@ -1,5 +1,7 @@
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { findTeamBySlug, getDb } from "./db.js";
@@ -11,6 +13,9 @@ import { id, normalizeEmail, publicUser, serialize } from "./utils.js";
 const app = express();
 app.use(cors({ origin: config.CLIENT_ORIGIN, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
+
+const frontendDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../dist");
+app.use(express.static(frontendDist));
 
 const credentialsSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
 const registerSchema = z.object({ name: z.string().trim().min(2), email: z.string().email(), password: z.string().min(1), phone: z.string().trim().max(40).optional().default(""), yearOfStudy: z.string().trim().max(40).optional().default(""), gender: z.string().trim().max(40).optional().default("") });
@@ -195,6 +200,12 @@ app.post("/api/teams/:teamId/attendance", requireAuth, requireRole("admin", "tea
     await db.collection<AttendanceDocument>("attendance").replaceOne({ teamId, meetingDate: input.meetingDate }, attendance, { upsert: true });
     return res.status(201).json(serialize(attendance));
   } catch (error) { return next(error); }
+});
+
+// Serve the Vite SPA for browser routes when frontend and backend share a host.
+app.get("/{*splat}", (req, res, next) => {
+  if (req.path.startsWith("/api/")) return next();
+  return res.sendFile(path.join(frontendDist, "index.html"));
 });
 
 app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
