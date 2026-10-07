@@ -22,6 +22,7 @@ const registerSchema = z.object({ name: z.string().trim().min(2), email: z.strin
 const scheduleSchema = z.object({ day: z.string().trim().min(1), time: z.string().trim().min(1), location: z.string().trim().min(1) });
 const attendanceSchema = z.object({ meetingDate: z.string().date(), statuses: z.record(z.enum(["Present", "Absent", "Late", "Excused"])) });
 const teamSchema = z.object({ slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), name: z.string().trim().min(2), tagline: z.string().trim().min(2), description: z.string().trim().min(2), isPublic: z.boolean().default(true), color: z.string().trim().default("#8B5CF6"), schedule: z.array(scheduleSchema).default([]) });
+const namedTeamFilter = { slug: { $not: /^small-group-\d+$/ } };
 
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
 
@@ -67,7 +68,7 @@ app.get("/api/me/teams", requireAuth, async (req, res, next) => {
   try {
     const db = await getDb();
     const memberships = await db.collection<MembershipDocument>("memberships").find({ userId: id(req.authUser!.id)!, status: "active" }).toArray();
-    const teams = await db.collection<TeamDocument>("teams").find({ _id: { $in: memberships.map((membership) => membership.teamId) } }).toArray();
+    const teams = await db.collection<TeamDocument>("teams").find({ _id: { $in: memberships.map((membership) => membership.teamId) }, ...namedTeamFilter }).toArray();
     return res.json(serialize(teams));
   } catch (error) { return next(error); }
 });
@@ -82,7 +83,7 @@ app.get("/api/admin/users", requireAuth, requireRole("admin"), async (_req, res,
 app.get("/api/admin/teams", requireAuth, requireRole("admin"), async (_req, res, next) => {
   try {
     const db = await getDb();
-    return res.json(serialize(await db.collection<TeamDocument>("teams").find({}).sort({ name: 1 }).toArray()));
+    return res.json(serialize(await db.collection<TeamDocument>("teams").find(namedTeamFilter).sort({ name: 1 }).toArray()));
   } catch (error) { return next(error); }
 });
 
@@ -91,7 +92,7 @@ app.get("/api/admin/overview", requireAuth, requireRole("admin"), async (_req, r
     const db = await getDb();
     const [users, teams, memberships] = await Promise.all([
       db.collection<UserDocument>("users").find({}, { projection: { passwordHash: 0 } }).sort({ name: 1 }).toArray(),
-      db.collection<TeamDocument>("teams").find({}).sort({ name: 1 }).toArray(),
+      db.collection<TeamDocument>("teams").find(namedTeamFilter).sort({ name: 1 }).toArray(),
       db.collection<MembershipDocument>("memberships").find({ status: "active" }).toArray(),
     ]);
     const memberIdsByTeam = new Map<string, string[]>();
@@ -143,7 +144,7 @@ app.post("/api/admin/teams/:teamId/leaders", requireAuth, requireRole("admin"), 
 app.get("/api/teams", async (req, res, next) => {
   try {
     const db = await getDb();
-    const filter = req.authUser?.role === "admin" ? {} : { isPublic: true };
+    const filter = req.authUser?.role === "admin" ? namedTeamFilter : { ...namedTeamFilter, isPublic: true };
     return res.json(serialize(await db.collection<TeamDocument>("teams").find(filter).sort({ name: 1 }).toArray()));
   } catch (error) { return next(error); }
 });
