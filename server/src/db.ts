@@ -20,6 +20,8 @@ async function ensureIndexes(db: Db) {
     db.collection("teams").createIndex({ slug: 1 }, { unique: true }),
     db.collection("memberships").createIndex({ userId: 1, teamId: 1 }, { unique: true }),
     db.collection("attendance").createIndex({ teamId: 1, meetingDate: 1 }, { unique: true }),
+    db.collection("tiktokVideos").createIndex({ order: 1 }),
+    db.collection("tiktokVideos").createIndex({ videoId: 1 }, { unique: true }),
   ]);
 }
 

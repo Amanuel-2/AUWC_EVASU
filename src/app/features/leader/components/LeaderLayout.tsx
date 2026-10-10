@@ -1,4 +1,4 @@
-import { Bell, CalendarDays, ClipboardCheck, Home, LogOut, Menu, User, Users, X } from "lucide-react";
+import { Bell, CalendarDays, ClipboardCheck, Home, LogOut, Menu, User, Users, Video, X } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import { useAuth } from "../../../context/AuthContext";
@@ -15,7 +15,7 @@ const navigation = [
 ] as const;
 
 function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const { team } = useLeaderDashboard();
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -47,6 +47,18 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             <span>{t(item.labelKey)}</span>
           </NavLink>
         ))}
+        {user?.role === "team_leader" && user.joinedTeams.includes("media") && (
+          <NavLink
+            to="/leader/media"
+            onClick={onNavigate}
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-all duration-200 ${isActive ? "bg-white text-[#0F2638] shadow-sm" : "text-white/72 hover:bg-white/10 hover:text-white"}`
+            }
+          >
+            <Video size={18} aria-hidden="true" />
+            <span>Media Management</span>
+          </NavLink>
+        )}
       </nav>
       <div className="border-t border-white/10 p-3">
         <button type="button" onClick={handleLogout} className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm text-white/72 transition-colors hover:bg-white/10 hover:text-white">

@@ -13,6 +13,7 @@ import MembersPage from "./features/leader/pages/MembersPage";
 import AttendancePage from "./features/leader/pages/AttendancePage";
 import SchedulePage from "./features/leader/pages/SchedulePage";
 import ProfilePage from "./features/leader/pages/ProfilePage";
+import MediaManagementPage from "./features/leader/pages/MediaManagementPage";
 import RequireAdmin from "./features/admin/components/RequireAdmin";
 import AdminDashboard from "./features/admin/pages/AdminDashboard";
 import BrandLogo from "./components/BrandLogo";
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
               { path: "attendance", Component: AttendancePage },
               { path: "schedule", Component: SchedulePage },
               { path: "profile", Component: ProfilePage },
+              { path: "media", Component: MediaManagementPage },
             ],
           },
         ],

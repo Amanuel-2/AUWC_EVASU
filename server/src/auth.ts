@@ -39,6 +39,15 @@ export function requireRole(...roles: UserDocument["role"][]) {
   };
 }
 
+// TikTok management is intentionally narrower than admin access: only an
+// active Media Team leader can manage the public gallery. General admins,
+// ordinary members, and leaders of other teams are denied here and at every
+// media API route.
+export function requireMediaTeamAccess(req: Request, res: Response, next: NextFunction) {
+  if (req.authUser?.role === "team_leader" && req.authUser.teamIds.includes("media")) return next();
+  return res.status(403).json({ message: "Only authorized Media Team leaders can manage TikTok videos." });
+}
+
 export async function requireTeamAccess(req: Request, res: Response, next: NextFunction) {
   const teamId = String(req.params.teamId);
   if (req.authUser?.role === "admin") return next();

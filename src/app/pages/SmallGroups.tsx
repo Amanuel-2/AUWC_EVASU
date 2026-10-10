@@ -29,6 +29,7 @@ export default function SmallGroups() {
               }}
             >
               <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-10 transition-transform duration-300 group-hover:scale-125" style={{ backgroundColor: team.color }} />
+              <img src={team.image} alt={`${team.name} activity`} className="relative mb-6 h-40 w-full rounded-xl object-cover" />
               <div className="relative flex items-start justify-between gap-4 mb-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: team.color }}>Ministry team</p>
                 <ArrowRight className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" size={20} />

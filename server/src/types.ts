@@ -48,6 +48,23 @@ export interface AttendanceDocument {
   statuses: Record<string, AttendanceStatus>;
 }
 
+export type SocialVideoPlatform = "TikTok" | "YouTube" | "Vimeo" | "Instagram" | "Facebook" | "External";
+
+export interface TikTokVideoDocument {
+  _id?: ObjectId;
+  url: string;
+  videoId: string;
+  platform: SocialVideoPlatform;
+  embedUrl?: string | null;
+  title: string;
+  description: string;
+  isActive: boolean;
+  order: number;
+  createdBy: ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface AuthUser {
   id: string;
   email: string;

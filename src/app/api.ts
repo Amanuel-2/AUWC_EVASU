@@ -32,6 +32,20 @@ export interface AdminOverview {
   teams: AdminTeam[];
 }
 
+export interface TikTokVideo {
+  id: string;
+  url: string;
+  videoId: string;
+  embedUrl: string | null;
+  platform: "TikTok" | "YouTube" | "Vimeo" | "Instagram" | "Facebook" | "External";
+  title: string;
+  description: string;
+  isActive: boolean;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const tokenKey = "fellowship_access_token";
 
 export function getAccessToken() { return localStorage.getItem(tokenKey); }
@@ -72,3 +86,9 @@ export async function fetchScheduleRequest(teamId: string) { return request<{ da
 export async function fetchAttendanceRequest(teamId: string) { return request<unknown[]>(`/api/teams/${encodeURIComponent(teamId)}/attendance`); }
 export async function saveScheduleRequest(teamId: string, schedule: { day: string; time: string; location: string }) { return request<{ day: string; time: string; location: string }>(`/api/teams/${encodeURIComponent(teamId)}/schedule`, { method: "PATCH", body: JSON.stringify(schedule) }); }
 export async function saveAttendanceRequest(teamId: string, meetingDate: string, statuses: Record<string, string>) { return request<unknown>(`/api/teams/${encodeURIComponent(teamId)}/attendance`, { method: "POST", body: JSON.stringify({ meetingDate, statuses }) }); }
+export async function fetchTikTokVideosRequest() { return request<TikTokVideo[]>("/api/tiktok-videos"); }
+export async function fetchMediaTikTokVideosRequest() { return request<TikTokVideo[]>("/api/media/tiktok-videos"); }
+export async function createTikTokVideoRequest(input: { url: string; title: string; description: string; isActive: boolean }) { return request<TikTokVideo>("/api/media/tiktok-videos", { method: "POST", body: JSON.stringify(input) }); }
+export async function updateTikTokVideoRequest(videoId: string, input: Partial<Pick<TikTokVideo, "url" | "title" | "description" | "isActive">>) { return request<TikTokVideo>(`/api/media/tiktok-videos/${encodeURIComponent(videoId)}`, { method: "PATCH", body: JSON.stringify(input) }); }
+export async function deleteTikTokVideoRequest(videoId: string) { return request<void>(`/api/media/tiktok-videos/${encodeURIComponent(videoId)}`, { method: "DELETE" }); }
+export async function reorderTikTokVideosRequest(ids: string[]) { return request<TikTokVideo[]>("/api/media/tiktok-videos/reorder", { method: "PATCH", body: JSON.stringify({ ids }) }); }

@@ -6,8 +6,8 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { findTeamBySlug, getDb } from "./db.js";
 import { config } from "./config.js";
-import { requireAuth, requireRole, requireTeamAccess, signAccessToken } from "./auth.js";
-import { AttendanceDocument, MembershipDocument, TeamDocument, UserDocument } from "./types.js";
+import { requireAuth, requireMediaTeamAccess, requireRole, requireTeamAccess, signAccessToken } from "./auth.js";
+import { AttendanceDocument, MembershipDocument, TeamDocument, TikTokVideoDocument, UserDocument } from "./types.js";
 import { id, normalizeEmail, publicUser, serialize } from "./utils.js";
 
 const app = express();
@@ -21,10 +21,140 @@ const credentialsSchema = z.object({ email: z.string().email(), password: z.stri
 const registerSchema = z.object({ name: z.string().trim().min(2), email: z.string().email(), password: z.string().min(1), phone: z.string().trim().max(40).optional().default(""), department: z.string().trim().min(2).max(100), yearOfStudy: z.string().trim().max(40).optional().default(""), gender: z.string().trim().max(40).optional().default("") });
 const scheduleSchema = z.object({ day: z.string().trim().min(1), time: z.string().trim().min(1), location: z.string().trim().min(1) });
 const attendanceSchema = z.object({ meetingDate: z.string().date(), statuses: z.record(z.enum(["Present", "Absent", "Late", "Excused"])) });
+const tiktokVideoSchema = z.object({ url: z.string().url().max(500), title: z.string().trim().max(120).default(""), description: z.string().trim().max(500).default(""), isActive: z.boolean().default(true) });
+const tiktokVideoPatchSchema = tiktokVideoSchema.partial();
+const tiktokReorderSchema = z.object({ ids: z.array(z.string()).max(500) });
 const teamSchema = z.object({ slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), name: z.string().trim().min(2), tagline: z.string().trim().min(2), description: z.string().trim().min(2), isPublic: z.boolean().default(true), color: z.string().trim().default("#8B5CF6"), schedule: z.array(scheduleSchema).default([]) });
 const namedTeamFilter = { slug: { $not: /^small-group-\d+$/ } };
 
+function getVideoDetails(rawUrl: string) {
+  try {
+    const parsed = new URL(rawUrl);
+    if (parsed.protocol !== "https:") return null;
+    const hostname = parsed.hostname.toLowerCase();
+    if (["tiktok.com", "www.tiktok.com", "m.tiktok.com", "vm.tiktok.com"].includes(hostname)) {
+      const videoId = parsed.pathname.match(/\/video\/(\d+)/)?.[1];
+      return videoId ? { videoId, platform: "TikTok" as const, embedUrl: `https://www.tiktok.com/player/v1/${videoId}?description=1&music_info=1` } : null;
+    }
+    if (["youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be"].includes(hostname)) {
+      const videoId = hostname === "youtu.be" ? parsed.pathname.slice(1).split("/")[0] : parsed.searchParams.get("v") ?? parsed.pathname.match(/\/(?:shorts|embed)\/([^/?]+)/)?.[1];
+      return videoId ? { videoId, platform: "YouTube" as const, embedUrl: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0` } : null;
+    }
+    if (["vimeo.com", "www.vimeo.com", "player.vimeo.com"].includes(hostname)) {
+      const videoId = parsed.pathname.match(/\/(\d+)(?:\/|$)/)?.[1];
+      return videoId ? { videoId, platform: "Vimeo" as const, embedUrl: `https://player.vimeo.com/video/${videoId}` } : null;
+    }
+    if (["instagram.com", "www.instagram.com"].includes(hostname)) {
+      const match = parsed.pathname.match(/\/(reel|p|tv)\/([^/?]+)/);
+      return match ? { videoId: match[2], platform: "Instagram" as const, embedUrl: `https://www.instagram.com/${match[1]}/${match[2]}/embed` } : null;
+    }
+    if (["facebook.com", "www.facebook.com", "m.facebook.com", "fb.watch"].includes(hostname)) {
+      const videoId = parsed.searchParams.get("v") ?? parsed.pathname.match(/\/(?:videos|reel)\/(\d+)/)?.[1] ?? parsed.pathname.slice(1).split("/")[0];
+      return videoId ? { videoId, platform: "Facebook" as const, embedUrl: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(rawUrl)}&show_text=false` } : null;
+    }
+    // Unknown HTTPS platforms can still be published as an external link.
+    return { videoId: rawUrl, platform: "External" as const, embedUrl: null };
+  } catch {
+    return null;
+  }
+}
+
+function publicTikTokVideo(video: TikTokVideoDocument) {
+  const platform = video.platform ?? "TikTok";
+  return {
+    id: video._id?.toString(),
+    url: video.url,
+    videoId: video.videoId,
+    embedUrl: video.embedUrl ?? (platform === "External" ? null : platform === "TikTok" ? `https://www.tiktok.com/player/v1/${video.videoId}?description=1&music_info=1` : platform === "YouTube" ? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(video.videoId)}?rel=0` : platform === "Vimeo" ? `https://player.vimeo.com/video/${video.videoId}` : platform === "Instagram" ? `https://www.instagram.com/p/${video.videoId}/embed` : `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(video.url)}&show_text=false`),
+    platform,
+    title: video.title,
+    description: video.description,
+    isActive: video.isActive,
+    order: video.order,
+    createdAt: video.createdAt,
+    updatedAt: video.updatedAt,
+  };
+}
+
 app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
+
+app.get("/api/tiktok-videos", async (_req, res, next) => {
+  try {
+    const db = await getDb();
+    const videos = await db.collection<TikTokVideoDocument>("tiktokVideos").find({ isActive: true }).sort({ order: 1, createdAt: 1 }).toArray();
+    return res.json(videos.map(publicTikTokVideo));
+  } catch (error) { return next(error); }
+});
+
+app.get("/api/media/tiktok-videos", requireAuth, requireMediaTeamAccess, async (_req, res, next) => {
+  try {
+    const db = await getDb();
+    const videos = await db.collection<TikTokVideoDocument>("tiktokVideos").find({}).sort({ order: 1, createdAt: 1 }).toArray();
+    return res.json(videos.map(publicTikTokVideo));
+  } catch (error) { return next(error); }
+});
+
+app.post("/api/media/tiktok-videos", requireAuth, requireMediaTeamAccess, async (req, res, next) => {
+  try {
+    const input = tiktokVideoSchema.parse(req.body);
+    const details = getVideoDetails(input.url);
+    if (!details) return res.status(400).json({ message: "Use a valid public HTTPS video URL from a supported platform." });
+    const db = await getDb();
+    const existing = await db.collection<TikTokVideoDocument>("tiktokVideos").findOne({ url: input.url });
+    if (existing) return res.status(409).json({ message: "This TikTok video is already in the gallery." });
+    await db.collection<TikTokVideoDocument>("tiktokVideos").updateMany({}, { $inc: { order: 1 } });
+    const now = new Date();
+    const video: TikTokVideoDocument = { ...input, ...details, order: 0, createdBy: id(req.authUser!.id)!, createdAt: now, updatedAt: now };
+    const result = await db.collection<TikTokVideoDocument>("tiktokVideos").insertOne(video);
+    video._id = result.insertedId;
+    return res.status(201).json(publicTikTokVideo(video));
+  } catch (error) { return next(error); }
+});
+
+app.patch("/api/media/tiktok-videos/reorder", requireAuth, requireMediaTeamAccess, async (req, res, next) => {
+  try {
+    const { ids } = tiktokReorderSchema.parse(req.body);
+    const objectIds = ids.map((value) => id(value));
+    if (objectIds.some((value) => !value) || new Set(ids).size !== ids.length) return res.status(400).json({ message: "The reorder list contains invalid or duplicate video IDs." });
+    const db = await getDb();
+    const videos = await db.collection<TikTokVideoDocument>("tiktokVideos").find({}).toArray();
+    if (videos.length !== ids.length || videos.some((video) => !ids.includes(video._id!.toString()))) return res.status(400).json({ message: "Reorder must include every gallery video exactly once." });
+    await Promise.all(ids.map((videoId, order) => db.collection<TikTokVideoDocument>("tiktokVideos").updateOne({ _id: id(videoId)! }, { $set: { order, updatedAt: new Date() } })));
+    const updated = await db.collection<TikTokVideoDocument>("tiktokVideos").find({}).sort({ order: 1 }).toArray();
+    return res.json(updated.map(publicTikTokVideo));
+  } catch (error) { return next(error); }
+});
+
+app.patch("/api/media/tiktok-videos/:videoId", requireAuth, requireMediaTeamAccess, async (req, res, next) => {
+  try {
+    const videoObjectId = id(String(req.params.videoId));
+    if (!videoObjectId) return res.status(400).json({ message: "Invalid video ID." });
+    const input = tiktokVideoPatchSchema.parse(req.body);
+    const update: Partial<TikTokVideoDocument> = { ...input, updatedAt: new Date() };
+    if (input.url) {
+      const details = getVideoDetails(input.url);
+      if (!details) return res.status(400).json({ message: "Use a valid public HTTPS video URL from a supported platform." });
+      const duplicate = await (await getDb()).collection<TikTokVideoDocument>("tiktokVideos").findOne({ url: input.url, _id: { $ne: videoObjectId } });
+      if (duplicate) return res.status(409).json({ message: "This TikTok video is already in the gallery." });
+      Object.assign(update, details);
+    }
+    const db = await getDb();
+    const result = await db.collection<TikTokVideoDocument>("tiktokVideos").findOneAndUpdate({ _id: videoObjectId }, { $set: update }, { returnDocument: "after" });
+    if (!result) return res.status(404).json({ message: "TikTok video not found." });
+    return res.json(publicTikTokVideo(result));
+  } catch (error) { return next(error); }
+});
+
+app.delete("/api/media/tiktok-videos/:videoId", requireAuth, requireMediaTeamAccess, async (req, res, next) => {
+  try {
+    const videoObjectId = id(String(req.params.videoId));
+    if (!videoObjectId) return res.status(400).json({ message: "Invalid video ID." });
+    const db = await getDb();
+    const result = await db.collection<TikTokVideoDocument>("tiktokVideos").deleteOne({ _id: videoObjectId });
+    if (!result.deletedCount) return res.status(404).json({ message: "TikTok video not found." });
+    return res.status(204).send();
+  } catch (error) { return next(error); }
+});
 
 app.post("/api/auth/register", async (req, res, next) => {
   try {

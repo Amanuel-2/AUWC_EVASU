@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { namedTeams } from "../data/teams";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
+import TikTokGallery from "../components/TikTokGallery";
 
 import worshipTeam1 from "../../assets/teams/worship/20260510_125332.jpg";
 import worshipTeam2 from "../../assets/teams/worship/20260510_125349.jpg";
@@ -222,6 +223,7 @@ function Teams() {
                 whileHover={reduceMotion ? undefined : { y: -6 }}
               >
                 <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-10 transition-transform duration-300 group-hover:scale-125" style={{ backgroundColor: team.color }} />
+                <img src={team.image} alt={`${team.name} activity`} className="relative mb-5 h-36 w-full rounded-xl object-cover" />
                 <div className="relative flex items-start justify-between gap-4">
                   <div><p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: team.color }}>Ministry team</p><h3 className="font-['DM_Serif_Display'] text-xl text-foreground">{team.name.replace(" Team", "")}</h3></div>
                   <ArrowRight className="mt-1 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" size={20} />
@@ -308,6 +310,7 @@ export default function Home() {
       <Hero />
       <About />
       <Teams />
+      <TikTokGallery />
       <Events />
       <CTA />
     </main>

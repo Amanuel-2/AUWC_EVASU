@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title">
+  <title id="title">Team gallery image coming soon</title>
+  <rect width="1200" height="800" fill="#f5eee6"/>
+  <circle cx="600" cy="320" r="96" fill="#5c1d4d" opacity=".12"/>
+  <path d="M555 320h90M600 275v90" stroke="#5c1d4d" stroke-width="18" stroke-linecap="round" opacity=".55"/>
+  <text x="600" y="530" text-anchor="middle" fill="#5c1d4d" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="600">Team gallery coming soon</text>
+</svg>
