@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { ArrowRight, Users, Heart, Music, Palette, HandHeart, Video, BookOpen, Cross, CalendarDays, MapPin, Quote } from "lucide-react";
+import { ArrowRight, Users, Heart, BookOpen, Cross, CalendarDays, MapPin, Quote } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { namedTeams } from "../data/teams";
 import { useLanguage } from "../context/LanguageContext";
@@ -192,15 +192,6 @@ function Teams() {
   const { t } = useLanguage();
   const reduceMotion = useReducedMotion();
 
-  const teamIcons = {
-    worship: <Music className="w-5 h-5" />,
-    choir: <Music className="w-5 h-5" />,
-    prayer: <Cross className="w-5 h-5" />,
-    art: <Palette className="w-5 h-5" />,
-    media: <Video className="w-5 h-5" />,
-    "love-sharing": <HandHeart className="w-5 h-5" />,
-  };
-
   return (
     <section id="small-groups" className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -219,18 +210,23 @@ function Teams() {
                 role="link"
                 tabIndex={0}
                 onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") navigate(`/teams/${team.id}`); }}
-                className="bg-white p-6 rounded-2xl border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
+                className="relative overflow-hidden p-6 rounded-2xl border border-border border-t-4 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                style={{
+                  borderTopColor: team.color,
+                  background: `linear-gradient(135deg, #ffffff 0%, #ffffff 70%, ${team.color}16 100%)`,
+                }}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.45, delay: i * 0.06 }}
                 whileHover={reduceMotion ? undefined : { y: -6 }}
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ backgroundColor: team.color + "20", color: team.color }}>
-                  {teamIcons[team.id as keyof typeof teamIcons] || <Users className="w-5 h-5" />}
+                <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-10 transition-transform duration-300 group-hover:scale-125" style={{ backgroundColor: team.color }} />
+                <div className="relative flex items-start justify-between gap-4">
+                  <div><p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: team.color }}>Ministry team</p><h3 className="font-['DM_Serif_Display'] text-xl text-foreground">{team.name.replace(" Team", "")}</h3></div>
+                  <ArrowRight className="mt-1 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" size={20} />
                 </div>
-                <h3 className="font-['DM_Serif_Display'] text-xl text-foreground mb-2">{team.name.replace(" Team", "")}</h3>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{team.tagline}</p>
+                <p className="relative mt-3 text-sm text-muted-foreground mb-4 line-clamp-2">{team.tagline}</p>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <Users size={14} />
                   <span>Welcoming new students</span>

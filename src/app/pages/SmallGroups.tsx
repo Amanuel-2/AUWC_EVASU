@@ -22,12 +22,15 @@ export default function SmallGroups() {
               key={team.id}
               type="button"
               onClick={() => navigate(`/teams/${team.id}`)}
-              className="group text-left bg-white border border-border rounded-2xl p-6 hover:-translate-y-1 hover:shadow-xl hover:border-primary/40 transition-all focus:outline-none focus:ring-2 focus:ring-primary/40"
+              className="group relative overflow-hidden text-left border border-border border-t-4 rounded-2xl p-6 hover:-translate-y-1 hover:shadow-xl transition-all focus:outline-none focus:ring-2 focus:ring-primary/40"
+              style={{
+                borderTopColor: team.color,
+                background: `linear-gradient(135deg, #ffffff 0%, #ffffff 70%, ${team.color}16 100%)`,
+              }}
             >
-              <div className="flex items-start justify-between gap-4 mb-6">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style={{ backgroundColor: `${team.color}20` }}>
-                  {team.icon}
-                </div>
+              <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-10 transition-transform duration-300 group-hover:scale-125" style={{ backgroundColor: team.color }} />
+              <div className="relative flex items-start justify-between gap-4 mb-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: team.color }}>Ministry team</p>
                 <ArrowRight className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" size={20} />
               </div>
               <h2 className="font-['DM_Serif_Display'] text-2xl text-foreground mb-2">{team.name.replace(" Team", "")}</h2>

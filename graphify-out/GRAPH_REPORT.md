@@ -1,68 +1,66 @@
-# Graph Report - AUWC_EVASU  (2026-09-29)
+# Graph Report - AUWC_EVASU  (2026-10-07)
 
 ## Corpus Check
-- 10 files · ~549,701 words
+- 16 files · ~552,193 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 726 nodes · 1473 edges · 42 communities (36 shown, 5 thin omitted)
+- 750 nodes · 1516 edges · 40 communities (32 shown, 7 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 39 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
-- Frontend App Shell
-- Backend API Server
-- Frontend Dependencies
-- API Client & State
-- Layout & Navigation UI
-- Data Display Components
-- Build Tooling
-- Action & Input Components
-- Form Controls
-- Documentation & Config
-- Modal & Command
-- Menu Components
-- Context Menu
-- Dropdown Menu
-- Form Components
-- Carousel
-- Sheet
-- Select
-- Chart
-- Drawer
-- Server TypeScript Config
-- Navigation Menu
-- Alert & Badge
-- Toggle Components
+- App Shell and Layout
+- Admin API Client
 - Server Dependencies
-- Server Documentation
-- Server Dev Dependencies
-- Input OTP
-- Accordion
-- Popover
-- Frontend Dev Dependencies
-- Peer Dependencies Meta
-- Avatar
-- Collapsible
-- HoverCard
-- Resizable Panels
-- Package Overrides
-- Peer Dependencies
-- Package Scripts
-- Aspect Ratio
-- Guidelines
+- Frontend UI Libraries
+- Dialog and Sheet Primitives
+- Avatar and Card Primitives
+- Form Input Primitives
+- Alert Dialog and Date Picker
+- Package Manifest Entries
+- Command and Menu Dialogs
+- Project Docs and Assets
+- Alert Badge Breadcrumb UI
+- Context Menu Components
+- Dropdown Menu Components
+- React Hook Form Integration
+- Carousel Components
+- Server Package Manifest
+- Select Menu Components
+- Charts and Recharts
+- Drawer Components
+- TypeScript Configuration
+- Navigation Menu Components
+- Toggle Components
+- Backend Auth and Data Stack
+- Accordion Components
+- Popover Components
+- Tabs Components
+- Vite Build Toolchain
+- React Peer Dependencies
+- Collapsible Components
+- Hover Card Components
+- Pinned Build Packages
+- Theme and Toast Utilities
+- Package Manager Overrides
+- React Peer Dependency Decl
+- NPM Scripts
+- Aspect Ratio Component
+- Vercel Rewrite Config
+- Guidelines Template
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 223 edges
-2. `react` - 58 edges
-3. `lucide-react` - 34 edges
+2. `react` - 59 edges
+3. `Lucide React` - 36 edges
 4. `useAuth()` - 28 edges
-5. `useLanguage()` - 21 edges
+5. `useLanguage()` - 22 edges
 6. `react-router` - 17 edges
 7. `AUWC ECSF Fellowship Management System` - 15 edges
 8. `useLeaderDashboard()` - 13 edges
-9. `LeaderDashboardProvider()` - 11 edges
-10. `compilerOptions` - 10 edges
+9. `request()` - 13 edges
+10. `LeaderDashboardProvider()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `AUWC ECSF Logo (asset)` --semantically_similar_to--> `AUWC ECSF Logo`  [INFERRED] [semantically similar]
@@ -73,8 +71,8 @@
   ATTRIBUTIONS.md → README.md
 - `pnpm workspace config` --conceptually_related_to--> `Vite`  [INFERRED]
   pnpm-workspace.yaml → README.md
-- `Progress()` --calls--> `cn()`  [EXTRACTED]
-  src/app/components/ui/progress.tsx → src/app/components/ui/utils.ts
+- `Command()` --calls--> `cn()`  [EXTRACTED]
+  src/app/components/ui/command.tsx → src/app/components/ui/utils.ts
 
 ## Import Cycles
 - None detected.
@@ -86,171 +84,155 @@
 - **Role-Based Feature Modules** — readme_admin_dashboard, readme_team_leader_dashboard, readme_mock_authentication, readme_role_based_access [INFERRED 0.85]
 - **AUWCEC ECSF Team Photos** — src_assets_teams_art, src_assets_teams_love_sharing, src_assets_teams_worship, src_assets_auwcec_ecsf_logo [INFERRED 0.85]
 
-## Communities (42 total, 5 thin omitted)
+## Communities (40 total, 7 thin omitted)
 
-### Community 0 - "Frontend App Shell"
+### Community 0 - "App Shell and Layout"
 Cohesion: 0.06
-Nodes (64): lucide-react, react-router, App(), BrandLogo(), BrandLogoProps, Footer(), LanguageToggle(), Navbar() (+56 more)
+Nodes (61): Lucide React, react-router, App(), BrandLogo(), BrandLogoProps, Footer(), LanguageToggle(), Navbar() (+53 more)
 
-### Community 1 - "Backend API Server"
+### Community 1 - "Admin API Client"
 Cohesion: 0.06
-Nodes (55): bcryptjs, cors, dotenv, express, jsonwebtoken, mongodb, tsx, @types/cors (+47 more)
+Nodes (56): AdminOverview, AdminTeam, API_URL, ApiTeam, ApiUser, assignTeamLeaderRequest(), changeLeaderPasswordRequest(), clearAccessToken() (+48 more)
 
-### Community 2 - "Frontend Dependencies"
+### Community 2 - "Server Dependencies"
+Cohesion: 0.06
+Nodes (58): MongoDB, bcryptjs, cors, dotenv, express, jsonwebtoken, tsx, @types/cors (+50 more)
+
+### Community 3 - "Frontend UI Libraries"
 Cohesion: 0.04
 Nodes (56): dependencies, canvas-confetti, class-variance-authority, clsx, cmdk, date-fns, embla-carousel-react, @emotion/react (+48 more)
 
-### Community 3 - "API Client & State"
-Cohesion: 0.09
-Nodes (45): API_URL, ApiTeam, ApiUser, clearAccessToken(), currentUserRequest(), fetchAttendanceRequest(), fetchLeaderTeamRequest(), fetchScheduleRequest() (+37 more)
+### Community 4 - "Dialog and Sheet Primitives"
+Cohesion: 0.05
+Nodes (44): @radix-ui/react-dialog, @radix-ui/react-tooltip, Input(), Separator(), Sheet(), SheetContent(), SheetDescription(), SheetFooter() (+36 more)
 
-### Community 4 - "Layout & Navigation UI"
+### Community 5 - "Avatar and Card Primitives"
+Cohesion: 0.08
+Nodes (32): @radix-ui/react-avatar, @radix-ui/react-menubar, Avatar(), AvatarFallback(), AvatarImage(), Card(), CardAction(), CardContent() (+24 more)
+
+### Community 6 - "Form Input Primitives"
 Cohesion: 0.06
-Nodes (36): @radix-ui/react-tooltip, Input(), Separator(), Sidebar(), SidebarContent(), SidebarContext, SidebarContextProps, SidebarFooter() (+28 more)
+Nodes (26): clsx, input-otp, @radix-ui/react-checkbox, @radix-ui/react-progress, @radix-ui/react-radio-group, @radix-ui/react-scroll-area, @radix-ui/react-slider, @radix-ui/react-switch (+18 more)
 
-### Community 5 - "Data Display Components"
-Cohesion: 0.11
-Nodes (27): @radix-ui/react-tabs, BreadcrumbEllipsis(), BreadcrumbItem(), BreadcrumbLink(), BreadcrumbList(), BreadcrumbPage(), BreadcrumbSeparator(), Card() (+19 more)
-
-### Community 6 - "Build Tooling"
-Cohesion: 0.07
-Nodes (26): name, private, type, version, canvas-confetti, date-fns, @emotion/react, @emotion/styled (+18 more)
-
-### Community 7 - "Action & Input Components"
-Cohesion: 0.09
-Nodes (21): @radix-ui/react-alert-dialog, @radix-ui/react-slot, react-day-picker, AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter() (+13 more)
-
-### Community 8 - "Form Controls"
+### Community 7 - "Alert Dialog and Date Picker"
 Cohesion: 0.10
-Nodes (18): clsx, @radix-ui/react-checkbox, @radix-ui/react-progress, @radix-ui/react-radio-group, @radix-ui/react-scroll-area, @radix-ui/react-slider, @radix-ui/react-switch, react (+10 more)
+Nodes (20): @radix-ui/react-alert-dialog, react-day-picker, AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader() (+12 more)
 
-### Community 9 - "Documentation & Config"
-Cohesion: 0.13
-Nodes (23): AUWC ECSF Logo (asset), Lucide React, Attributions, Radix UI, shadcn/ui, Unsplash, index.html (Vite entry point), pnpm workspace config (+15 more)
+### Community 8 - "Package Manifest Entries"
+Cohesion: 0.08
+Nodes (24): name, private, type, version, canvas-confetti, date-fns, @emotion/react, @emotion/styled (+16 more)
 
-### Community 10 - "Modal & Command"
+### Community 9 - "Command and Menu Dialogs"
 Cohesion: 0.13
 Nodes (15): cmdk, Command(), CommandGroup(), CommandInput(), CommandItem(), CommandList(), CommandSeparator(), CommandShortcut() (+7 more)
 
-### Community 11 - "Menu Components"
-Cohesion: 0.11
-Nodes (12): @radix-ui/react-menubar, Menubar(), MenubarCheckboxItem(), MenubarContent(), MenubarItem(), MenubarLabel(), MenubarRadioItem(), MenubarSeparator() (+4 more)
+### Community 10 - "Project Docs and Assets"
+Cohesion: 0.14
+Nodes (21): AUWC ECSF Logo (asset), Attributions, Radix UI, shadcn/ui, Unsplash, index.html (Vite entry point), pnpm workspace config, Admin Dashboard (+13 more)
 
-### Community 12 - "Context Menu"
+### Community 11 - "Alert Badge Breadcrumb UI"
+Cohesion: 0.12
+Nodes (14): class-variance-authority, @radix-ui/react-slot, Alert(), AlertDescription(), AlertTitle(), alertVariants, Badge(), badgeVariants (+6 more)
+
+### Community 12 - "Context Menu Components"
 Cohesion: 0.12
 Nodes (10): @radix-ui/react-context-menu, ContextMenuCheckboxItem(), ContextMenuContent(), ContextMenuItem(), ContextMenuLabel(), ContextMenuRadioItem(), ContextMenuSeparator(), ContextMenuShortcut() (+2 more)
 
-### Community 13 - "Dropdown Menu"
+### Community 13 - "Dropdown Menu Components"
 Cohesion: 0.12
 Nodes (10): @radix-ui/react-dropdown-menu, DropdownMenuCheckboxItem(), DropdownMenuContent(), DropdownMenuItem(), DropdownMenuLabel(), DropdownMenuRadioItem(), DropdownMenuSeparator(), DropdownMenuShortcut() (+2 more)
 
-### Community 14 - "Form Components"
+### Community 14 - "React Hook Form Integration"
 Cohesion: 0.17
 Nodes (13): @radix-ui/react-label, react-hook-form, FormControl(), FormDescription(), FormFieldContext, FormFieldContextValue, FormItem(), FormItemContext (+5 more)
 
-### Community 15 - "Carousel"
+### Community 15 - "Carousel Components"
 Cohesion: 0.17
 Nodes (14): embla-carousel-react, Carousel(), CarouselApi, CarouselContent(), CarouselContext, CarouselContextProps, CarouselItem(), CarouselNext() (+6 more)
 
-### Community 16 - "Sheet"
-Cohesion: 0.17
-Nodes (8): @radix-ui/react-dialog, Sheet(), SheetContent(), SheetDescription(), SheetFooter(), SheetHeader(), SheetOverlay(), SheetTitle()
+### Community 16 - "Server Package Manifest"
+Cohesion: 0.12
+Nodes (15): dependencies, bcryptjs, cors, dotenv, express, jsonwebtoken, mongodb, zod (+7 more)
 
-### Community 17 - "Select"
+### Community 17 - "Select Menu Components"
 Cohesion: 0.17
 Nodes (8): @radix-ui/react-select, SelectContent(), SelectItem(), SelectLabel(), SelectScrollDownButton(), SelectScrollUpButton(), SelectSeparator(), SelectTrigger()
 
-### Community 18 - "Chart"
+### Community 18 - "Charts and Recharts"
 Cohesion: 0.23
 Nodes (10): recharts, ChartConfig, ChartContainer(), ChartContext, ChartContextProps, ChartLegendContent(), ChartTooltipContent(), getPayloadConfigFromPayload() (+2 more)
 
-### Community 19 - "Drawer"
+### Community 19 - "Drawer Components"
 Cohesion: 0.17
 Nodes (7): vaul, DrawerContent(), DrawerDescription(), DrawerFooter(), DrawerHeader(), DrawerOverlay(), DrawerTitle()
 
-### Community 20 - "Server TypeScript Config"
+### Community 20 - "TypeScript Configuration"
 Cohesion: 0.17
 Nodes (11): compilerOptions, esModuleInterop, forceConsistentCasingInFileNames, module, moduleResolution, outDir, rootDir, skipLibCheck (+3 more)
 
-### Community 21 - "Navigation Menu"
+### Community 21 - "Navigation Menu Components"
 Cohesion: 0.20
 Nodes (10): @radix-ui/react-navigation-menu, NavigationMenu(), NavigationMenuContent(), NavigationMenuIndicator(), NavigationMenuItem(), NavigationMenuLink(), NavigationMenuList(), NavigationMenuTrigger() (+2 more)
 
-### Community 22 - "Alert & Badge"
-Cohesion: 0.28
-Nodes (7): class-variance-authority, Alert(), AlertDescription(), AlertTitle(), alertVariants, Badge(), badgeVariants
-
-### Community 23 - "Toggle Components"
+### Community 22 - "Toggle Components"
 Cohesion: 0.31
 Nodes (7): @radix-ui/react-toggle, @radix-ui/react-toggle-group, ToggleGroup(), ToggleGroupContext, ToggleGroupItem(), Toggle(), toggleVariants
 
-### Community 24 - "Server Dependencies"
-Cohesion: 0.25
-Nodes (8): dependencies, bcryptjs, cors, dotenv, express, jsonwebtoken, mongodb, zod
-
-### Community 25 - "Server Documentation"
+### Community 23 - "Backend Auth and Data Stack"
 Cohesion: 0.32
 Nodes (8): API areas, AUWC ECSF API, JWT_SECRET, MongoDB Atlas, MongoDB driver, Node.js, Seed script, TypeScript
 
-### Community 26 - "Server Dev Dependencies"
-Cohesion: 0.29
-Nodes (7): devDependencies, tsx, @types/cors, @types/express, @types/jsonwebtoken, @types/node, typescript
-
-### Community 27 - "Input OTP"
-Cohesion: 0.33
-Nodes (4): input-otp, InputOTP(), InputOTPGroup(), InputOTPSlot()
-
-### Community 28 - "Accordion"
+### Community 24 - "Accordion Components"
 Cohesion: 0.33
 Nodes (4): @radix-ui/react-accordion, AccordionContent(), AccordionItem(), AccordionTrigger()
 
-### Community 30 - "Frontend Dev Dependencies"
+### Community 26 - "Tabs Components"
+Cohesion: 0.33
+Nodes (5): @radix-ui/react-tabs, Tabs(), TabsContent(), TabsList(), TabsTrigger()
+
+### Community 27 - "Vite Build Toolchain"
 Cohesion: 0.40
 Nodes (5): devDependencies, tailwindcss, @tailwindcss/vite, vite, @vitejs/plugin-react
 
-### Community 31 - "Peer Dependencies Meta"
+### Community 28 - "React Peer Dependencies"
 Cohesion: 0.40
 Nodes (5): peerDependenciesMeta, react, react-dom, optional, optional
 
-### Community 32 - "Avatar"
-Cohesion: 0.40
-Nodes (4): @radix-ui/react-avatar, Avatar(), AvatarFallback(), AvatarImage()
+### Community 31 - "Pinned Build Packages"
+Cohesion: 0.50
+Nodes (4): allowScripts, esbuild@0.25.12, esbuild@0.28.2, @tailwindcss/oxide@4.1.12
 
-### Community 35 - "Resizable Panels"
-Cohesion: 0.40
-Nodes (3): react-resizable-panels, ResizableHandle(), ResizablePanelGroup()
-
-### Community 36 - "Package Overrides"
+### Community 33 - "Package Manager Overrides"
 Cohesion: 0.67
 Nodes (3): vite, pnpm, overrides
 
-### Community 37 - "Peer Dependencies"
+### Community 34 - "React Peer Dependency Decl"
 Cohesion: 0.67
 Nodes (3): peerDependencies, react, react-dom
 
-### Community 38 - "Package Scripts"
+### Community 35 - "NPM Scripts"
 Cohesion: 0.67
 Nodes (3): scripts, build, dev
 
 ## Knowledge Gaps
-- **183 isolated node(s):** `BrandLogoProps`, `Language`, `TranslationKey`, `FormFieldContextValue`, `FormItemContextValue` (+178 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 240 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **189 isolated node(s):** `BrandLogoProps`, `Team`, `FormFieldContextValue`, `FormItemContextValue`, `CarouselApi` (+184 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 254 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `Form Controls` to `Frontend App Shell`, `API Client & State`, `Layout & Navigation UI`, `Data Display Components`, `Build Tooling`, `Action & Input Components`, `Modal & Command`, `Menu Components`, `Context Menu`, `Dropdown Menu`, `Form Components`, `Carousel`, `Sheet`, `Select`, `Chart`, `Drawer`, `Navigation Menu`, `Alert & Badge`, `Toggle Components`, `Input OTP`, `Accordion`, `Popover`, `Avatar`, `HoverCard`, `Resizable Panels`?**
-  _High betweenness centrality (0.238) - this node is a cross-community bridge._
-- **Why does `cn()` connect `Data Display Components` to `Layout & Navigation UI`, `Action & Input Components`, `Form Controls`, `Modal & Command`, `Menu Components`, `Context Menu`, `Dropdown Menu`, `Form Components`, `Carousel`, `Sheet`, `Select`, `Chart`, `Drawer`, `Navigation Menu`, `Alert & Badge`, `Toggle Components`, `Input OTP`, `Accordion`, `Popover`, `Avatar`, `HoverCard`, `Resizable Panels`?**
-  _High betweenness centrality (0.182) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `Frontend Dependencies` to `Build Tooling`?**
-  _High betweenness centrality (0.120) - this node is a cross-community bridge._
-- **What connects `BrandLogoProps`, `Language`, `TranslationKey` to the rest of the system?**
-  _183 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Frontend App Shell` be split into smaller, more focused modules?**
-  _Cohesion score 0.05942571785268414 - nodes in this community are weakly interconnected._
-- **Should `Backend API Server` be split into smaller, more focused modules?**
-  _Cohesion score 0.061057692307692306 - nodes in this community are weakly interconnected._
-- **Should `Frontend Dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.03571428571428571 - nodes in this community are weakly interconnected._
+- **Why does `Lucide React` connect `App Shell and Layout` to `Admin API Client`, `Dialog and Sheet Primitives`, `Avatar and Card Primitives`, `Form Input Primitives`, `Alert Dialog and Date Picker`, `Package Manifest Entries`, `Command and Menu Dialogs`, `Project Docs and Assets`, `Alert Badge Breadcrumb UI`, `Context Menu Components`, `Dropdown Menu Components`, `Carousel Components`, `Select Menu Components`, `Navigation Menu Components`, `Accordion Components`?**
+  _High betweenness centrality (0.323) - this node is a cross-community bridge._
+- **Why does `react` connect `Form Input Primitives` to `App Shell and Layout`, `Admin API Client`, `Dialog and Sheet Primitives`, `Avatar and Card Primitives`, `Alert Dialog and Date Picker`, `Package Manifest Entries`, `Command and Menu Dialogs`, `Alert Badge Breadcrumb UI`, `Context Menu Components`, `Dropdown Menu Components`, `React Hook Form Integration`, `Carousel Components`, `Select Menu Components`, `Charts and Recharts`, `Drawer Components`, `Navigation Menu Components`, `Toggle Components`, `Accordion Components`, `Popover Components`, `Tabs Components`, `Hover Card Components`?**
+  _High betweenness centrality (0.248) - this node is a cross-community bridge._
+- **Why does `React 18` connect `Project Docs and Assets` to `App Shell and Layout`?**
+  _High betweenness centrality (0.220) - this node is a cross-community bridge._
+- **What connects `BrandLogoProps`, `Team`, `FormFieldContextValue` to the rest of the system?**
+  _189 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `App Shell and Layout` be split into smaller, more focused modules?**
+  _Cohesion score 0.06218487394957983 - nodes in this community are weakly interconnected._
+- **Should `Admin API Client` be split into smaller, more focused modules?**
+  _Cohesion score 0.06298904538341157 - nodes in this community are weakly interconnected._
+- **Should `Server Dependencies` be split into smaller, more focused modules?**
+  _Cohesion score 0.05583972719522592 - nodes in this community are weakly interconnected._
