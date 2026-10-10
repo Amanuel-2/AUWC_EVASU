@@ -16,7 +16,8 @@ app.use(cors({ origin: config.CLIENT_ORIGIN, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 
 const frontendDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../dist");
-app.use(express.static(frontendDist));
+app.use("/assets", express.static(path.join(frontendDist, "assets"), { maxAge: "1y", immutable: true }));
+app.use(express.static(frontendDist, { maxAge: "1h" }));
 
 const credentialsSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
 const resetRequestSchema = z.object({ email: z.string().trim().email() });

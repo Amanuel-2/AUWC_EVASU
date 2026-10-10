@@ -6,12 +6,13 @@ import { namedTeams } from "../data/teams";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
 import TikTokGallery from "../components/TikTokGallery";
+import OptimizedImage from "../components/OptimizedImage";
 
-import worshipTeam1 from "../../assets/teams/worship/20260510_125332.jpg";
-import worshipTeam2 from "../../assets/teams/worship/20260510_125349.jpg";
-import loveSharing1 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-02.jpg";
-import loveSharing2 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-11.jpg";
-import artTeam from "../../assets/teams/art/photo_2026-06-23_14-54-08.jpg";
+import worshipTeam1 from "../../assets/teams/worship/20260510_125332.webp";
+import worshipTeam2 from "../../assets/teams/worship/20260510_125349.webp";
+import loveSharing1 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-02.webp";
+import loveSharing2 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-11.webp";
+import artTeam from "../../assets/teams/art/photo_2026-06-23_14-54-08.webp";
 /* ── Intersection Observer hook for fade-in animations ── */
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -89,12 +90,12 @@ function Hero() {
         <motion.div className="relative" variants={{ hidden: { opacity: 0, x: 28 }, visible: { opacity: 1, x: 0, transition: { duration: 0.85, ease: "easeOut" } } }}>
           <div className="relative grid grid-cols-2 gap-4">
             <div className="space-y-4">
-              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={worshipTeam1} alt="Students worshipping together" className="rounded-2xl w-full h-56 lg:h-64 object-cover shadow-md" />
-              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={loveSharing1} alt="Students serving their community" className="rounded-2xl w-full h-40 lg:h-48 object-cover shadow-md" />
+              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={worshipTeam1} alt="Students worshipping together" className="rounded-2xl w-full h-56 lg:h-64 object-cover shadow-md" loading="eager" decoding="async" fetchPriority="high" width="640" height="512" />
+              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={loveSharing1} alt="Students serving their community" className="rounded-2xl w-full h-40 lg:h-48 object-cover shadow-md" loading="lazy" decoding="async" width="640" height="512" />
             </div>
             <div className="space-y-4 mt-8">
-              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={worshipTeam2} alt="Fellowship gathering" className="rounded-2xl w-full h-40 lg:h-48 object-cover shadow-md" />
-              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={artTeam} alt="Students expressing their creativity" className="rounded-2xl w-full h-56 lg:h-64 object-cover shadow-md" />
+              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={worshipTeam2} alt="Fellowship gathering" className="rounded-2xl w-full h-40 lg:h-48 object-cover shadow-md" loading="lazy" decoding="async" width="640" height="512" />
+              <motion.img whileHover={reduceMotion ? undefined : { scale: 1.03 }} transition={{ duration: 0.35 }} src={artTeam} alt="Students expressing their creativity" className="rounded-2xl w-full h-56 lg:h-64 object-cover shadow-md" loading="lazy" decoding="async" width="640" height="512" />
             </div>
           </div>
           <motion.div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl border border-border" animate={reduceMotion ? undefined : { y: [0, -7, 0] }} transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}>
@@ -176,9 +177,9 @@ function About() {
           </div>
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <img src={artTeam} alt="Art team" className="rounded-2xl w-full h-56 object-cover" />
-            <img src={loveSharing2} alt="Community outreach" className="rounded-2xl w-full h-56 object-cover" />
-            <img src={worshipTeam2} alt="Worship gathering" className="rounded-2xl w-full h-56 object-cover" />
+            <OptimizedImage src={artTeam} alt="Art team" className="rounded-2xl w-full h-56 object-cover" width={640} height={448} />
+            <OptimizedImage src={loveSharing2} alt="Community outreach" className="rounded-2xl w-full h-56 object-cover" width={640} height={448} />
+            <OptimizedImage src={worshipTeam2} alt="Worship gathering" className="rounded-2xl w-full h-56 object-cover" width={640} height={448} />
           </div>
         </div>
       </div>
@@ -223,7 +224,7 @@ function Teams() {
                 whileHover={reduceMotion ? undefined : { y: -6 }}
               >
                 <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full opacity-10 transition-transform duration-300 group-hover:scale-125" style={{ backgroundColor: team.color }} />
-                <img src={team.image} alt={`${team.name} activity`} className="relative mb-5 h-36 w-full rounded-xl object-cover" />
+                <OptimizedImage src={team.image} alt={`${team.name} activity`} className="relative mb-5 h-36 w-full rounded-xl object-cover" width={640} height={360} />
                 <div className="relative flex items-start justify-between gap-4">
                   <div><p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: team.color }}>Ministry team</p><h3 className="font-['DM_Serif_Display'] text-xl text-foreground">{team.name.replace(" Team", "")}</h3></div>
                   <ArrowRight className="mt-1 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" size={20} />

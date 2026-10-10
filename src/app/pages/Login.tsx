@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import BrandLogo from "../components/BrandLogo";
 import LanguageToggle from "../components/LanguageToggle";
 import { useLanguage } from "../context/LanguageContext";
+import OptimizedImage from "../components/OptimizedImage";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -38,10 +39,13 @@ export default function Login() {
       {/* Left panel */}
       <div className="hidden lg:flex flex-col justify-between p-12 bg-foreground relative overflow-hidden">
         <div className="absolute inset-0">
-          <img
+          <OptimizedImage
             src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&h=1200&fit=crop&auto=format"
             alt=""
             className="w-full h-full object-cover opacity-30"
+            width={900}
+            height={1200}
+            critical
           />
           <div className="absolute inset-0 bg-gradient-to-b from-foreground/60 to-foreground/90" />
         </div>

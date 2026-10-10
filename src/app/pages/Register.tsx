@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import BrandLogo from "../components/BrandLogo";
 import LanguageToggle from "../components/LanguageToggle";
 import { useLanguage } from "../context/LanguageContext";
+import OptimizedImage from "../components/OptimizedImage";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -66,10 +67,13 @@ export default function Register() {
         </div>
 
         <div className="relative">
-          <img
+          <OptimizedImage
             src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=200&fit=crop&auto=format"
             alt="Community"
             className="rounded-2xl opacity-60 w-full h-28 object-cover"
+            width={500}
+            height={200}
+            critical
           />
         </div>
       </div>

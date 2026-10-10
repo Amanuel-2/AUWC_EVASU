@@ -5,6 +5,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useLeaderDashboard } from "../context/LeaderDashboardContext";
 import LanguageToggle from "../../../components/LanguageToggle";
 import { useLanguage } from "../../../context/LanguageContext";
+import OptimizedImage from "../../../components/OptimizedImage";
 
 const navigation = [
   { to: "/leader", labelKey: "dashboard", icon: Home, end: true },
@@ -94,7 +95,7 @@ function TopBar({ onOpenMenu }: { onOpenMenu: () => void }) {
           </button>
           <div className="hidden items-center gap-3 rounded-md border px-3 py-2 sm:flex">
             <div className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-              {user?.avatarUrl ? <img src={user.avatarUrl} alt="" className="size-8 rounded-full object-cover" /> : user?.name.slice(0, 1).toUpperCase()}
+              {user?.avatarUrl ? <OptimizedImage src={user.avatarUrl} alt="" className="size-8 rounded-full object-cover" width={32} height={32} /> : user?.name.slice(0, 1).toUpperCase()}
             </div>
             <div className="leading-tight">
               <p className="text-sm font-medium">{user?.name}</p>

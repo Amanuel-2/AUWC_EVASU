@@ -3,6 +3,7 @@ import { ArrowLeft, Clock, MapPin, CheckCircle, Users } from "lucide-react";
 import { teams } from "../data/teams";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import OptimizedImage from "../components/OptimizedImage";
 
 export default function TeamDetails() {
   const { id } = useParams<{ id: string }>();
@@ -42,10 +43,13 @@ export default function TeamDetails() {
     <main className="min-h-screen bg-background pt-20 pb-24 md:pb-0">
       {/* Hero Banner */}
       <div className="relative h-[55vh] min-h-[400px] overflow-hidden bg-foreground">
-        <img
+        <OptimizedImage
           src={team.image}
           alt={team.name}
           className="w-full h-full object-cover opacity-50"
+          width={1600}
+          height={900}
+          critical
         />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/30 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-end">
@@ -108,10 +112,12 @@ export default function TeamDetails() {
               <div className="grid grid-cols-2 gap-4">
                 {team.galleryImages.map((src, i) => (
                   <div key={i} className={`rounded-2xl overflow-hidden bg-muted ${i === 0 ? "col-span-2 aspect-video" : "aspect-square"}`}>
-                    <img
+                    <OptimizedImage
                       src={src}
                       alt={`${team.name} gallery ${i + 1}`}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      width={960}
+                      height={640}
                     />
                   </div>
                 ))}

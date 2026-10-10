@@ -1,4 +1,5 @@
 import logoUrl from "../../assets/photo_2026-07-12_12-58-57-removebg-preview.png";
+import OptimizedImage from "./OptimizedImage";
 
 interface BrandLogoProps {
   variant?: "light" | "dark";
@@ -12,7 +13,7 @@ export default function BrandLogo({ variant = "dark", compact = false, className
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <img src={logoUrl} alt="AUWC ECSF logo" className="size-14 rounded-md object-contain" />
+      <OptimizedImage src={logoUrl} alt="AUWC ECSF logo" className="size-14 rounded-md object-contain" width={56} height={56} critical />
       {!compact && (
         <div className="flex flex-col leading-none">
           <span className={`text-base font-bold tracking-wide ${textColor}`}>AUWC ECSF</span>
