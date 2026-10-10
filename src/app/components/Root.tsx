@@ -15,7 +15,7 @@ export default function Root() {
   });
   const [fadeLoader, setFadeLoader] = useState(false);
   const location = useLocation();
-  const hideChrome = ["/login", "/register"].includes(location.pathname) || location.pathname.startsWith("/leader") || location.pathname.startsWith("/admin");
+  const hideChrome = ["/login", "/register", "/forgot-password", "/reset-password"].includes(location.pathname) || location.pathname.startsWith("/leader") || location.pathname.startsWith("/admin");
 
   useEffect(() => {
     if (!showLoader) return;

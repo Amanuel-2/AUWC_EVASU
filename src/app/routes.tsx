@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import TeamDetails from "./pages/TeamDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import SmallGroups from "./pages/SmallGroups";
 import MySmallGroup from "./pages/MySmallGroup";
 import RequireTeamLeader from "./features/leader/components/RequireTeamLeader";
@@ -28,6 +30,8 @@ export const router = createBrowserRouter([
       { path: "teams/:id", Component: TeamDetails },
       { path: "login", Component: Login },
       { path: "register", Component: Register },
+      { path: "forgot-password", Component: ForgotPassword },
+      { path: "reset-password", Component: ResetPassword },
       { path: "small-groups", Component: SmallGroups },
       { path: "my-group", Component: MySmallGroup },
       {

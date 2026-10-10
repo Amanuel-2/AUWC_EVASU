@@ -7,8 +7,9 @@ import { z } from "zod";
 import { findTeamBySlug, getDb } from "./db.js";
 import { config } from "./config.js";
 import { requireAuth, requireMediaTeamAccess, requireRole, requireTeamAccess, signAccessToken } from "./auth.js";
-import { AttendanceDocument, MembershipDocument, TeamDocument, TikTokVideoDocument, UserDocument } from "./types.js";
+import { AttendanceDocument, MembershipDocument, PasswordResetTokenDocument, TeamDocument, TikTokVideoDocument, UserDocument } from "./types.js";
 import { id, normalizeEmail, publicUser, serialize } from "./utils.js";
+import crypto from "node:crypto";
 
 const app = express();
 app.use(cors({ origin: config.CLIENT_ORIGIN, credentials: true }));
@@ -18,6 +19,8 @@ const frontendDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 
 app.use(express.static(frontendDist));
 
 const credentialsSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
+const resetRequestSchema = z.object({ email: z.string().trim().email() });
+const resetPasswordSchema = z.object({ token: z.string().regex(/^[a-f0-9]{64}$/), password: z.string().min(8).max(128) });
 const registerSchema = z.object({ name: z.string().trim().min(2), email: z.string().email(), password: z.string().min(1), phone: z.string().trim().max(40).optional().default(""), department: z.string().trim().min(2).max(100), yearOfStudy: z.string().trim().max(40).optional().default(""), gender: z.string().trim().max(40).optional().default("") });
 const scheduleSchema = z.object({ day: z.string().trim().min(1), time: z.string().trim().min(1), location: z.string().trim().min(1) });
 const attendanceSchema = z.object({ meetingDate: z.string().date(), statuses: z.record(z.enum(["Present", "Absent", "Late", "Excused"])) });
@@ -26,6 +29,37 @@ const tiktokVideoPatchSchema = tiktokVideoSchema.partial();
 const tiktokReorderSchema = z.object({ ids: z.array(z.string()).max(500) });
 const teamSchema = z.object({ slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), name: z.string().trim().min(2), tagline: z.string().trim().min(2), description: z.string().trim().min(2), isPublic: z.boolean().default(true), color: z.string().trim().default("#8B5CF6"), schedule: z.array(scheduleSchema).default([]) });
 const namedTeamFilter = { slug: { $not: /^small-group-\d+$/ } };
+
+const resetRequestWindow = new Map<string, number[]>();
+const resetAttemptWindow = new Map<string, number[]>();
+const WINDOW_MS = 15 * 60 * 1000;
+const MAX_REQUESTS = 3;
+const MAX_ATTEMPTS = 10;
+
+function allowedRequest(map: Map<string, number[]>, key: string, max: number) {
+  const now = Date.now();
+  const recent = (map.get(key) ?? []).filter((stamp) => now - stamp < WINDOW_MS);
+  if (recent.length >= max) { map.set(key, recent); return false; }
+  recent.push(now); map.set(key, recent); return true;
+}
+
+function hashResetToken(token: string) { return crypto.createHash("sha256").update(token).digest("hex"); }
+
+async function sendPasswordResetEmail(email: string, resetUrl: string) {
+  if (!config.RESEND_API_KEY) throw new Error("Password reset email delivery is not configured.");
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${config.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: config.EMAIL_FROM,
+      to: [email],
+      subject: "Reset your AUWC ECSF password",
+      text: `We received a request to reset your AUWC ECSF password. This link expires in 30 minutes:\n\n${resetUrl}\n\nIf you did not request this, you can safely ignore this email.`,
+      html: `<p>We received a request to reset your AUWC ECSF password.</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 30 minutes. If you did not request this, you can safely ignore this email.</p>`,
+    }),
+  });
+  if (!response.ok) throw new Error("Password reset email delivery failed.");
+}
 
 function getVideoDetails(rawUrl: string) {
   try {
@@ -180,6 +214,45 @@ app.post("/api/auth/login", async (req, res, next) => {
     const memberships = await db.collection<MembershipDocument>("memberships").find({ userId: user._id, status: "active" }).toArray();
     const teamDocuments = await db.collection<TeamDocument>("teams").find({ _id: { $in: memberships.map((membership) => membership.teamId) } }).project({ slug: 1 }).toArray();
     return res.json({ user: publicUser(user), accessToken: signAccessToken(user, teamDocuments.map((team) => team.slug)) });
+  } catch (error) { return next(error); }
+});
+
+app.post("/api/auth/forgot-password", async (req, res, next) => {
+  const generic = { message: "If an account exists for that email, a password reset link has been sent." };
+  try {
+    const input = resetRequestSchema.parse(req.body);
+    const requestKey = `${req.ip}:${normalizeEmail(input.email)}`;
+    if (!allowedRequest(resetRequestWindow, requestKey, MAX_REQUESTS)) return res.json(generic);
+    const db = await getDb();
+    const user = await db.collection<UserDocument>("users").findOne({ email: normalizeEmail(input.email) });
+    if (!user?._id) return res.json(generic);
+    const token = crypto.randomBytes(32).toString("hex");
+    const now = new Date();
+    await db.collection<PasswordResetTokenDocument>("passwordResetTokens").deleteMany({ userId: user._id });
+    await db.collection<PasswordResetTokenDocument>("passwordResetTokens").insertOne({ userId: user._id, tokenHash: hashResetToken(token), createdAt: now, expiresAt: new Date(now.getTime() + 30 * 60 * 1000) });
+    try {
+      await sendPasswordResetEmail(user.email, `${config.FRONTEND_URL}/reset-password?token=${token}`);
+    } catch (error) {
+      console.error("Password reset email delivery failed:", error instanceof Error ? error.message : "Unknown delivery error");
+      await db.collection<PasswordResetTokenDocument>("passwordResetTokens").deleteOne({ tokenHash: hashResetToken(token) });
+    }
+    return res.json(generic);
+  } catch (error) { return next(error); }
+});
+
+app.post("/api/auth/reset-password", async (req, res, next) => {
+  try {
+    const input = resetPasswordSchema.parse(req.body);
+    if (!allowedRequest(resetAttemptWindow, `${req.ip}:${input.token.slice(0, 12)}`, MAX_ATTEMPTS)) return res.status(429).json({ message: "Too many attempts. Please request a new reset link." });
+    const db = await getDb();
+    const tokenHash = hashResetToken(input.token);
+    const token = await db.collection<PasswordResetTokenDocument>("passwordResetTokens").findOneAndUpdate({ tokenHash, expiresAt: { $gt: new Date() }, usedAt: { $exists: false } }, { $set: { usedAt: new Date() } }, { returnDocument: "before" });
+    if (!token?.userId) return res.status(400).json({ message: "This reset link is invalid or has expired. Request a new one." });
+    const passwordChangedAt = new Date();
+    const result = await db.collection<UserDocument>("users").updateOne({ _id: token.userId }, { $set: { passwordHash: await bcrypt.hash(input.password, 12), passwordChangedAt, updatedAt: passwordChangedAt } });
+    if (!result.modifiedCount) return res.status(400).json({ message: "This reset link is invalid or has expired. Request a new one." });
+    await db.collection<PasswordResetTokenDocument>("passwordResetTokens").deleteMany({ userId: token.userId });
+    return res.json({ message: "Your password has been changed. You can now sign in." });
   } catch (error) { return next(error); }
 });
 

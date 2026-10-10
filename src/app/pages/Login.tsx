@@ -115,7 +115,7 @@ export default function Login() {
                 </button>
               </div>
               <div className="text-right mt-2">
-                <a href="#" className="text-xs text-primary hover:underline">{t("forgot")}</a>
+                <Link to="/forgot-password" className="text-xs text-primary hover:underline">{t("forgot")}</Link>
               </div>
             </div>
 

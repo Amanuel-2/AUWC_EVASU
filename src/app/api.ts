@@ -67,6 +67,8 @@ export async function loginRequest(email: string, password: string) {
   localStorage.setItem(tokenKey, result.accessToken);
   return result.user;
 }
+export async function forgotPasswordRequest(email: string) { return request<{ message: string }>("/api/auth/forgot-password", { method: "POST", body: JSON.stringify({ email }) }); }
+export async function resetPasswordRequest(token: string, password: string) { return request<{ message: string }>("/api/auth/reset-password", { method: "POST", body: JSON.stringify({ token, password }) }); }
 
 export async function registerRequest(name: string, email: string, password: string, phone: string, department: string, yearOfStudy: string, gender: string) {
   const result = await request<{ user: ApiUser; accessToken: string }>("/api/auth/register", { method: "POST", body: JSON.stringify({ name, email, password, phone, department, yearOfStudy, gender }) });

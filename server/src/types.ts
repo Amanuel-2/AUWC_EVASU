@@ -16,6 +16,16 @@ export interface UserDocument {
   avatarUrl: string;
   createdAt: Date;
   updatedAt: Date;
+  passwordChangedAt?: Date;
+}
+
+export interface PasswordResetTokenDocument {
+  _id?: ObjectId;
+  userId: ObjectId;
+  tokenHash: string;
+  expiresAt: Date;
+  createdAt: Date;
+  usedAt?: Date;
 }
 
 export interface TeamDocument {

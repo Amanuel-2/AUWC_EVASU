@@ -25,6 +25,8 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     if (!user) return res.status(401).json({ message: "User account no longer exists." });
     const memberships = await db.collection<MembershipDocument>("memberships").find({ userId, status: "active" }).toArray();
     const teamDocuments = await db.collection("teams").find({ _id: { $in: memberships.map((membership) => membership.teamId) } }).project<{ slug: string }>({ slug: 1 }).toArray();
+    const issuedAt = typeof payload.iat === "number" ? payload.iat : 0;
+    if (user.passwordChangedAt && Math.floor(user.passwordChangedAt.getTime() / 1000) > issuedAt) return res.status(401).json({ message: "Your session has expired. Please sign in again." });
     req.authUser = { id: userId.toString(), email: user.email, role: user.role, teamIds: teamDocuments.map((team) => team.slug) };
     next();
   } catch {

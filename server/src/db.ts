@@ -22,6 +22,8 @@ async function ensureIndexes(db: Db) {
     db.collection("attendance").createIndex({ teamId: 1, meetingDate: 1 }, { unique: true }),
     db.collection("tiktokVideos").createIndex({ order: 1 }),
     db.collection("tiktokVideos").createIndex({ videoId: 1 }, { unique: true }),
+    db.collection("passwordResetTokens").createIndex({ tokenHash: 1 }, { unique: true }),
+    db.collection("passwordResetTokens").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
   ]);
 }
 

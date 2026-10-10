@@ -10,6 +10,9 @@ const envSchema = z.object({
   ADMIN_EMAIL: z.string().email().default("admin@auwcec.edu"),
   ADMIN_PASSWORD: z.string().min(8).optional(),
   SEED_LEADER_PASSWORD: z.string().min(8).optional(),
+  FRONTEND_URL: z.string().url().default("http://localhost:5173"),
+  RESEND_API_KEY: z.string().optional(),
+  EMAIL_FROM: z.string().min(3).default("AUWC ECSF <noreply@example.com>"),
 });
 
 export const config = envSchema.parse(process.env);
