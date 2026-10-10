@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const nextUser = toUser(apiUser);
       setUser(nextUser);
       return nextUser;
-    } catch { return null; }
+    } catch (error) { throw error; }
   };
 
   const logout = () => { clearAccessToken(); localStorage.removeItem(CURRENT_USER_KEY); setUser(null); };

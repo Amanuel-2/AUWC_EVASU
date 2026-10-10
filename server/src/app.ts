@@ -7,6 +7,7 @@ import { z } from "zod";
 import { findTeamBySlug, getDb } from "./db.js";
 import { config } from "./config.js";
 import { requireAuth, requireMediaTeamAccess, requireRole, requireTeamAccess, signAccessToken } from "./auth.js";
+import { MongoServerError } from "mongodb";
 import { AttendanceDocument, MembershipDocument, PasswordResetTokenDocument, TeamDocument, TikTokVideoDocument, UserDocument } from "./types.js";
 import { id, normalizeEmail, publicUser, serialize } from "./utils.js";
 import crypto from "node:crypto";
@@ -203,7 +204,11 @@ app.post("/api/auth/register", async (req, res, next) => {
     const result = await db.collection<UserDocument>("users").insertOne(user);
     user._id = result.insertedId;
     return res.status(201).json({ user: publicUser(user), accessToken: signAccessToken(user, []) });
-  } catch (error) { return next(error); }
+  } catch (error) {
+    if (error instanceof MongoServerError && error.code === 11000) return res.status(409).json({ message: "An account with this email already exists." });
+    console.error("Registration failed:", error instanceof Error ? error.message : "Unknown registration error");
+    return next(error);
+  }
 });
 
 app.post("/api/auth/login", async (req, res, next) => {

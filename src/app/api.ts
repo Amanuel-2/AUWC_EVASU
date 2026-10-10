@@ -56,9 +56,18 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   headers.set("Content-Type", "application/json");
   const token = getAccessToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers });
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.message || "The server request failed.");
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, { ...options, headers });
+  } catch {
+    throw new Error("Unable to reach the server. Please check the API URL and try again.");
+  }
+  const rawBody = await response.text();
+  const body = (() => { try { return JSON.parse(rawBody) as { message?: string; issues?: { message?: string }[] }; } catch { return {}; } })();
+  if (!response.ok) {
+    const issue = body.issues?.find((item) => item.message)?.message;
+    throw new Error(body.message || issue || `The server returned ${response.status} ${response.statusText || "an error"}.`);
+  }
   return body as T;
 }
 
