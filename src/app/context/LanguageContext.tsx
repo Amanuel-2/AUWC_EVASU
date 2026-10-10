@@ -10,7 +10,7 @@ const translations = {
     pageNotFound: "Page not found", missingPage: "The page you are looking for does not exist.",
     welcomeBack: "Welcome back", signInSubtitle: "Sign in to your AUWC ECSF account", demoAccounts: "Demo accounts",
     adminDemo: "Admin: admin@auwcec.edu / aman1234", leaderDemo: "Team leaders: pray@gmail.com, worship@gmail.com, media@gmail.com, fund@gmail.com, art@gmail.com, choir@gmail.com, evangelism@gmail.com, or love@gmail.com / aman1234",
-    email: "Email address", universityEmail: "University email", department: "Department", password: "Password", forgot: "Forgot password?",
+    email: "Email address", universityEmail: "Email", department: "Department", password: "Password", forgot: "Forgot password?",
     signIn: "Sign In", signingIn: "Signing in...", newTo: "New to AUWC?", createAccount: "Create an account",
     createTitle: "Create your account", joinFree: "Join AUWC ECSF — it's completely free", fullName: "Full name",
     creating: "Creating account...", createButton: "Create Account", already: "Already have an account?",
