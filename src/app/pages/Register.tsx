@@ -1,11 +1,11 @@
 import { useState, FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
-import { Eye, EyeOff, ArrowLeft, Check } from "lucide-react";
+import { Eye, EyeOff, Check } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import BrandLogo from "../components/BrandLogo";
 import LanguageToggle from "../components/LanguageToggle";
 import { useLanguage } from "../context/LanguageContext";
 import OptimizedImage from "../components/OptimizedImage";
+import AuthHeader from "../components/AuthHeader";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -37,15 +37,13 @@ export default function Register() {
 
   return (
     <div className="relative min-h-screen grid lg:grid-cols-2">
+      <AuthHeader to="/" label={t("backHome")} className="lg:hidden" />
       <div className="absolute right-4 top-4 z-20"><LanguageToggle /></div>
       {/* Left panel */}
       <div className="hidden lg:flex flex-col justify-between p-12 bg-primary relative overflow-hidden">
+        <AuthHeader to="/" label={t("backHome")} light className="hidden lg:flex" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2" />
-
-        <div className="relative">
-<Link to="/"><BrandLogo variant="light" /></Link>
-        </div>
 
         <div className="relative">
           <h2 className="font-['DM_Serif_Display'] text-4xl text-white mb-4 leading-tight">
@@ -81,10 +79,6 @@ export default function Register() {
       {/* Right panel */}
       <div className="flex flex-col justify-center items-center px-6 py-12 lg:px-16 bg-background">
         <div className="w-full max-w-md">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10">
-            <ArrowLeft size={16} /> {t("backHome")}
-          </Link>
-
           <div className="mb-10">
             <h1 className="font-['DM_Serif_Display'] text-4xl text-foreground mb-2">{t("createTitle")}</h1>
             <p className="text-muted-foreground text-sm">{t("joinFree")}</p>

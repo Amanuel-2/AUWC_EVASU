@@ -309,8 +309,8 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <About />
       <Teams />
+      <About />
       <TikTokGallery />
       <Events />
       <CTA />

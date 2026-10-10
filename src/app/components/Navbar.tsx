@@ -8,8 +8,8 @@ import { useLanguage } from "../context/LanguageContext";
 
 const navLinks = [
   { key: "home", href: "/" },
-  { key: "about", href: "/#about" },
   { key: "teams", href: "/small-groups" },
+  { key: "about", href: "/#about" },
   { key: "events", href: "/#events" },
   { key: "contact", href: "/#contact" },
 ] as const;

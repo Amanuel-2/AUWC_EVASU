@@ -1,11 +1,11 @@
 import { useState, FormEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import BrandLogo from "../components/BrandLogo";
 import LanguageToggle from "../components/LanguageToggle";
 import { useLanguage } from "../context/LanguageContext";
 import OptimizedImage from "../components/OptimizedImage";
+import AuthHeader from "../components/AuthHeader";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -35,9 +35,11 @@ export default function Login() {
 
   return (
     <div className="relative min-h-screen grid lg:grid-cols-2">
+      <AuthHeader to="/" label={t("backHome")} className="lg:hidden" />
       <div className="absolute right-4 top-4 z-20"><LanguageToggle /></div>
       {/* Left panel */}
       <div className="hidden lg:flex flex-col justify-between p-12 bg-foreground relative overflow-hidden">
+        <AuthHeader to="/" label={t("backHome")} light className="hidden lg:flex" />
         <div className="absolute inset-0">
           <OptimizedImage
             src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&h=1200&fit=crop&auto=format"
@@ -48,9 +50,6 @@ export default function Login() {
             critical
           />
           <div className="absolute inset-0 bg-gradient-to-b from-foreground/60 to-foreground/90" />
-        </div>
-        <div className="relative">
-<Link to="/"><BrandLogo variant="light" /></Link>
         </div>
         <div className="relative">
           <blockquote className="font-['DM_Serif_Display'] text-3xl text-white leading-relaxed italic mb-6">
@@ -68,10 +67,6 @@ export default function Login() {
       {/* Right panel */}
       <div className="flex flex-col justify-center items-center px-6 py-12 lg:px-16 bg-background">
         <div className="w-full max-w-md">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-10">
-            <ArrowLeft size={16} /> {t("backHome")}
-          </Link>
-
           <div className="mb-10">
             <h1 className="font-['DM_Serif_Display'] text-4xl text-foreground mb-2">{t("welcomeBack")}</h1>
             <p className="text-muted-foreground text-sm">{t("signInSubtitle")}</p>

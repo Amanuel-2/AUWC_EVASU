@@ -38,7 +38,7 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-background/90 uppercase tracking-wider mb-5">{t("home")}</h4>
             <ul className="space-y-3">
-              {[t("home"), t("about"), t("teams"), t("events"), t("contact")].map((item) => (
+              {[t("home"), t("teams"), t("about"), t("events"), t("contact")].map((item) => (
                 <li key={item}>
                   <a href="#" className="text-sm text-background/60 hover:text-background transition-colors duration-200">
                     {item}
