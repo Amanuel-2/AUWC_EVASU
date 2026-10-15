@@ -21,6 +21,7 @@ app.use("/assets", express.static(path.join(frontendDist, "assets"), { maxAge: "
 app.use(express.static(frontendDist, { maxAge: "1h" }));
 
 const credentialsSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
+const changePasswordSchema = z.object({ currentPassword: z.string().min(1), nextPassword: z.string().min(8).max(128) });
 const resetRequestSchema = z.object({ email: z.string().trim().email() });
 const resetPasswordSchema = z.object({ token: z.string().regex(/^[a-f0-9]{64}$/), password: z.string().min(8).max(128) });
 const registerSchema = z.object({ name: z.string().trim().min(2), email: z.string().email(), password: z.string().min(1), phone: z.string().trim().max(40).optional().default(""), department: z.string().trim().min(2).max(100), yearOfStudy: z.string().trim().max(40).optional().default(""), gender: z.string().trim().max(40).optional().default("") });
@@ -220,6 +221,25 @@ app.post("/api/auth/login", async (req, res, next) => {
     const memberships = await db.collection<MembershipDocument>("memberships").find({ userId: user._id, status: "active" }).toArray();
     const teamDocuments = await db.collection<TeamDocument>("teams").find({ _id: { $in: memberships.map((membership) => membership.teamId) } }).project({ slug: 1 }).toArray();
     return res.json({ user: publicUser(user), accessToken: signAccessToken(user, teamDocuments.map((team) => team.slug)) });
+  } catch (error) { return next(error); }
+});
+
+app.post("/api/auth/change-password", requireAuth, async (req, res, next) => {
+  try {
+    const input = changePasswordSchema.parse(req.body);
+    const db = await getDb();
+    const userId = id(req.authUser!.id);
+    if (!userId) return res.status(401).json({ message: "Authentication required." });
+    const user = await db.collection<UserDocument>("users").findOne({ _id: userId });
+    if (!user || !(await bcrypt.compare(input.currentPassword, user.passwordHash))) {
+      return res.status(400).json({ message: "The current password is incorrect." });
+    }
+    const passwordChangedAt = new Date();
+    await db.collection<UserDocument>("users").updateOne(
+      { _id: userId },
+      { $set: { passwordHash: await bcrypt.hash(input.nextPassword, 12), passwordChangedAt, updatedAt: passwordChangedAt } },
+    );
+    return res.json({ message: "Your password has been changed.", accessToken: signAccessToken({ ...user, passwordChangedAt } as UserDocument, req.authUser!.teamIds) });
   } catch (error) { return next(error); }
 });
 

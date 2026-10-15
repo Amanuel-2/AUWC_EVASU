@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { ApiUser, clearAccessToken, currentUserRequest, getAccessToken, joinTeamRequest, leaveTeamRequest, loginRequest, registerRequest } from "../api";
+import { ApiUser, changePasswordRequest, clearAccessToken, currentUserRequest, getAccessToken, joinTeamRequest, leaveTeamRequest, loginRequest, registerRequest } from "../api";
 
 interface User extends ApiUser { assignedTeamId: string; joinedTeams: string[]; }
 interface AuthContextType {
@@ -80,7 +80,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const hasJoinedTeam = (teamId: string) => user?.joinedTeams.includes(teamId) ?? false;
   const updateUser = (updates: Partial<User>) => setUser((current) => current ? { ...current, ...updates, id: current.id, email: updates.email?.trim().toLowerCase() ?? current.email } : current);
-  const changePassword = async (_currentPassword: string, nextPassword: string) => nextPassword.length >= 8;
+  const changePassword = async (currentPassword: string, nextPassword: string) => {
+    if (nextPassword.length < 8) return false;
+    try {
+      await changePasswordRequest(currentPassword, nextPassword);
+      return true;
+    } catch { return false; }
+  };
 
   return <AuthContext.Provider value={{ user, loading, login, register, logout, joinTeam, leaveTeam, hasJoinedTeam, updateUser, changePassword }}>{children}</AuthContext.Provider>;
 }

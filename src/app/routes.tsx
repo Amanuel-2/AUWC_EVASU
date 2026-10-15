@@ -34,6 +34,7 @@ export const router = createBrowserRouter([
       { path: "reset-password", Component: ResetPassword },
       { path: "small-groups", Component: SmallGroups },
       { path: "my-group", Component: MySmallGroup },
+      { path: "profile", Component: ProfilePage },
       {
         path: "leader",
         Component: RequireTeamLeader,

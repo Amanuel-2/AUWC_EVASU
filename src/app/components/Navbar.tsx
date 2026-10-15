@@ -107,6 +107,13 @@ export default function Navbar() {
                         <User size={14} /> {t("dashboard")}
                       </Link>
                     )}
+                    <Link
+                      to="/profile"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    >
+                      <User size={14} /> Profile
+                    </Link>
                     <button
                       onClick={() => { logout(); setUserMenuOpen(false); }}
                       className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
@@ -186,6 +193,13 @@ export default function Navbar() {
                     <User size={14} /> {t("dashboard")}
                   </Link>
                 )}
+                <Link
+                  to="/profile"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2 py-3 px-4 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-xl transition-colors"
+                >
+                  <User size={14} /> Profile
+                </Link>
                 <button
                   onClick={() => { logout(); setMenuOpen(false); }}
                   className="flex items-center gap-2 py-3 px-4 text-sm font-medium text-muted-foreground"
