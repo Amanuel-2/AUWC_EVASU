@@ -54,7 +54,7 @@ export default function Register() {
 
   return <div className="relative min-h-screen grid lg:grid-cols-2">
     <AuthHeader to="/" label={t("backHome")} className="lg:hidden" /><div className="absolute right-4 top-4 z-20"><LanguageToggle /></div>
-    <div className="hidden lg:flex flex-col justify-between p-12 bg-primary relative overflow-hidden">
+    <div className="hidden lg:flex flex-col justify-between p-12 lg:pt-40 bg-primary relative overflow-hidden">
       <AuthHeader to="/" label={t("backHome")} light className="hidden lg:flex" /><div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" /><div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2" />
       <div className="relative"><h2 className="font-['DM_Serif_Display'] text-4xl text-white mb-4 leading-tight">{t("createTitle")}</h2><p className="text-white/70 text-sm leading-relaxed mb-8">{t("heroText")}</p><ul className="space-y-3">{perks.map((perk) => <li key={perk} className="flex items-center gap-3"><div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center shrink-0"><Check size={11} className="text-white" /></div><span className="text-sm text-white/80">{perk}</span></li>)}</ul></div>
       <div className="relative"><OptimizedImage src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=200&fit=crop&auto=format" alt="Community" className="rounded-2xl opacity-60 w-full h-28 object-cover" width={500} height={200} critical /></div>

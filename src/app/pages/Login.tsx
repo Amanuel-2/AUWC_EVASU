@@ -38,7 +38,7 @@ export default function Login() {
       <AuthHeader to="/" label={t("backHome")} className="lg:hidden" />
       <div className="absolute right-4 top-4 z-20"><LanguageToggle /></div>
       {/* Left panel */}
-      <div className="hidden lg:flex flex-col justify-between p-12 bg-foreground relative overflow-hidden">
+      <div className="hidden lg:flex flex-col justify-between p-12 lg:pt-40 bg-foreground relative overflow-hidden">
         <AuthHeader to="/" label={t("backHome")} light className="hidden lg:flex" />
         <div className="absolute inset-0">
           <OptimizedImage
@@ -77,12 +77,6 @@ export default function Login() {
               {error}
             </div>
           )}
-
-          <div className="mb-6 rounded-lg border bg-secondary/50 p-4 text-sm text-muted-foreground">
-            <p className="font-medium text-foreground">{t("demoAccounts")}</p>
-            <p className="mt-1">{t("adminDemo")}</p>
-            <p>{t("leaderDemo")}</p>
-          </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
