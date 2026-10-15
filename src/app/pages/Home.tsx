@@ -284,7 +284,7 @@ function Events() {
           <Link to="/register" className="inline-flex items-center gap-2 text-primary font-semibold">Plan your first visit <ArrowRight size={17} /></Link>
         </div>
         <div
-          className="relative overflow-hidden"
+          className="relative overflow-hidden rounded-2xl"
           aria-roledescription="carousel"
           aria-label="Get involved opportunities"
         >
@@ -292,7 +292,7 @@ function Events() {
             <motion.div
               key={event.image}
               custom={slideDirection}
-              className="relative w-full overflow-hidden"
+              className="relative w-full overflow-hidden rounded-2xl"
               style={{ aspectRatio: `${event.width} / ${event.height}` }}
               variants={{
                 enter: (direction: number) => ({ x: direction * 80, opacity: 0 }),
