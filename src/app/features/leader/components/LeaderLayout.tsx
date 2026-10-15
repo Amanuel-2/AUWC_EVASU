@@ -1,4 +1,4 @@
-import { Bell, CalendarDays, ClipboardCheck, Home, LogOut, Menu, User, Users, Video, X } from "lucide-react";
+import { Bell, CalendarDays, ClipboardCheck, Compass, Home, LogOut, Menu, User, Users, Video, X } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import { useAuth } from "../../../context/AuthContext";
@@ -9,6 +9,7 @@ import OptimizedImage from "../../../components/OptimizedImage";
 
 const navigation = [
   { to: "/leader", labelKey: "dashboard", icon: Home, end: true },
+  { to: "/small-groups", labelKey: "teams", icon: Compass },
   { to: "/leader/members", labelKey: "teamMembers", icon: Users },
   { to: "/leader/attendance", labelKey: "attendance", icon: ClipboardCheck },
   { to: "/leader/schedule", labelKey: "meetingSchedule", icon: CalendarDays },

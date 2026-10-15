@@ -14,18 +14,18 @@ export default function AttendancePage() {
   const [records, setRecords] = useState<Record<string, AttendanceStatus>>({});
 
   useEffect(() => {
-    setRecords((current) => {
-      const next = { ...current };
-      members.forEach((member) => {
-        if (!next[member.id]) next[member.id] = "Present";
-      });
-      return next;
-    });
-  }, [members]);
+    const savedRecord = attendanceHistory.find((record) => record.meetingDate === meetingDate);
+    setRecords(Object.fromEntries(members.map((member) => [member.id, savedRecord?.statuses[member.id] ?? "Present"])),);
+  }, [attendanceHistory, meetingDate, members]);
 
   const filtered = useMemo(() => members.filter((member) => member.fullName.toLowerCase().includes(query.toLowerCase())), [members, query]);
 
   const setStatus = (memberId: string, status: AttendanceStatus) => setRecords((current) => ({ ...current, [memberId]: status }));
+
+  const setEveryoneStatus = (status: AttendanceStatus) => {
+    setRecords(Object.fromEntries(members.map((member) => [member.id, status])));
+    setNotice(`${status} selected for everyone. Save attendance to keep this change.`);
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -47,6 +47,19 @@ export default function AttendancePage() {
         <input type="date" value={meetingDate} onChange={(event) => setMeetingDate(event.target.value)} className="h-11 rounded-md border bg-background px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" aria-label="Meeting date" />
         <label className="relative"><span className="sr-only">Search members</span><Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search members" className="h-11 w-full rounded-md border bg-background pl-10 pr-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" /></label>
         <button type="button" onClick={handleSave} disabled={saving || !meetingDate} className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60">{saving ? "Saving..." : "Save attendance"}</button>
+      </section>
+      <section className="flex flex-col gap-3 rounded-lg border bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="text-sm font-semibold">Mark everyone</h3>
+          <p className="text-xs text-muted-foreground">Apply one status to the whole team, then save.</p>
+        </div>
+        <div className="grid grid-cols-2 gap-2 sm:flex">
+          {statuses.map((status) => (
+            <button key={status} type="button" onClick={() => setEveryoneStatus(status)} className="rounded-md border px-3 py-2 text-sm transition hover:border-primary hover:bg-accent">
+              Everyone {status}
+            </button>
+          ))}
+        </div>
       </section>
       {notice && <p className="rounded-lg border border-primary/20 bg-primary/10 p-3 text-sm text-primary">{notice}</p>}
       <section className="rounded-lg border bg-card shadow-sm">

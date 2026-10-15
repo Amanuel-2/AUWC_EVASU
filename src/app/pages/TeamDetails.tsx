@@ -8,9 +8,10 @@ import OptimizedImage from "../components/OptimizedImage";
 export default function TeamDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, joinTeam, hasJoinedTeam } = useAuth();
+  const { user, joinTeam, leaveTeam, hasJoinedTeam } = useAuth();
   const [justJoined, setJustJoined] = useState(false);
   const [joining, setJoining] = useState(false);
+  const [leaving, setLeaving] = useState(false);
   const [joinError, setJoinError] = useState("");
 
   const team = teams.find((t) => t.id === id);
@@ -37,6 +38,16 @@ export default function TeamDetails() {
     setJoining(false);
     if (joined) setJustJoined(true);
     else setJoinError("We could not join this team. Please try again.");
+  };
+
+  const handleLeave = async () => {
+    if (!user || !window.confirm(`Leave ${team.name}? You can join again later.`)) return;
+    setLeaving(true);
+    setJoinError("");
+    const left = await leaveTeam(team.id);
+    setLeaving(false);
+    if (left) setJustJoined(false);
+    else setJoinError("We could not cancel your membership. Please try again.");
   };
 
   return (
@@ -142,9 +153,19 @@ export default function TeamDetails() {
               </p>
 
               {alreadyJoined ? (
-                <div className="flex items-center gap-2 bg-accent/10 text-accent border border-accent/20 rounded-xl px-4 py-3 text-sm font-semibold">
-                  <CheckCircle size={16} />
-                  You have joined this team
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 bg-accent/10 text-accent border border-accent/20 rounded-xl px-4 py-3 text-sm font-semibold">
+                    <CheckCircle size={16} />
+                    You have joined this team
+                  </div>
+                  <button
+                    type="button"
+                    disabled={leaving}
+                    onClick={handleLeave}
+                    className="w-full rounded-xl border border-destructive/30 px-4 py-3 text-sm font-semibold text-destructive transition-colors hover:bg-destructive/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {leaving ? "Cancelling…" : "Cancel membership"}
+                  </button>
                 </div>
               ) : (
                 <button

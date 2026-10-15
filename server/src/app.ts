@@ -398,6 +398,20 @@ app.post("/api/teams/:teamId/join", requireAuth, async (req, res, next) => {
   } catch (error) { return next(error); }
 });
 
+app.delete("/api/teams/:teamId/membership", requireAuth, async (req, res, next) => {
+  try {
+    const db = await getDb();
+    const team = await findTeamBySlug(String(req.params.teamId));
+    if (!team?._id) return res.status(404).json({ message: "Team not found." });
+    const result = await db.collection<MembershipDocument>("memberships").updateOne(
+      { userId: id(req.authUser!.id)!, teamId: team._id, status: "active" },
+      { $set: { status: "inactive" } },
+    );
+    if (!result.matchedCount) return res.status(404).json({ message: "You are not an active member of this team." });
+    return res.json({ message: "You left the team." });
+  } catch (error) { return next(error); }
+});
+
 app.get("/api/teams/:teamId/members", requireAuth, requireTeamAccess, async (req, res, next) => {
   try {
     const db = await getDb();

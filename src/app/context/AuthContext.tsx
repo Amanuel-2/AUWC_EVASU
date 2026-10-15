@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { ApiUser, clearAccessToken, currentUserRequest, getAccessToken, joinTeamRequest, loginRequest, registerRequest } from "../api";
+import { ApiUser, clearAccessToken, currentUserRequest, getAccessToken, joinTeamRequest, leaveTeamRequest, loginRequest, registerRequest } from "../api";
 
 interface User extends ApiUser { assignedTeamId: string; joinedTeams: string[]; }
 interface AuthContextType {
@@ -9,6 +9,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string, phone: string, department: string, yearOfStudy: string, gender: string) => Promise<User | null>;
   logout: () => void;
   joinTeam: (teamId: string) => Promise<boolean>;
+  leaveTeam: (teamId: string) => Promise<boolean>;
   hasJoinedTeam: (teamId: string) => boolean;
   updateUser: (updates: Partial<User>) => void;
   changePassword: (currentPassword: string, nextPassword: string) => Promise<boolean>;
@@ -67,11 +68,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch { return false; }
   };
 
+  const leaveTeam = async (teamId: string) => {
+    if (!user || !user.joinedTeams.includes(teamId)) return false;
+    try {
+      await leaveTeamRequest(teamId);
+      const current = await currentUserRequest();
+      setUser(toUser(current.user, current.teamIds));
+      return true;
+    } catch { return false; }
+  };
+
   const hasJoinedTeam = (teamId: string) => user?.joinedTeams.includes(teamId) ?? false;
   const updateUser = (updates: Partial<User>) => setUser((current) => current ? { ...current, ...updates, id: current.id, email: updates.email?.trim().toLowerCase() ?? current.email } : current);
   const changePassword = async (_currentPassword: string, nextPassword: string) => nextPassword.length >= 8;
 
-  return <AuthContext.Provider value={{ user, loading, login, register, logout, joinTeam, hasJoinedTeam, updateUser, changePassword }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, loading, login, register, logout, joinTeam, leaveTeam, hasJoinedTeam, updateUser, changePassword }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
