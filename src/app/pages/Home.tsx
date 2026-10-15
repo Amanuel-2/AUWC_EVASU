@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { ArrowRight, Users, Heart, BookOpen, Cross, CalendarDays, MapPin, Quote } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { ArrowRight, Users, Heart, BookOpen, Cross, CalendarDays, MapPin } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { namedTeams } from "../data/teams";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
@@ -13,6 +13,10 @@ import worshipTeam2 from "../../assets/teams/worship/20260510_125349.webp";
 import loveSharing1 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-02.webp";
 import loveSharing2 from "../../assets/teams/love-sharing/photo_2026-06-23_14-57-11.webp";
 import artTeam from "../../assets/teams/art/photo_2026-06-23_14-54-08.webp";
+import getInvolvedImage1 from "../../assets/teams/Get involved/photo_2026-10-15_14-21-51.jpg";
+import getInvolvedImage2 from "../../assets/teams/Get involved/photo_2026-10-15_14-22-48.jpg";
+import getInvolvedImage3 from "../../assets/teams/Get involved/photo_2026-10-15_14-23-12.jpg";
+import getInvolvedImage4 from "../../assets/teams/Get involved/photo_2026-10-15_14-23-56.jpg";
 /* ── Intersection Observer hook for fade-in animations ── */
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -248,10 +252,30 @@ function Teams() {
 
 function Events() {
   const events = [
-    { title: "Weekly Fellowship", date: "Every Thursday", time: "5:00 PM", place: "Main Chapel", color: "bg-primary" },
-    { title: "Campus Prayer Walk", date: "Every Monday", time: "6:00 AM", place: "Chapel Garden", color: "bg-[#E8856A]" },
-    { title: "Community Outreach", date: "First Saturday", time: "9:00 AM", place: "Student Union", color: "bg-[#60A5FA]" },
+    { title: "Weekly Fellowship", date: "Every Thursday", time: "5:00 PM", place: "Main Chapel", image: getInvolvedImage1, width: 1280, height: 960 },
+    { title: "Campus Prayer Walk", date: "Every Monday", time: "6:00 AM", place: "Chapel Garden", image: getInvolvedImage2, width: 1280, height: 576 },
+    { title: "Community Outreach", date: "First Saturday", time: "9:00 AM", place: "Student Union", image: getInvolvedImage3, width: 1920, height: 2560 },
+    { title: "Find Your Place", date: "Join a ministry team", time: "Any time", place: "Our fellowship community", image: getInvolvedImage4, width: 1280, height: 960 },
   ];
+  const [activeEvent, setActiveEvent] = useState(0);
+  const [slideDirection, setSlideDirection] = useState(1);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setSlideDirection(1);
+      setActiveEvent((current) => (current + 1) % events.length);
+    }, 5000);
+    return () => window.clearInterval(interval);
+  }, [events.length]);
+
+  const showEvent = (index: number, direction: 1 | -1) => {
+    setSlideDirection(direction);
+    setActiveEvent((index + events.length) % events.length);
+  };
+
+  const event = events[activeEvent];
+  const textOutsideImage = event.height / event.width < 0.7;
+
   return (
     <section id="events" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -259,8 +283,73 @@ function Events() {
           <div><span className="text-sm font-semibold text-primary uppercase tracking-widest">Get involved</span><h2 className="font-['DM_Serif_Display'] text-3xl md:text-4xl text-foreground mt-3">There is a place for you here.</h2></div>
           <Link to="/register" className="inline-flex items-center gap-2 text-primary font-semibold">Plan your first visit <ArrowRight size={17} /></Link>
         </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {events.map((event) => <div key={event.title} className="rounded-2xl border border-border p-6 hover:shadow-md transition-shadow"><div className={`w-11 h-11 ${event.color} text-white rounded-xl flex items-center justify-center mb-5`}><CalendarDays size={21} /></div><h3 className="font-semibold text-lg text-foreground mb-4">{event.title}</h3><div className="space-y-2 text-sm text-muted-foreground"><p>{event.date} · {event.time}</p><p className="flex items-center gap-2"><MapPin size={15} className="text-primary" />{event.place}</p></div></div>)}
+        <div
+          className="relative overflow-hidden"
+          aria-roledescription="carousel"
+          aria-label="Get involved opportunities"
+        >
+          <AnimatePresence initial={false} custom={slideDirection} mode="wait">
+            <motion.div
+              key={event.image}
+              custom={slideDirection}
+              className="relative w-full overflow-hidden"
+              style={{ aspectRatio: `${event.width} / ${event.height}` }}
+              variants={{
+                enter: (direction: number) => ({ x: direction * 80, opacity: 0 }),
+                center: { x: 0, opacity: 1 },
+                exit: (direction: number) => ({ x: direction * -80, opacity: 0 }),
+              }}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ x: { type: "spring", stiffness: 280, damping: 30 }, opacity: { duration: 0.2 } }}
+              aria-live="polite"
+            >
+            <OptimizedImage src={event.image} alt={event.title} className="absolute inset-0 h-full w-full object-cover object-center" width={event.width} height={event.height} critical />
+            {!textOutsideImage && (
+              <>
+                <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950/75" />
+                <div className="absolute inset-x-0 top-0 p-6 text-white sm:p-10">
+                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white/90 backdrop-blur-md">
+                    <CalendarDays size={14} /> Get involved
+                  </div>
+                  <h3 className="max-w-xl font-['DM_Serif_Display'] text-3xl leading-tight sm:text-5xl">{event.title}</h3>
+                  <p className="mt-3 max-w-lg text-sm text-white/85 sm:text-base">{event.date} · {event.time}</p>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 text-white sm:p-10">
+                  <p className="flex items-center gap-2 text-sm text-white/90 sm:text-base"><MapPin size={17} />{event.place}</p>
+                  <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/75 backdrop-blur-md">{String(activeEvent + 1).padStart(2, "0")} / {String(events.length).padStart(2, "0")}</span>
+                </div>
+              </>
+            )}
+            </motion.div>
+          </AnimatePresence>
+          {textOutsideImage && (
+            <div className="flex items-end justify-between gap-6 bg-white px-6 py-5 text-foreground sm:px-10 sm:py-6">
+              <div>
+                <div className="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                  <CalendarDays size={14} /> Get involved
+                </div>
+                <h3 className="font-['DM_Serif_Display'] text-2xl sm:text-3xl">{event.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{event.date} · {event.time}</p>
+                <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><MapPin size={15} className="text-primary" />{event.place}</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">{String(activeEvent + 1).padStart(2, "0")} / {String(events.length).padStart(2, "0")}</span>
+            </div>
+          )}
+          <div className={`${textOutsideImage ? "relative justify-center bg-white py-4" : "absolute bottom-4 left-1/2 -translate-x-1/2"} flex gap-2`} role="tablist" aria-label="Choose an opportunity">
+            {events.map((item, index) => (
+              <button
+                key={item.title}
+                type="button"
+                role="tab"
+                aria-selected={index === activeEvent}
+                aria-label={`Show ${item.title}`}
+                onClick={() => showEvent(index, index >= activeEvent ? 1 : -1)}
+                className={`h-2 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-white ${index === activeEvent ? "w-8 bg-white" : "w-2 bg-white/55 hover:bg-white/80"}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
