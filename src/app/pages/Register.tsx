@@ -1,6 +1,7 @@
 import { FormEvent, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Check, Eye, EyeOff } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import LanguageToggle from "../components/LanguageToggle";
 import { useLanguage } from "../context/LanguageContext";
@@ -12,6 +13,7 @@ type FieldName = "name" | "email" | "phone" | "department" | "yearOfStudy" | "ge
 
 export default function Register() {
   const [step, setStep] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
   const [name, setName] = useState(""); const [email, setEmail] = useState(""); const [phone, setPhone] = useState(""); const [department, setDepartment] = useState(""); const [yearOfStudy, setYearOfStudy] = useState(""); const [gender, setGender] = useState(""); const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); const [loading, setLoading] = useState(false); const [error, setError] = useState(""); const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldName, string>>>({});
   const fieldRefs = useRef<Partial<Record<FieldName, HTMLInputElement | HTMLSelectElement | null>>>({});
@@ -34,7 +36,7 @@ export default function Register() {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault(); if (loading) return; if (!validateStep(step)) return;
-    if (step < TOTAL_STEPS - 1) { setStep((current) => current + 1); return; }
+    if (step < TOTAL_STEPS - 1) { setSlideDirection(1); setStep((current) => current + 1); return; }
     setLoading(true); setError("");
     try {
       const registeredUser = await register(name, email, password, phone, department, yearOfStudy, gender);
@@ -61,15 +63,31 @@ export default function Register() {
     </div>
     <div className="flex flex-col justify-center items-center px-4 py-24 sm:px-6 lg:px-16 bg-background"><div className="w-full max-w-md rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-8">
       <div className="mb-8" aria-label={`Registration progress: step ${step + 1} of ${TOTAL_STEPS}`}><div className="mb-3 flex items-center justify-between text-xs font-semibold text-muted-foreground"><span>Step {step + 1} of {TOTAL_STEPS}</span><span>{Math.round(((step + 1) / TOTAL_STEPS) * 100)}%</span></div><div className="h-2 overflow-hidden rounded-full bg-secondary"><div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${((step + 1) / TOTAL_STEPS) * 100}%` }} /></div></div>
-      <div className="mb-8"><h1 className="font-['DM_Serif_Display'] text-3xl text-foreground mb-2">{headings[step]}</h1><p className="text-muted-foreground text-sm">{descriptions[step]}</p></div>
-      {error && <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-xl px-4 py-3 mb-6" role="alert">{error}</div>}
-      <form onSubmit={handleSubmit} noValidate>
-        {step === 0 && <div className="space-y-5"><div><label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">{t("fullName")}</label><input id="name" {...fieldProps("name")} type="text" autoComplete="name" value={name} onChange={(event) => setField("name", event.target.value)} placeholder="Amara Osei" className={inputClass("name")} />{errorMessage("name")}</div><div><label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">{t("universityEmail")}</label><input id="email" {...fieldProps("email")} type="email" autoComplete="email" value={email} onChange={(event) => setField("email", event.target.value)} placeholder="you@auwcec.edu" className={inputClass("email")} />{errorMessage("email")}</div></div>}
-        {step === 1 && <div className="space-y-5"><div><label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">Phone number</label><input id="phone" {...fieldProps("phone")} type="tel" autoComplete="tel" value={phone} onChange={(event) => setField("phone", event.target.value)} placeholder="+253 77 123 456" className={inputClass("phone")} />{errorMessage("phone")}</div><div><label htmlFor="department" className="block text-sm font-medium text-foreground mb-2">{t("department")}</label><input id="department" {...fieldProps("department")} type="text" value={department} onChange={(event) => setField("department", event.target.value)} placeholder="Computer Science" className={inputClass("department")} />{errorMessage("department")}</div></div>}
-        {step === 2 && <div className="space-y-5"><div><label htmlFor="yearOfStudy" className="block text-sm font-medium text-foreground mb-2">Year of study</label><select id="yearOfStudy" {...fieldProps("yearOfStudy")} value={yearOfStudy} onChange={(event) => setField("yearOfStudy", event.target.value)} className={inputClass("yearOfStudy")}><option value="">Select year</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Graduate</option></select>{errorMessage("yearOfStudy")}</div><div><label htmlFor="gender" className="block text-sm font-medium text-foreground mb-2">Gender</label><select id="gender" {...fieldProps("gender")} value={gender} onChange={(event) => setField("gender", event.target.value)} className={inputClass("gender")}><option value="">Select gender</option><option>Female</option><option>Male</option></select><p className="mt-1.5 text-xs text-muted-foreground">Used only to help organize fellowship care and community support.</p>{errorMessage("gender")}</div></div>}
-        {step === 3 && <div className="space-y-5"><div><label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">{t("password")}</label><div className="relative"><input id="password" {...fieldProps("password")} type={showPassword ? "text" : "password"} autoComplete="new-password" value={password} onChange={(event) => setField("password", event.target.value)} placeholder={t("password")} className={`${inputClass("password")} pr-12`} /><button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button></div>{errorMessage("password")}</div><p className="text-xs text-muted-foreground leading-relaxed">{t("terms")}</p></div>}
-        <div className="mt-8 flex items-center gap-3"><button type="button" onClick={() => { setError(""); setStep((current) => Math.max(0, current - 1)); }} disabled={step === 0 || loading} className="flex-1 rounded-xl border border-border px-4 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary disabled:invisible">Back</button><button type="submit" disabled={loading} className="flex-[1.5] rounded-xl bg-primary px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60">{loading ? t("creating") : step === TOTAL_STEPS - 1 ? t("createButton") : "Continue"}</button></div>
-      </form><p className="text-center text-sm text-muted-foreground mt-8">{t("already")} <Link to="/login" className="text-primary font-semibold hover:underline">{t("signIn")}</Link></p>
+      <AnimatePresence initial={false} custom={slideDirection} mode="wait">
+        <motion.div
+          key={step}
+          custom={slideDirection}
+          variants={{
+            enter: (direction: number) => ({ x: direction * 80, opacity: 0 }),
+            center: { x: 0, opacity: 1 },
+            exit: (direction: number) => ({ x: direction * -80, opacity: 0 }),
+          }}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ x: { type: "spring", stiffness: 280, damping: 30 }, opacity: { duration: 0.2 } }}
+        >
+          <div className="mb-8"><h1 className="font-['DM_Serif_Display'] text-3xl text-foreground mb-2">{headings[step]}</h1><p className="text-muted-foreground text-sm">{descriptions[step]}</p></div>
+          {error && <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-xl px-4 py-3 mb-6" role="alert">{error}</div>}
+          <form onSubmit={handleSubmit} noValidate>
+            {step === 0 && <div className="space-y-5"><div><label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">{t("fullName")}</label><input id="name" {...fieldProps("name")} type="text" autoComplete="name" value={name} onChange={(event) => setField("name", event.target.value)} placeholder="Amara Osei" className={inputClass("name")} />{errorMessage("name")}</div><div><label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">{t("universityEmail")}</label><input id="email" {...fieldProps("email")} type="email" autoComplete="email" value={email} onChange={(event) => setField("email", event.target.value)} placeholder="you@auwcec.edu" className={inputClass("email")} />{errorMessage("email")}</div></div>}
+            {step === 1 && <div className="space-y-5"><div><label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">Phone number</label><input id="phone" {...fieldProps("phone")} type="tel" autoComplete="tel" value={phone} onChange={(event) => setField("phone", event.target.value)} placeholder="+253 77 123 456" className={inputClass("phone")} />{errorMessage("phone")}</div><div><label htmlFor="department" className="block text-sm font-medium text-foreground mb-2">{t("department")}</label><input id="department" {...fieldProps("department")} type="text" value={department} onChange={(event) => setField("department", event.target.value)} placeholder="Computer Science" className={inputClass("department")} />{errorMessage("department")}</div></div>}
+            {step === 2 && <div className="space-y-5"><div><label htmlFor="yearOfStudy" className="block text-sm font-medium text-foreground mb-2">Year of study</label><select id="yearOfStudy" {...fieldProps("yearOfStudy")} value={yearOfStudy} onChange={(event) => setField("yearOfStudy", event.target.value)} className={inputClass("yearOfStudy")}><option value="">Select year</option><option>Year 1</option><option>Year 2</option><option>Year 3</option><option>Year 4</option><option>Graduate</option></select>{errorMessage("yearOfStudy")}</div><div><label htmlFor="gender" className="block text-sm font-medium text-foreground mb-2">Gender</label><select id="gender" {...fieldProps("gender")} value={gender} onChange={(event) => setField("gender", event.target.value)} className={inputClass("gender")}><option value="">Select gender</option><option>Female</option><option>Male</option></select><p className="mt-1.5 text-xs text-muted-foreground">Used only to help organize fellowship care and community support.</p>{errorMessage("gender")}</div></div>}
+            {step === 3 && <div className="space-y-5"><div><label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">{t("password")}</label><div className="relative"><input id="password" {...fieldProps("password")} type={showPassword ? "text" : "password"} autoComplete="new-password" value={password} onChange={(event) => setField("password", event.target.value)} placeholder={t("password")} className={`${inputClass("password")} pr-12`} /><button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">{showPassword ? <EyeOff size={16} /> : <Eye size={16} />}</button></div>{errorMessage("password")}</div><p className="text-xs text-muted-foreground leading-relaxed">{t("terms")}</p></div>}
+            <div className="mt-8 flex items-center gap-3"><button type="button" onClick={() => { setError(""); setSlideDirection(-1); setStep((current) => Math.max(0, current - 1)); }} disabled={step === 0 || loading} className="flex-1 rounded-xl border border-border px-4 py-3.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary disabled:invisible">Back</button><button type="submit" disabled={loading} className="flex-[1.5] rounded-xl bg-primary px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60">{loading ? t("creating") : step === TOTAL_STEPS - 1 ? t("createButton") : "Continue"}</button></div>
+          </form><p className="text-center text-sm text-muted-foreground mt-8">{t("already")} <Link to="/login" className="text-primary font-semibold hover:underline">{t("signIn")}</Link></p>
+        </motion.div>
+      </AnimatePresence>
     </div></div>
   </div>;
 }
